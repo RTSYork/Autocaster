@@ -1,0 +1,19 @@
+##
+# Xilinx Platform Studio
+##
+implementation
+synthesis
+report
+blockdiagram
+revup
+SDK
+__xps
+*.log
+*.svf
+*.scr
+*.cmd
+*.bak
+*~
+*.elf
+*.ace
+*.make

@@ -1,0 +1,13 @@
+-p
+xc6slx45csg324-3
+-lang
+vhdl
+-intstyle
+default
+-lp
+C:/Digilent/Atlys_BSB_Support_v_3_6/Atlys_AXI_BSB_Support/lib/
+-msg
+__xps/ise/xmsgprops.lst
+-parallel
+yes
+system.mhs

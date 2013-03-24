@@ -1,0 +1,10 @@
+-batch 
+-create gh_player 
+-ver 1.00.a 
+-dir "C:\rj553\AXI" 
+-lang verilog 
+-bus axi4lite s 
+-rst 
+-reg 2 
+-xps 
+-driver 

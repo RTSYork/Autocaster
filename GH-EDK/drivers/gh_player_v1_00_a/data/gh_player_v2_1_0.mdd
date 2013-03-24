@@ -1,0 +1,15 @@
+##############################################################################
+## Filename:          C:\rj553\AXI/drivers/gh_player_v1_00_a/data/gh_player_v2_1_0.mdd
+## Description:       Microprocessor Driver Definition
+## Date:              Wed Jan 02 17:10:05 2013 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+OPTION psf_version = 2.1.0;
+
+BEGIN DRIVER gh_player
+
+  OPTION supported_peripherals = (gh_player);
+  OPTION depends = (common_v1_00_a);
+  OPTION copyfiles = all;
+
+END DRIVER

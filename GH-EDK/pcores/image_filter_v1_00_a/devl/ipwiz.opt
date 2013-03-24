@@ -1,0 +1,9 @@
+-batch 
+-create image_filter 
+-ver 1.00.a 
+-dir "C:\rj553\AXI" 
+-lang verilog 
+-bus axi4lite s 
+-rst 
+-reg 2 
+-xps 
