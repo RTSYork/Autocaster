@@ -1,0 +1,11 @@
+##
+# Xilinx SDK
+##
+.metadata
+*.lock
+*.log
+*.bit
+*.bmm
+microblaze_0
+Debug
+Release
