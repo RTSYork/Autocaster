@@ -2,3 +2,4 @@
 # General OS X
 ##
 .DS_Store
+.fuse_hidden*
