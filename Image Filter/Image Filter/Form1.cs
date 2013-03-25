@@ -250,7 +250,7 @@ namespace Image_Filter
 
 
                     // Threshold
-                    if (grey >= 172 && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 32))
+                    if (grey >= 172)// && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 180))
                         grey = 255;
                     else
                         grey = 0;
