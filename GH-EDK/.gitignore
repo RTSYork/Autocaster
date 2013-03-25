@@ -17,3 +17,4 @@ __xps
 *.elf
 *.ace
 *.make
+XpsGuiSessionLock
