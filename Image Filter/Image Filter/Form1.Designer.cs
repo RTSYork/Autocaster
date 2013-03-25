@@ -32,14 +32,14 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openButton = new System.Windows.Forms.Button();
             this.originalPictureBox = new System.Windows.Forms.PictureBox();
-            this.processedPictureBox1 = new System.Windows.Forms.PictureBox();
+            this.processedPictureBox2 = new System.Windows.Forms.PictureBox();
             this.imageBar = new System.Windows.Forms.TrackBar();
             this.imageCount = new System.Windows.Forms.Label();
             this.loadingBar = new System.Windows.Forms.ProgressBar();
             this.imageProcessor1 = new System.ComponentModel.BackgroundWorker();
-            this.processedPictureBox2 = new System.Windows.Forms.PictureBox();
-            this.processedPictureBox3 = new System.Windows.Forms.PictureBox();
             this.processedPictureBox4 = new System.Windows.Forms.PictureBox();
+            this.processedPictureBox1 = new System.Windows.Forms.PictureBox();
+            this.processedPictureBox3 = new System.Windows.Forms.PictureBox();
             this.mixPictureBox = new System.Windows.Forms.PictureBox();
             this.imageProcessor2 = new System.ComponentModel.BackgroundWorker();
             this.playButton = new System.Windows.Forms.Button();
@@ -53,11 +53,11 @@
             this.orangesLabel = new System.Windows.Forms.Label();
             this.noteLabels = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.originalPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mixPictureBox)).BeginInit();
             this.noteLabels.SuspendLayout();
             this.SuspendLayout();
@@ -88,14 +88,14 @@
             this.originalPictureBox.TabIndex = 1;
             this.originalPictureBox.TabStop = false;
             // 
-            // processedPictureBox1
+            // processedPictureBox2
             // 
-            this.processedPictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.processedPictureBox1.Location = new System.Drawing.Point(461, 63);
-            this.processedPictureBox1.Name = "processedPictureBox1";
-            this.processedPictureBox1.Size = new System.Drawing.Size(440, 250);
-            this.processedPictureBox1.TabIndex = 2;
-            this.processedPictureBox1.TabStop = false;
+            this.processedPictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.processedPictureBox2.Location = new System.Drawing.Point(461, 63);
+            this.processedPictureBox2.Name = "processedPictureBox2";
+            this.processedPictureBox2.Size = new System.Drawing.Size(440, 250);
+            this.processedPictureBox2.TabIndex = 2;
+            this.processedPictureBox2.TabStop = false;
             // 
             // imageBar
             // 
@@ -136,32 +136,32 @@
             this.imageProcessor1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.imageProcessor_ProgressChanged);
             this.imageProcessor1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.imageProcessor_RunWorkerCompleted);
             // 
-            // processedPictureBox2
+            // processedPictureBox4
             // 
-            this.processedPictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.processedPictureBox2.Location = new System.Drawing.Point(910, 63);
-            this.processedPictureBox2.Name = "processedPictureBox2";
-            this.processedPictureBox2.Size = new System.Drawing.Size(440, 250);
-            this.processedPictureBox2.TabIndex = 8;
-            this.processedPictureBox2.TabStop = false;
+            this.processedPictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.processedPictureBox4.Location = new System.Drawing.Point(910, 63);
+            this.processedPictureBox4.Name = "processedPictureBox4";
+            this.processedPictureBox4.Size = new System.Drawing.Size(440, 250);
+            this.processedPictureBox4.TabIndex = 8;
+            this.processedPictureBox4.TabStop = false;
+            // 
+            // processedPictureBox1
+            // 
+            this.processedPictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.processedPictureBox1.Location = new System.Drawing.Point(12, 322);
+            this.processedPictureBox1.Name = "processedPictureBox1";
+            this.processedPictureBox1.Size = new System.Drawing.Size(440, 250);
+            this.processedPictureBox1.TabIndex = 9;
+            this.processedPictureBox1.TabStop = false;
             // 
             // processedPictureBox3
             // 
             this.processedPictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.processedPictureBox3.Location = new System.Drawing.Point(12, 322);
+            this.processedPictureBox3.Location = new System.Drawing.Point(461, 322);
             this.processedPictureBox3.Name = "processedPictureBox3";
             this.processedPictureBox3.Size = new System.Drawing.Size(440, 250);
-            this.processedPictureBox3.TabIndex = 9;
+            this.processedPictureBox3.TabIndex = 10;
             this.processedPictureBox3.TabStop = false;
-            // 
-            // processedPictureBox4
-            // 
-            this.processedPictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.processedPictureBox4.Location = new System.Drawing.Point(461, 322);
-            this.processedPictureBox4.Name = "processedPictureBox4";
-            this.processedPictureBox4.Size = new System.Drawing.Size(440, 250);
-            this.processedPictureBox4.TabIndex = 10;
-            this.processedPictureBox4.TabStop = false;
             // 
             // mixPictureBox
             // 
@@ -299,11 +299,11 @@
             this.Controls.Add(this.noteLabels);
             this.Controls.Add(this.playButton);
             this.Controls.Add(this.mixPictureBox);
-            this.Controls.Add(this.processedPictureBox4);
             this.Controls.Add(this.processedPictureBox3);
-            this.Controls.Add(this.processedPictureBox2);
-            this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.processedPictureBox1);
+            this.Controls.Add(this.processedPictureBox4);
+            this.Controls.Add(this.loadingBar);
+            this.Controls.Add(this.processedPictureBox2);
             this.Controls.Add(this.originalPictureBox);
             this.Controls.Add(this.imageCount);
             this.Controls.Add(this.imageBar);
@@ -311,11 +311,11 @@
             this.Name = "Form1";
             this.Text = "Image Filter";
             ((System.ComponentModel.ISupportInitialize)(this.originalPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.processedPictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mixPictureBox)).EndInit();
             this.noteLabels.ResumeLayout(false);
             this.noteLabels.PerformLayout();
@@ -329,14 +329,14 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button openButton;
         private System.Windows.Forms.PictureBox originalPictureBox;
-        private System.Windows.Forms.PictureBox processedPictureBox1;
+        private System.Windows.Forms.PictureBox processedPictureBox2;
         private System.Windows.Forms.TrackBar imageBar;
         private System.Windows.Forms.Label imageCount;
         private System.Windows.Forms.ProgressBar loadingBar;
         private System.ComponentModel.BackgroundWorker imageProcessor1;
-        private System.Windows.Forms.PictureBox processedPictureBox2;
-        private System.Windows.Forms.PictureBox processedPictureBox3;
         private System.Windows.Forms.PictureBox processedPictureBox4;
+        private System.Windows.Forms.PictureBox processedPictureBox1;
+        private System.Windows.Forms.PictureBox processedPictureBox3;
         private System.Windows.Forms.PictureBox mixPictureBox;
         private System.ComponentModel.BackgroundWorker imageProcessor2;
         private System.Windows.Forms.Button playButton;

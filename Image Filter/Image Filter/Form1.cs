@@ -125,8 +125,8 @@ namespace Image_Filter
         {
             originalPictureBox.Image = originals[index];
             processedPictureBox1.Image = greyed[index];
-            processedPictureBox2.Image = blurred[index];
-            processedPictureBox3.Image = thresholded[index];
+            processedPictureBox2.Image = thresholded[index];
+            processedPictureBox3.Image = blurred[index];
             processedPictureBox4.Image = filtered[index];
             mixPictureBox.Image = mixed[index];
 
@@ -216,51 +216,72 @@ namespace Image_Filter
             int grey2;
             int grey3;
             int mixR, mixG, mixB;
-            int lastGrey1, lastGrey2, lastGrey3;
+            int lastGrey1, lastGrey2;
 
-            int[] lastRow = new int[width];
+            int[] lastRow1 = new int[width];
+            int[] lastRow2 = new int[width];
             for (int i = 0; i < width; i++)
-                lastRow[i] = 0;
+            {
+                lastRow1[i] = 0;
+                lastRow2[i] = 0;
+            }
 
-            for (int y = 0; y < height-2; y++)
+            for (int y = 0; y < height; y++)
             {
                 lastGrey1 = 0;
                 lastGrey2 = 0;
-                lastGrey3 = 0;
 
                 for (int x = 0; x < width; x++)
                 {
                     oldPixel = original.GetPixel(x, y);
 
+
                     // Greyscale
-                    grey = (oldPixel.R + oldPixel.G + oldPixel.B) >> 2;
+                    grey = Math.Max(0, ((oldPixel.R + oldPixel.G + oldPixel.B) >> 1) - 128);
                     newPixel = Color.FromArgb(grey, grey, grey);
                     greyed[index].SetPixel(x, y, newPixel);
 
+                    
+                    // Blur Horizontal
+                    //grey2 = (grey + lastGrey1) >> 1;
+                    //lastGrey1 = grey;
+                    //newPixel = Color.FromArgb(grey2, grey2, grey2);
+                    //blurred[index].SetPixel(x, y, newPixel);
+
+
+                    // Threshold
+                    if (grey >= 172 && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 32))
+                        grey = 255;
+                    else
+                        grey = 0;
+                    newPixel = Color.FromArgb(grey, grey, grey);
+                    thresholded[index].SetPixel(x, y, newPixel);
+
+
                     // Blur
-                    grey2 = (grey + grey + lastGrey1 + lastGrey2) >> 2;
-                    lastGrey3 = lastGrey2;
+                    grey2 = (grey + lastGrey2 + lastGrey1 + lastRow1[x]) >> 2;
                     lastGrey2 = lastGrey1;
                     lastGrey1 = grey;
+                    lastRow1[x] = grey;
                     newPixel = Color.FromArgb(grey2, grey2, grey2);
                     blurred[index].SetPixel(x, y, newPixel);
 
-                    // Threshold
-                    if (grey2 >= 190)
-                        grey2 = 255;
-                    else
+
+                    // Threshold 2
+                    if (grey2 < 255)
                         grey2 = 0;
                     newPixel = Color.FromArgb(grey2, grey2, grey2);
-                    thresholded[index].SetPixel(x, y, newPixel);
+                    filtered[index].SetPixel(x, y, newPixel);
 
                     // Edge detection
-                    grey3 = Math.Max(0, grey2 - lastRow[x]);
-                    lastRow[x] = grey2;
-                    newPixel = Color.FromArgb(grey3, grey3, grey3);
-                    filtered[index].SetPixel(x, y, newPixel);
+                    grey3 = Math.Max(0, (lastRow2[x] - grey2));
+                    lastRow2[x] = grey2;
+                    //newPixel = Color.FromArgb(grey3, grey3, grey3);
+                    //filtered[index].SetPixel(x, y, newPixel);
                     
-                    // Mixed image
-                    if (((y >> 2) + (y >> 4)) == (width >> 1) - x - 92)
+
+                    // Mixed image and note detection
+                    if ((y > 150 && y < 200) && ((y >> 2) + (y >> 4)) == (width >> 1) - x - 92)
                     {
                         newPixel = Color.FromArgb(0, 255, 0);
                         if (grey3 == 255)
@@ -271,7 +292,7 @@ namespace Image_Filter
                              greens[index].Add(y);
                         }
                     }
-                    else if (((y >> 3) + (y >> 5)) == (width >> 1) - x - 48)
+                    else if ((y > 150 && y < 200) && ((y >> 3) + (y >> 5)) == (width >> 1) - x - 48)
                     {
                         newPixel = Color.FromArgb(255, 0, 0);
                         if (grey3 == 255)
@@ -280,7 +301,7 @@ namespace Image_Filter
                             else
                                 reds[index].Add(y);
                     }
-                    else if (0 == (width >> 1) - x)
+                    else if ((y > 150 && y < 200) && x == (width >> 1))
                     {
                         newPixel = Color.FromArgb(255, 255, 0);
                         if (grey3 == 255)
@@ -289,7 +310,7 @@ namespace Image_Filter
                             else
                                 yellows[index].Add(y);
                     }
-                    else if (((-y >> 3) + (-y >> 5)) == (width >> 1) - x + 48)
+                    else if ((y > 150 && y < 200) && ((y >> 3) + (y >> 5)) == x - 48 - (width >> 1))
                     {
                         newPixel = Color.FromArgb(0, 0, 255);
                         if (grey3 == 255)
@@ -298,7 +319,7 @@ namespace Image_Filter
                             else
                                 blues[index].Add(y);
                     }
-                    else if (((-y >> 2) + (-y >> 4)) == (width >> 1) - x + 92)
+                    else if ((y > 150 && y < 200) && ((y >> 2) + (y >> 4)) == x - 92 - (width >> 1))
                     {
                         newPixel = Color.FromArgb(255, 128, 0);
                         if (grey3 == 255)
@@ -356,23 +377,23 @@ namespace Image_Filter
             height = originals[0].Height;
             originalPictureBox.Width = width;
             originalPictureBox.Height = height;
-            processedPictureBox1.Width = width;
-            processedPictureBox1.Height = height;
             processedPictureBox2.Width = width;
             processedPictureBox2.Height = height;
-            processedPictureBox3.Width = width;
-            processedPictureBox3.Height = height;
             processedPictureBox4.Width = width;
             processedPictureBox4.Height = height;
+            processedPictureBox1.Width = width;
+            processedPictureBox1.Height = height;
+            processedPictureBox3.Width = width;
+            processedPictureBox3.Height = height;
             mixPictureBox.Width = width;
             mixPictureBox.Height = height;
             noteLabels.Width = width - 40;
 
-            processedPictureBox1.Location = new Point(originalPictureBox.Location.X + width + 10, originalPictureBox.Location.Y);
-            processedPictureBox2.Location = new Point(processedPictureBox1.Location.X + width + 10, originalPictureBox.Location.Y);
-            processedPictureBox3.Location = new Point(originalPictureBox.Location.X, originalPictureBox.Location.Y + height + 10);
-            processedPictureBox4.Location = new Point(processedPictureBox1.Location.X, processedPictureBox3.Location.Y);
-            mixPictureBox.Location = new Point(processedPictureBox2.Location.X, processedPictureBox3.Location.Y);
+            processedPictureBox2.Location = new Point(originalPictureBox.Location.X + width + 10, originalPictureBox.Location.Y);
+            processedPictureBox4.Location = new Point(processedPictureBox2.Location.X + width + 10, originalPictureBox.Location.Y);
+            processedPictureBox1.Location = new Point(originalPictureBox.Location.X, originalPictureBox.Location.Y + height + 10);
+            processedPictureBox3.Location = new Point(processedPictureBox2.Location.X, processedPictureBox1.Location.Y);
+            mixPictureBox.Location = new Point(processedPictureBox4.Location.X, processedPictureBox1.Location.Y);
             noteLabels.Location = new Point(mixPictureBox.Location.X, mixPictureBox.Location.Y + height + 5);
 
             imageCount.Text = "1 / " + files.Length;
