@@ -1,12 +1,13 @@
 ##
 # Xilinx Platform Studio
 ##
-implementation
-synthesis
-report
-blockdiagram
-revup
-SDK
+/implementation
+/synthesis
+/report
+/blockdiagram
+/revup
+/SDK
+/hdl
 __xps
 *.log
 *.svf
