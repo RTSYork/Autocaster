@@ -20,3 +20,8 @@ __xps
 *.make
 platgen.opt
 XpsGuiSessionLock
+
+##
+# Bluespec
+##
+*.bo
