@@ -113,7 +113,8 @@ entity image_filter is
   generic
   (
     -- ADD USER GENERICS BELOW THIS LINE ---------------
-    --USER generics added here
+    -- AXI4-Stream parameter
+    C_AXI_STREAM_DATA_WIDTH        : integer              := 32;
     -- ADD USER GENERICS ABOVE THIS LINE ---------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -135,7 +136,26 @@ entity image_filter is
   port
   (
     -- ADD USER PORTS BELOW THIS LINE ------------------
-    --USER ports added here
+	ACLK                    : in    std_logic;
+	RGB_OUT                 : out   std_logic_vector(23 downto 0);
+	
+    -- AXI4-Stream Read Channel
+    S_AXIS_S2MM_ACLK        : out   std_logic;
+    S_AXIS_S2MM_ARESETN     : in    std_logic;
+    S_AXIS_S2MM_TREADY      : out   std_logic;
+    S_AXIS_S2MM_TDATA       : in    std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0);
+    S_AXIS_S2MM_TKEEP       : in    std_logic_vector((C_AXI_STREAM_DATA_WIDTH/8)-1 downto 0);
+    S_AXIS_S2MM_TLAST       : in    std_logic;
+    S_AXIS_S2MM_TVALID      : in    std_logic;
+    
+    -- AXI4-Stream Write Channel
+    M_AXIS_S2MM_ACLK        : out   std_logic;
+    M_AXIS_S2MM_ARESETN     : in    std_logic;
+    M_AXIS_S2MM_TVALID      : out   std_logic;
+    M_AXIS_S2MM_TDATA       : out   std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0);
+    M_AXIS_S2MM_TKEEP       : out   std_logic_vector((C_AXI_STREAM_DATA_WIDTH/8)-1 downto 0);
+    M_AXIS_S2MM_TLAST       : out   std_logic;
+    M_AXIS_S2MM_TREADY      : in    std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -255,7 +275,7 @@ architecture IMP of image_filter is
     generic
     (
       -- ADD USER GENERICS BELOW THIS LINE ---------------
-      --USER generics added here
+      C_AXI_STREAM_DATA_WIDTH        : integer              := 32;
       -- ADD USER GENERICS ABOVE THIS LINE ---------------
 
       -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -267,8 +287,23 @@ architecture IMP of image_filter is
     port
     (
       -- ADD USER PORTS BELOW THIS LINE ------------------
-      --USER ports added here
-      -- ADD USER PORTS ABOVE THIS LINE ------------------
+	  ACLK                           : in  std_logic;
+	  RGB_OUT                        : out std_logic_vector(23 downto 0);
+      S_AXIS_S2MM_ACLK               : out std_logic;
+      S_AXIS_S2MM_ARESETN            : in  std_logic;
+      S_AXIS_S2MM_TREADY             : out std_logic;
+      S_AXIS_S2MM_TDATA              : in  std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0);
+      S_AXIS_S2MM_TKEEP              : in  std_logic_vector((C_AXI_STREAM_DATA_WIDTH/8)-1 downto 0);
+      S_AXIS_S2MM_TLAST              : in  std_logic;
+      S_AXIS_S2MM_TVALID             : in  std_logic;
+      M_AXIS_S2MM_ACLK               : out std_logic;
+      M_AXIS_S2MM_ARESETN            : in  std_logic;
+      M_AXIS_S2MM_TVALID             : out std_logic;
+      M_AXIS_S2MM_TDATA              : out std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0);
+      M_AXIS_S2MM_TKEEP              : out std_logic_vector((C_AXI_STREAM_DATA_WIDTH/8)-1 downto 0);
+      M_AXIS_S2MM_TLAST              : out std_logic;
+      M_AXIS_S2MM_TREADY             : in  std_logic;
+      -- ADD USER PORTS ABOVE THIS LINE ----------------
 
       -- DO NOT EDIT BELOW THIS LINE ---------------------
       -- Bus protocol ports, do not add to or delete
@@ -368,7 +403,7 @@ begin
     generic map
     (
       -- MAP USER GENERICS BELOW THIS LINE ---------------
-      --USER generics mapped here
+      C_AXI_STREAM_DATA_WIDTH        => C_AXI_STREAM_DATA_WIDTH,
       -- MAP USER GENERICS ABOVE THIS LINE ---------------
 
       C_NUM_REG                      => USER_NUM_REG,
@@ -377,7 +412,22 @@ begin
     port map
     (
       -- MAP USER PORTS BELOW THIS LINE ------------------
-      --USER ports mapped here
+	  ACLK                           => ACLK,
+	  RGB_OUT                        => RGB_OUT,
+      S_AXIS_S2MM_ACLK               => S_AXIS_S2MM_ACLK,
+      S_AXIS_S2MM_ARESETN            => S_AXIS_S2MM_ARESETN,
+      S_AXIS_S2MM_TREADY             => S_AXIS_S2MM_TREADY,
+      S_AXIS_S2MM_TDATA              => S_AXIS_S2MM_TDATA,
+      S_AXIS_S2MM_TKEEP              => S_AXIS_S2MM_TKEEP,
+      S_AXIS_S2MM_TLAST              => S_AXIS_S2MM_TLAST,
+      S_AXIS_S2MM_TVALID             => S_AXIS_S2MM_TVALID ,
+      M_AXIS_S2MM_ACLK               => M_AXIS_S2MM_ACLK,
+      M_AXIS_S2MM_ARESETN            => M_AXIS_S2MM_ARESETN,
+      M_AXIS_S2MM_TVALID             => M_AXIS_S2MM_TVALID,
+      M_AXIS_S2MM_TDATA              => M_AXIS_S2MM_TDATA,
+      M_AXIS_S2MM_TKEEP              => M_AXIS_S2MM_TKEEP,
+      M_AXIS_S2MM_TLAST              => M_AXIS_S2MM_TLAST,
+      M_AXIS_S2MM_TREADY             => M_AXIS_S2MM_TREADY,
       -- MAP USER PORTS ABOVE THIS LINE ------------------
 
       Bus2IP_Clk                     => ipif_Bus2IP_Clk,

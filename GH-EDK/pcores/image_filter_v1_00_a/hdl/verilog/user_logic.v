@@ -54,7 +54,26 @@
 module user_logic
 (
   // -- ADD USER PORTS BELOW THIS LINE ---------------
-  // --USER ports added here 
+  ACLK,
+  RGB_OUT,
+  
+  // AXI4-Stream Read Channel
+  S_AXIS_S2MM_ACLK,
+  S_AXIS_S2MM_ARESETN,
+  S_AXIS_S2MM_TREADY,
+  S_AXIS_S2MM_TDATA,
+  S_AXIS_S2MM_TKEEP,
+  S_AXIS_S2MM_TLAST,
+  S_AXIS_S2MM_TVALID,
+  
+  // AXI4-Stream Write Channel
+  M_AXIS_S2MM_ACLK,
+  M_AXIS_S2MM_ARESETN,
+  M_AXIS_S2MM_TVALID,
+  M_AXIS_S2MM_TDATA,
+  M_AXIS_S2MM_TKEEP,
+  M_AXIS_S2MM_TLAST,
+  M_AXIS_S2MM_TREADY,
   // -- ADD USER PORTS ABOVE THIS LINE ---------------
 
   // -- DO NOT EDIT BELOW THIS LINE ------------------
@@ -73,7 +92,8 @@ module user_logic
 ); // user_logic
 
 // -- ADD USER PARAMETERS BELOW THIS LINE ------------
-// --USER parameters added here 
+// AXI4-Stream parameter
+parameter C_AXI_STREAM_DATA_WIDTH        = 32;
 // -- ADD USER PARAMETERS ABOVE THIS LINE ------------
 
 // -- DO NOT EDIT BELOW THIS LINE --------------------
@@ -83,7 +103,26 @@ parameter C_SLV_DWIDTH                   = 32;
 // -- DO NOT EDIT ABOVE THIS LINE --------------------
 
 // -- ADD USER PORTS BELOW THIS LINE -----------------
-// --USER ports added here 
+input                                     ACLK;
+output  [23 : 0]                          RGB_OUT;
+
+// AXI4-Stream Read Channel
+output                                    S_AXIS_S2MM_ACLK;
+input                                     S_AXIS_S2MM_ARESETN;
+output                                    S_AXIS_S2MM_TREADY;
+input   [C_AXI_STREAM_DATA_WIDTH-1 : 0]   S_AXIS_S2MM_TDATA;
+input   [C_AXI_STREAM_DATA_WIDTH/8-1 : 0] S_AXIS_S2MM_TKEEP;
+input                                     S_AXIS_S2MM_TLAST;
+input                                     S_AXIS_S2MM_TVALID;
+    
+// AXI4-Stream Write Channel
+output                                    M_AXIS_S2MM_ACLK;
+input                                     M_AXIS_S2MM_ARESETN;
+output                                    M_AXIS_S2MM_TVALID;
+output  [C_AXI_STREAM_DATA_WIDTH-1 : 0]   M_AXIS_S2MM_TDATA;
+output  [C_AXI_STREAM_DATA_WIDTH/8-1 : 0] M_AXIS_S2MM_TKEEP;
+output                                    M_AXIS_S2MM_TLAST;
+input                                     M_AXIS_S2MM_TREADY;
 // -- ADD USER PORTS ABOVE THIS LINE -----------------
 
 // -- DO NOT EDIT BELOW THIS LINE --------------------
@@ -105,6 +144,8 @@ output                                    IP2Bus_Error;
 //----------------------------------------------------------------------------
 
   // --USER nets declarations added here, as needed for user logic
+  wire       [23 : 0]                       rgbIn;
+  wire       [23 : 0]                       rgbOut;
 
   // Nets for user logic slave model s/w accessible register example
   reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -117,6 +158,42 @@ output                                    IP2Bus_Error;
   integer                                   byte_index, bit_index;
 
   // USER logic implementation added here
+  
+  // Data inputs
+  assign
+    rgbIn = S_AXIS_S2MM_TDATA[23:0];
+	
+  // Data outputs
+  assign
+    M_AXIS_S2MM_TDATA = {8'b0, rgbOut},
+    RGB_OUT           = rgbOut;
+	
+  // Tie together unmodified lines of AXIS bus
+  assign
+    M_AXIS_S2MM_TVALID = S_AXIS_S2MM_TVALID,
+    M_AXIS_S2MM_TKEEP  = S_AXIS_S2MM_TKEEP,
+    M_AXIS_S2MM_TLAST  = S_AXIS_S2MM_TLAST,
+    S_AXIS_S2MM_TREADY = M_AXIS_S2MM_TREADY;
+  
+  // AXIS clock outputs
+  assign
+    M_AXIS_S2MM_ACLK = ACLK,
+    M_AXIS_S2MM_ACLK = ACLK;
+	
+	
+  // Pass image through filters
+  filters Filters (
+    .CLK          (ACLK),
+    .RST          (Bus2IP_Resetn),
+	.HSync        (S_AXIS_S2MM_TLAST),
+	.Enable       (1'b1),
+    .RGBin        (rgbIn),
+	
+    .RGBout       (rgbOut)
+  );
+	
+  
+	
 
   // ------------------------------------------------------
   // Example code to read/write user logic slave model s/w accessible registers

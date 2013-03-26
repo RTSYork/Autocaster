@@ -6,5 +6,8 @@
 
 lib proc_common_v3_00_a  all 
 lib axi_lite_ipif_v1_01_a  all 
+lib image_filter_v1_00_a mkThreshold verilog
+lib image_filter_v1_00_a mkGreyscale verilog
+lib image_filter_v1_00_a filters verilog
 lib image_filter_v1_00_a user_logic verilog
 lib image_filter_v1_00_a image_filter vhdl
