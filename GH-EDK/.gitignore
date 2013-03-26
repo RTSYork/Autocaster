@@ -18,4 +18,5 @@ __xps
 *.elf
 *.ace
 *.make
+platgen.opt
 XpsGuiSessionLock
