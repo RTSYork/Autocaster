@@ -1,0 +1,9 @@
+OPTION psf_version = 2.1.0;
+
+BEGIN DRIVER image_filter
+
+  OPTION supported_peripherals = (image_filter);
+  OPTION depends = (common_v1_00_a);
+  OPTION copyfiles = all;
+
+END DRIVER
