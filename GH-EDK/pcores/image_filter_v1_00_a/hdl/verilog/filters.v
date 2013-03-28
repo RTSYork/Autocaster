@@ -53,7 +53,7 @@ output [23:0] RGBout;
 	
 	// Threshold grey image
 	mkThreshold # (
-		.threshold  (8'd172)
+		.threshold  (8'd200)
 	) Threshold1 (
 		.CLK        (CLK),
 		.RST_N      (RST),
