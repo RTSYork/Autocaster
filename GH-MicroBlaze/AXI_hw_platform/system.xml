@@ -1,7 +1,7 @@
 
-<EDKSYSTEM EDKVERSION="14.3" EDWVERSION="1.2" TIMESTAMP="Thu Mar 28 15:49:24 2013">
+<EDKSYSTEM EDKVERSION="14.3" EDWVERSION="1.2" TIMESTAMP="Thu Mar 28 20:37:11 2013">
 
-  <SYSTEMINFO ARCH="spartan6" DEVICE="xc6slx45" PACKAGE="csg324" PART="xc6slx45csg324-3" SOURCE="C:/rj553/GH-EDK/system.xmp" SPEEDGRADE="-3"/>
+  <SYSTEMINFO ARCH="spartan6" DEVICE="xc6slx45" PACKAGE="csg324" PART="xc6slx45csg324-3" SOURCE="F:/gh-project/GH-EDK/system.xmp" SPEEDGRADE="-3"/>
 
   <EXTERNALPORTS>
     <PORT DIR="IO" MHS_INDEX="0" NAME="zio" SIGNAME="zio">
@@ -7104,7 +7104,7 @@
       <DESCRIPTION TYPE="SHORT">AXI HDMI Receiver/Transmitter</DESCRIPTION>
       <DESCRIPTION TYPE="LONG">AXI4-Stream HDMI Receiver/Transmitter</DESCRIPTION>
       <DOCUMENTATION>
-        <DOCUMENT SOURCE="C:/rj553/GH-EDK/pcores/axi_hdmi_v1_00_a/doc/axi_hdmi_v1_00_a.pdf" TYPE="IP"/>
+        <DOCUMENT SOURCE="F:/gh-project/GH-EDK/pcores/axi_hdmi_v1_00_a/doc/axi_hdmi_v1_00_a.pdf" TYPE="IP"/>
       </DOCUMENTATION>
       <LICENSEINFO ICON_NAME="ps_core_local"/>
       <PARAMETERS>
