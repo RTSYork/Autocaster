@@ -11,11 +11,11 @@ endinterface
 (* synthesize *)
 module mkGreyscale (Greyscale);
 
-	Wire#(UInt#(8))  red   <- mkUnsafeDWire(0);
-	Wire#(UInt#(8))  green <- mkUnsafeDWire(0);
-	Wire#(UInt#(8))  blue  <- mkUnsafeDWire(0);
-	Wire#(UInt#(10)) sum   <- mkUnsafeDWire(0);
-	Wire#(UInt#(8))  grey  <- mkUnsafeDWire(0); 
+	Wire#(UInt#(8)) red   <- mkUnsafeDWire(0);
+	Wire#(UInt#(8)) green <- mkUnsafeDWire(0);
+	Wire#(UInt#(8)) blue  <- mkUnsafeDWire(0);
+	Wire#(UInt#(9)) sum   <- mkUnsafeDWire(0);
+	Wire#(UInt#(8)) grey  <- mkUnsafeDWire(0); 
 
 	// Convert pixel
 	method ActionValue#(Bit#(8)) filter(Bit#(24) rgb_in);
@@ -23,8 +23,8 @@ module mkGreyscale (Greyscale);
 		green <= unpack(rgb_in[15: 8]);
 		blue  <= unpack(rgb_in[ 7: 0]);
 		
-		sum   <= zeroExtend(red) + zeroExtend(green) + zeroExtend(blue);
-		grey  <= truncate((sum >> 1) - 127);
+		sum   <= (zeroExtend(green) + zeroExtend(blue)) >> 1;
+		grey  <= truncate((sum + zeroExtend(red)) >> 1);
 		
 		return pack(grey);
 	endmethod
