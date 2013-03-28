@@ -146,6 +146,8 @@ output                                    IP2Bus_Error;
   // --USER nets declarations added here, as needed for user logic
   wire       [23 : 0]                       rgbIn;
   wire       [23 : 0]                       rgbOut;
+  wire                                      enable;
+  wire       [ 5 : 0]                       filters;
 
   // Nets for user logic slave model s/w accessible register example
   reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -159,14 +161,19 @@ output                                    IP2Bus_Error;
 
   // USER logic implementation added here
   
+  // Registers
+  assign
+    enable  = slv_reg0[0],
+	filters = slv_reg0[6:1];
+  
   // Data inputs
   assign
     rgbIn = S_AXIS_S2MM_TDATA[23:0];
 	
   // Data outputs
   assign
-    M_AXIS_S2MM_TDATA = {8'b0, rgbOut},
-    RGB_OUT           = rgbOut;
+    M_AXIS_S2MM_TDATA = enable ? {8'b0, rgbOut} : S_AXIS_S2MM_TDATA,
+    RGB_OUT           = enable ? rgbOut : rgbIn;
 	
   // Tie together unmodified lines of AXIS bus
   assign
@@ -186,7 +193,7 @@ output                                    IP2Bus_Error;
     .CLK          (ACLK),
     .RST          (Bus2IP_Resetn),
 	.HSync        (S_AXIS_S2MM_TLAST),
-	.Enable       (1'b1),
+	.Enables      (filters),
     .RGBin        (rgbIn),
 	
     .RGBout       (rgbOut)
