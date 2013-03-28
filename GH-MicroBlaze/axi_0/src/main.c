@@ -91,7 +91,11 @@ int main(void)
 
 	int lasts0 = SWITCH_OFF;
 	int lasts2 = SWITCH_OFF;
-	int s0, s1, s2, s3;
+	int lasts4 = SWITCH_OFF;
+	int lasts5 = SWITCH_OFF;
+	int lasts6 = SWITCH_OFF;
+	int lasts7 = SWITCH_OFF;
+	int s0, s1, s2, s3, s4, s5, s6, s7;
 
 	// Positions of note detectors (x, y)
 	// 1 Player
@@ -156,7 +160,6 @@ int main(void)
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
 
-
 	while (1) {
 		// Loop forever
 
@@ -219,6 +222,18 @@ int main(void)
 					BIT_CHECK(status, 12) >> 12,
 					BIT_CHECK(status, 13) >> 13,
 					BIT_CHECK(status, 14) >> 14);
+		}
+
+		s4 = getSwitch(SWITCH4);
+		s5 = getSwitch(SWITCH5);
+		s6 = getSwitch(SWITCH6);
+		s7 = getSwitch(SWITCH7);
+		if (s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
+			Xil_Out32(XPAR_IMAGE_FILTER_0_BASEADDR, s4 | (s5<<1) | (s6<<2) | (1<<3) | (s7<<4) | (1<<5));
+			lasts4 = s4;
+			lasts5 = s5;
+			lasts6 = s6;
+			lasts7 = s7;
 		}
 	}
 
