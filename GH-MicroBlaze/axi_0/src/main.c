@@ -28,6 +28,7 @@
 #include "xil_io.h"	//Contains the Xil_Out32 and Xil_In32 functions
 
 #include "gh_player.h"
+#include "image_filter.h"
 
 #include "hdmi/vdma.h"		// VDMA functions
 #include "hdmi/hdmi.h"		// HDMI functions
@@ -229,7 +230,7 @@ int main(void)
 		s6 = getSwitch(SWITCH6);
 		s7 = getSwitch(SWITCH7);
 		if (s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
-			Xil_Out32(XPAR_IMAGE_FILTER_0_BASEADDR, s4 | (s5<<1) | (s6<<2) | (1<<3) | (s7<<4) | (1<<5));
+			imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, s4, s5, s6, 1, s7, 1, 1);
 			lasts4 = s4;
 			lasts5 = s5;
 			lasts6 = s6;
