@@ -147,7 +147,7 @@ output                                    IP2Bus_Error;
   wire       [23 : 0]                       rgbIn;
   wire       [23 : 0]                       rgbOut;
   wire                                      enable;
-  wire       [ 5 : 0]                       filters;
+  wire       [ 5 : 0]                       filterEnables;
 
   // Nets for user logic slave model s/w accessible register example
   reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -163,8 +163,8 @@ output                                    IP2Bus_Error;
   
   // Registers
   assign
-    enable  = slv_reg0[0],
-	filters = slv_reg0[6:1];
+    enable        = slv_reg0[0],
+    filterEnables = slv_reg0[6:1];
   
   // Data inputs
   assign
@@ -192,8 +192,8 @@ output                                    IP2Bus_Error;
   filters Filters (
     .CLK          (ACLK),
     .RST          (Bus2IP_Resetn),
-	.HSync        (S_AXIS_S2MM_TLAST),
-	.Enables      (filters),
+    .HSync        (S_AXIS_S2MM_TLAST),
+    .Enables      (filterEnables),
     .RGBin        (rgbIn),
 	
     .RGBout       (rgbOut)
