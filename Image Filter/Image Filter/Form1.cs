@@ -237,7 +237,8 @@ namespace Image_Filter
 
 
                     // Greyscale
-                    grey = Math.Max(0, ((oldPixel.R + oldPixel.G + oldPixel.B) >> 1) - 128);
+                    //grey = Math.Max(0, ((oldPixel.R + oldPixel.G + oldPixel.B) >> 1) - 128);
+                    grey = (((oldPixel.G + oldPixel.B) >> 1) + oldPixel.R) >> 1;
                     newPixel = Color.FromArgb(grey, grey, grey);
                     greyed[index].SetPixel(x, y, newPixel);
 
@@ -250,7 +251,7 @@ namespace Image_Filter
 
 
                     // Threshold
-                    if (grey >= 172)// && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 180))
+                    if (grey >= 200)// && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 180))
                         grey = 255;
                     else
                         grey = 0;
