@@ -3,17 +3,30 @@
 
 (* always_ready *)
 interface Threshold;
-	(* always_enabled, result = "gry_out", prefix = "" *)
-	method ActionValue#(Bit#(8)) filter(UInt#(8) gry_in);
+	(* always_enabled, prefix = "" *)
+	method Action filter(UInt#(8) gry_in);
+	
+	method Bit#(8) gry_out();
+	method Bit#(1) bin_out();
 endinterface
 
 
 (* synthesize *)
 module mkThreshold #(parameter UInt#(8) threshold) (Threshold);
 
+	Wire#(Bool) belowThreshold <- mkDWire(False);
+
 	// Perform thresholding
-	method ActionValue#(Bit#(8)) filter(UInt#(8) gry_in);
-		return (gry_in < threshold) ? 0 : 255;
+	method Action filter(UInt#(8) gry_in);
+		belowThreshold <= (gry_in < threshold);
+	endmethod
+	
+	method Bit#(8) gry_out();
+		return belowThreshold ? 0 : 255;
+	endmethod
+	
+	method Bit#(1) bin_out();
+		return belowThreshold ? 0 : 1;
 	endmethod
 
 endmodule

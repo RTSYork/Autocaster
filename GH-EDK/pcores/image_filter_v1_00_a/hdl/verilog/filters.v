@@ -59,7 +59,8 @@ output [23:0] RGBout;
 		.RST_N      (RST),
 		.gry_in     (f2In),
 		
-		.gry_out    (f2Out)
+		.gry_out    (f2Out),
+		.bin_out    ()
 	);
 	
 	// Blur image
@@ -74,7 +75,8 @@ output [23:0] RGBout;
 		.RST_N      (RST),
 		.gry_in     (f4In),
 		
-		.gry_out    (f4Out)
+		.gry_out    (f4Out),
+		.bin_out    ()
 	);
 	
 	// Edge detection
