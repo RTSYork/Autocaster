@@ -82,7 +82,7 @@ output [23:0] DisplayOut;
 		
 	// Mix original image with filtered image
 	assign
-		mixOut = {{4{edgeOut}}, RGBin[23:20], {4{edgeOut}}, RGBin[15:12], {4{edgeOut}}, RGBin[7:4]};
+		mixOut = {{2{edgeOut}}, RGBin[23:18], {2{edgeOut}}, RGBin[15:10], {2{edgeOut}}, RGBin[7:2]};
 
 	
 endmodule
