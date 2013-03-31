@@ -161,6 +161,13 @@ int main(void)
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
 
+
+	// Reset Image Filter core, set threshold, enable
+	IMAGE_FILTER_mReset(XPAR_IMAGE_FILTER_0_BASEADDR);
+	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 200);
+	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+
+
 	while (1) {
 		// Loop forever
 
@@ -230,7 +237,19 @@ int main(void)
 		s6 = getSwitch(SWITCH6);
 		s7 = getSwitch(SWITCH7);
 		if (s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
-			imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, s4, s5, s6, 1, s7, 1, 1);
+			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON)
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_MIX);
+			else if (s7 == SWITCH_ON)
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_EDGE);
+			else if (s6 == SWITCH_ON)
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH2);
+			else if (s5 == SWITCH_ON)
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_BLUR);
+			else if (s4 == SWITCH_ON)
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_GREY);
+			else
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+
 			lasts4 = s4;
 			lasts5 = s5;
 			lasts6 = s6;
