@@ -237,21 +237,13 @@ namespace Image_Filter
 
 
                     // Greyscale
-                    //grey = Math.Max(0, ((oldPixel.R + oldPixel.G + oldPixel.B) >> 1) - 128);
                     grey = (((oldPixel.G + oldPixel.B) >> 1) + oldPixel.R) >> 1;
                     newPixel = Color.FromArgb(grey, grey, grey);
                     greyed[index].SetPixel(x, y, newPixel);
 
-                    
-                    // Blur Horizontal
-                    //grey2 = (grey + lastGrey1) >> 1;
-                    //lastGrey1 = grey;
-                    //newPixel = Color.FromArgb(grey2, grey2, grey2);
-                    //blurred[index].SetPixel(x, y, newPixel);
-
 
                     // Threshold
-                    if (grey >= 200)// && (Math.Abs(oldPixel.R - oldPixel.G) + Math.Abs(oldPixel.R - oldPixel.B) + Math.Abs(oldPixel.G - oldPixel.B) < 180))
+                    if (grey >= 200)
                         grey = 255;
                     else
                         grey = 0;
@@ -260,7 +252,7 @@ namespace Image_Filter
 
 
                     // Blur
-                    grey2 = (grey + lastGrey2 + lastGrey1 + lastRow1[x]) >> 2;
+                    grey2 = (grey & 0x88) | (lastGrey1 & 0x44) | (lastGrey2 & 0x22) | (lastRow1[x] & 0x11);
                     lastGrey2 = lastGrey1;
                     lastGrey1 = grey;
                     lastRow1[x] = grey;
@@ -275,7 +267,7 @@ namespace Image_Filter
                     filtered[index].SetPixel(x, y, newPixel);
 
                     // Edge detection
-                    grey3 = Math.Max(0, (lastRow2[x] - grey2));
+                    grey3 = (lastRow2[x] == 255 && grey2 != 255) ? 255 : 0;
                     lastRow2[x] = grey2;
                     //newPixel = Color.FromArgb(grey3, grey3, grey3);
                     //filtered[index].SetPixel(x, y, newPixel);
