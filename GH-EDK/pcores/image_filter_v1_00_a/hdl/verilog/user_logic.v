@@ -149,6 +149,7 @@ output                                    IP2Bus_Error;
   wire       [23 : 0]                       dispOut;
   wire                                      enable;
   wire       [ 5 : 0]                       filterDisplay;
+  wire       [ 8 : 0]                       threshold;
 
   // Nets for user logic slave model s/w accessible register example
   reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -165,7 +166,8 @@ output                                    IP2Bus_Error;
   // Registers
   assign
     enable        = slv_reg0[0],
-    filterDisplay = slv_reg0[6:1];
+    filterDisplay = slv_reg0[6:1],
+	threshold     = slv_reg1[7:0];
   
   // Data inputs
   assign
@@ -197,6 +199,7 @@ output                                    IP2Bus_Error;
 	.VDE          (S_AXIS_S2MM_TKEEP),
     .Display      (filterDisplay),
     .RGBin        (rgbIn),
+	.Threshold    (threshold),
 	
     .ProcessOut   (procOut),
 	.DisplayOut   (dispOut)
@@ -237,7 +240,7 @@ output                                    IP2Bus_Error;
       if ( Bus2IP_Resetn == 1'b0 )
         begin
           slv_reg0 <= 0;
-          slv_reg1 <= 0;
+          slv_reg1 <= 32'd200;
         end
       else
         case ( slv_reg_write_sel )

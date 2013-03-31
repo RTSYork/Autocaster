@@ -6,6 +6,7 @@ module filters
 	VDE,
 	Display,
 	RGBin,
+	Threshold,
 	
 	ProcessOut,
 	DisplayOut
@@ -17,6 +18,7 @@ input         HSync;
 input         VDE;
 input  [ 5:0] Display;
 input  [23:0] RGBin;
+input  [ 7:0] Threshold;
 
 output        ProcessOut;
 output [23:0] DisplayOut;
@@ -51,9 +53,8 @@ output [23:0] DisplayOut;
 	);
 	
 	// Threshold grey image
-	mkThreshold # (
-		.threshold  (8'd200)
-	) Threshold1 (
+	mkThreshold Threshold1 (
+		.threshold  (Threshold),
 		.gry_in     (greyOut),
 		.bin_out    (thresh1Out)
 	);
@@ -69,9 +70,8 @@ output [23:0] DisplayOut;
 	);
 	
 	// Threshold blurred image
-	mkThreshold # (
-		.threshold  (8'd255)
-	) Threshold2 (
+	mkThreshold Threshold2 (
+		.threshold  (8'hFF),
 		.gry_in     (blurOut),
 		.bin_out    (thresh2Out)
 	);

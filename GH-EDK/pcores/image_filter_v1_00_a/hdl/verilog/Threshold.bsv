@@ -4,15 +4,15 @@
 (* always_ready *)
 interface Threshold;
 	(* always_enabled, result = "bin_out", prefix = "" *)
-	method ActionValue#(Bit#(1)) filter(UInt#(8) gry_in);
+	method ActionValue#(Bit#(1)) filter(UInt#(8) gry_in, UInt#(8) threshold);
 endinterface
 
 
 (* synthesize *)
-module mkThreshold #(parameter UInt#(8) threshold) (Threshold);
+module mkThreshold (Threshold);
 
 	// Perform thresholding
-	method ActionValue#(Bit#(1)) filter(UInt#(8) gry_in);
+	method ActionValue#(Bit#(1)) filter(UInt#(8) gry_in, UInt#(8) threshold);
 		return (gry_in < threshold) ? 0 : 1;
 	endmethod
 
