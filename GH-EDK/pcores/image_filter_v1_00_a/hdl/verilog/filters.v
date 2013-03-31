@@ -34,20 +34,18 @@ output [23:0] DisplayOut;
 	assign
 		ProcessOut = edgeOut;
 	
-	// Assign display output
-	assign DisplayOut = Display[0] ? { 3{greyOut}}    :
-	                    Display[1] ? {24{thresh1Out}} :
-	                    Display[2] ? { 3{blurOut}}    :
-	                    Display[3] ? {24{thresh2Out}} :
+	// Assign display output			 
+	assign DisplayOut = Display[5] ?     mixOut       :
 	                    Display[4] ? {24{edgeOut}}    :
-	                    Display[5] ?     mixOut       :
+	                    Display[3] ? {24{thresh2Out}} :
+	                    Display[2] ? { 3{blurOut}}    :
+	                    Display[1] ? {24{thresh1Out}} :
+	                    Display[0] ? { 3{greyOut}}    :
 	                                     RGBin        ;
 	
 	
 	// Convert image to greyscale
 	mkGreyscale Greyscale (
-		.CLK        (CLK),
-		.RST_N      (RST),
 		.rgb_in     (RGBin),	
 		.gry_out    (greyOut)
 	);
@@ -56,33 +54,44 @@ output [23:0] DisplayOut;
 	mkThreshold # (
 		.threshold  (8'd200)
 	) Threshold1 (
-		.CLK        (CLK),
-		.RST_N      (RST),
 		.gry_in     (greyOut),
 		.bin_out    (thresh1Out)
 	);
 	
 	// Blur image
-	assign
-		blurOut = {8{thresh1Out}};
+	mkBlur Blur (
+		.CLK        (CLK),
+		.RST_N      (RST),
+		.hsync      (HSync),
+		.vde        (VDE),
+		.bin_in     (thresh1Out),
+		.gry_out    (blurOut)
+	);
 	
 	// Threshold blurred image
 	mkThreshold # (
 		.threshold  (8'd255)
 	) Threshold2 (
-		.CLK        (CLK),
-		.RST_N      (RST),
-		.gry_in     (blurOur),
+		.gry_in     (blurOut),
 		.bin_out    (thresh2Out)
 	);
 	
 	// Edge detection
-	assign
-		edgeOut = thresh2Out;
+	mkEdge Edge (
+		.CLK        (CLK),
+		.RST_N      (RST),
+		.hsync      (HSync),
+		.vde        (VDE),
+		.bin_in     (thresh2Out),
+		.bin_out    (edgeOut)
+	);
 		
 	// Mix original image with filtered image
-	assign
-		mixOut = {{2{edgeOut}}, RGBin[23:18], {2{edgeOut}}, RGBin[15:10], {2{edgeOut}}, RGBin[7:2]};
+	mkMix Mix (
+		.bin_in     (edgeOut),
+		.rgb_in     (RGBin),
+		.rgb_out    (mixOut)
+	);
 
 	
 endmodule
