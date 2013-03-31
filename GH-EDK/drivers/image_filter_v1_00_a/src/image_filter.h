@@ -39,14 +39,13 @@
 #define SOFT_RESET (0x0000000A)
 
 
-#define FRET_GREEN	0
-#define FRET_RED	1
-#define FRET_YELLOW	2
-#define FRET_BLUE	3
-#define FRET_ORANGE	4
-
-#define THRESHOLD_ON	0
-#define THRESHOLD_OFF	1
+#define FILTER_NONE		0
+#define FILTER_GREY		1
+#define FILTER_THRESH1	2
+#define FILTER_BLUR		4
+#define FILTER_THRESH2	8
+#define FILTER_EDGE		16
+#define FILTER_MIX		32
 
 
 /**************************** Type Definitions *****************************/
@@ -142,7 +141,8 @@
 	
 /************************** Function Prototypes ****************************/
 
-void imageFilter_SetControl(u32 baseAddress, u8 coreEnable, u8 greyscaleEnable, u8 threshold1Enable, u8 blurEnable, u8 threshold2Enable, u8 edgeEnable, u8 mixImage);
+void imageFilter_SetControl(u32 baseAddress, u8 coreEnable, u8 displayFilter);
+void imageFilter_SetThreshold(u32 baseAddress, u8 threshold);
 
 /**
 *  Defines the number of registers available for read and write*/

@@ -11,6 +11,10 @@
 
 /************************** Function Definitions ***************************/
 
-void imageFilter_SetControl(u32 baseAddress, u8 coreEnable, u8 greyscaleEnable, u8 threshold1Enable, u8 blurEnable, u8 threshold2Enable, u8 edgeEnable, u8 mixImage) {
-	IMAGE_FILTER_mWriteSlaveReg0(baseAddress, 0, (mixImage<<6) | (edgeEnable<<5) | (threshold2Enable<<4) | (blurEnable<<3) | (threshold1Enable<<2) | (greyscaleEnable<<1) | coreEnable);
+void imageFilter_SetControl(u32 baseAddress, u8 coreEnable, u8 displayFilter) {
+	IMAGE_FILTER_mWriteSlaveReg0(baseAddress, 0, (displayFilter<<1) | coreEnable);
+}
+
+void imageFilter_SetThreshold(u32 baseAddress, u8 threshold) {
+	IMAGE_FILTER_mWriteSlaveReg1(baseAddress, 0, threshold);
 }
