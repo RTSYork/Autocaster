@@ -9,6 +9,7 @@ lib axi_lite_ipif_v1_01_a  all
 lib gh_player_v1_00_a mkTilt verilog
 lib gh_player_v1_00_a mkWhammy verilog
 lib gh_player_v1_00_a mkFret verilog
+lib gh_player_v1_00_a player_filtered verilog
 lib gh_player_v1_00_a player verilog
 lib gh_player_v1_00_a user_logic verilog
 lib gh_player_v1_00_a gh_player vhdl

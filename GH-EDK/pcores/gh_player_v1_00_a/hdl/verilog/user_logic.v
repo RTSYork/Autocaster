@@ -141,8 +141,25 @@ output                                    IP2Bus_Error;
 	wire       [23 : 0]                       orangeOn;
 	wire       [23 : 0]                       orangeOff;
 	wire       [23 : 0]                       orangePos;
-	wire       [3 : 0]                        smoothValue;
-	wire       [3 : 0]                        strumTime;
+	wire       [ 3 : 0]                       smoothValue;
+	wire       [ 3 : 0]                       strumTime;
+	
+	wire                                      player1Enable;
+	wire                                      player2Enable;
+	wire       [14 : 0]                       status1;
+	wire       [14 : 0]                       status2;
+	wire       [ 4 : 0]                       frets1;
+	wire       [ 4 : 0]                       frets2;
+	wire                                      strum1;
+	wire                                      strum2;
+	wire       [ 7 : 0]                       whammy1;
+	wire       [ 7 : 0]                       whammy2;
+	wire                                      tilt1;
+	wire                                      tilt2;
+	wire       [ 7 : 0]                       leds1;
+	wire       [ 7 : 0]                       leds2;
+	
+	
 
 	// Nets for user logic slave model s/w accessible register example
 	reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -169,7 +186,9 @@ output                                    IP2Bus_Error;
 	wire                                      slv_write_ack;
 	integer                                   byte_index, bit_index;
 
-  // USER logic implementation added here
+	// USER logic implementation added here
+
+	// Register assignments
 	assign
 		playerEnable = slv_reg0[0],
 		playerType   = slv_reg0[1],
@@ -190,6 +209,20 @@ output                                    IP2Bus_Error;
 		orangeOn     = slv_reg14[24:0],
 		orangeOff    = slv_reg15[24:0],
 		orangePos    = slv_reg16[24:0];
+		
+	// Player enable assignments
+	assign
+		player1Enable = playerType ? 1'b0 : playerEnable,
+		player2Enable = playerType ? playerEnable : 1'b0;
+	
+	// Player output assignments
+	assign
+		Frets  = playerType ? frets2  : frets1,
+		Strum  = playerType ? strum2  : strum1,
+		Whammy = playerType ? whammy2 : whammy1,
+		Tilt   = playerType ? tilt2   : tilt1,
+		LEDs   = playerType ? leds2   : leds1,
+		status = playerType ? status2 : status1;
 		
 
 	// ------------------------------------------------------
@@ -374,13 +407,13 @@ output                                    IP2Bus_Error;
 
 	
 	// ------------------------------------------------------------
-	// Player module
+	// Player modules
 	// ------------------------------------------------------------
   
-	player player1 (
+	player player_old (
 		.CLK         (Bus2IP_Clk),
 		.RST         (Bus2IP_Resetn),
-		.Enable      (playerEnable),
+		.Enable      (player1Enable),
 		.HSync       (HSync),
 		.VSync       (VSync),
 		.PClk        (PClk),
@@ -404,12 +437,36 @@ output                                    IP2Bus_Error;
 		.SmoothValue (smoothValue),
 		.StrumTime   (strumTime),
 		
-		.Frets  (Frets),
-		.Strum  (Strum),
-		.Whammy (Whammy),
-		.Tilt   (Tilt),
-		.LEDs   (LEDs),
-		.Status (status)
+		.Frets  (frets1),
+		.Strum  (strum1),
+		.Whammy (whammy1),
+		.Tilt   (tilt1),
+		.LEDs   (leds1),
+		.Status (status1)
+	);
+	
+	player_filtered player_new (
+		.CLK         (Bus2IP_Clk),
+		.RST         (Bus2IP_Resetn),
+		.Enable      (player2Enable),
+		.HSync       (HSync),
+		.VSync       (VSync),
+		.PClk        (PClk),
+		.VDE         (VDE),
+		.RGB         (RGB),
+		.GreenPos    (greenPos),
+		.RedPos      (redPos),
+		.YellowPos   (yellowPos),
+		.BluePos     (bluePos),
+		.OrangePos   (orangePos),
+		.StrumTime   (strumTime),
+		
+		.Frets  (frets2),
+		.Strum  (strum2),
+		.Whammy (whammy2),
+		.Tilt   (tilt2),
+		.LEDs   (leds2),
+		.Status (status2)
 	);
   
 endmodule
