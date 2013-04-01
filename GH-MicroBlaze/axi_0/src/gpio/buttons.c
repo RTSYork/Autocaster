@@ -20,16 +20,16 @@ volatile u32 lBtnStateOld;
 XIntc btnIntCtrl;
 
 // --- 1 Player ---
-#define G_X 476
-#define G_Y 581
-#define R_X 559
-#define R_Y 577
-#define Y_X 640
-#define Y_Y 575
-#define B_X 721
-#define B_Y 577
-#define O_X 804
-#define O_Y 581
+//#define G_X 476
+//#define G_Y 581
+//#define R_X 559
+//#define R_Y 577
+//#define Y_X 640
+//#define Y_Y 575
+//#define B_X 721
+//#define B_Y 577
+//#define O_X 804
+//#define O_Y 581
 // --- 2 Player ---
 //#define G_X 218
 //#define G_Y 593
@@ -53,16 +53,16 @@ XIntc btnIntCtrl;
 //#define O_X 371
 //#define O_Y 605
 // --- Filtered fret detector ---
-//#define G_X 480
-//#define G_Y 571
-//#define R_X 558
-//#define R_Y 566
-//#define Y_X 640
-//#define Y_Y 564
-//#define B_X 722
-//#define B_Y 566
-//#define O_X 800
-//#define O_Y 571
+#define G_X 480
+#define G_Y 571
+#define R_X 558
+#define R_Y 566
+#define Y_X 640
+#define Y_Y 564
+#define B_X 722
+#define B_Y 566
+#define O_X 800
+#define O_Y 571
 
 // Positions of note detectors (x, y)
 point gPos = {G_X, G_Y};

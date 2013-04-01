@@ -119,20 +119,20 @@ int main(void)
 //	point oPos = {376, 621};
 
 	// Thresholds of note detectors
-	pixel gOn  = {0x05, 0x59, 0x07};
-	pixel gOff = {0x28, 0x59, 0x0A};
-	pixel rOn  = {0x68, 0x21, 0x23};
-	pixel rOff = {0x47, 0x0C, 0x1E};
-	pixel yOn  = {0x7C, 0x6D, 0x0F};
-	pixel yOff = {0x7A, 0x6D, 0x11};
-	pixel bOn  = {0x11, 0x33, 0x99};
-	pixel bOff = {0x2D, 0x30, 0x66};
-	pixel oOn  = {0x7F, 0x3A, 0x0F};
-	pixel oOff = {0x7A, 0x3D, 0x07};
+//	pixel gOn  = {0x05, 0x59, 0x07};
+//	pixel gOff = {0x28, 0x59, 0x0A};
+//	pixel rOn  = {0x68, 0x21, 0x23};
+//	pixel rOff = {0x47, 0x0C, 0x1E};
+//	pixel yOn  = {0x7C, 0x6D, 0x0F};
+//	pixel yOff = {0x7A, 0x6D, 0x11};
+//	pixel bOn  = {0x11, 0x33, 0x99};
+//	pixel bOff = {0x2D, 0x30, 0x66};
+//	pixel oOn  = {0x7F, 0x3A, 0x0F};
+//	pixel oOff = {0x7A, 0x3D, 0x07};
 
 	// Control values
-	u8 smoothValue = 3; //4;
-	u8 strumValue = 2; //3;
+//	u8 smoothValue = 3; //4;
+//	u8 strumValue = 2; //3;
 	u8 enable = 0;
 
 	// Status value
@@ -142,18 +142,19 @@ int main(void)
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
+//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
+	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
 
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOn,  FRET_RED,    THRESHOLD_ON);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOff, FRET_RED,    THRESHOLD_OFF);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOn,  FRET_YELLOW, THRESHOLD_ON);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOff, FRET_YELLOW, THRESHOLD_OFF);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOn,  FRET_BLUE,   THRESHOLD_ON);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOff, FRET_BLUE,   THRESHOLD_OFF);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOn,  FRET_ORANGE, THRESHOLD_ON);
-	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOff, FRET_ORANGE, THRESHOLD_OFF);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOn,  FRET_RED,    THRESHOLD_ON);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOff, FRET_RED,    THRESHOLD_OFF);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOn,  FRET_YELLOW, THRESHOLD_ON);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOff, FRET_YELLOW, THRESHOLD_OFF);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOn,  FRET_BLUE,   THRESHOLD_ON);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOff, FRET_BLUE,   THRESHOLD_OFF);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOn,  FRET_ORANGE, THRESHOLD_ON);
+//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOff, FRET_ORANGE, THRESHOLD_OFF);
 
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
@@ -206,7 +207,8 @@ int main(void)
 				enable = 0;
 				setLed(LED2, LED_OFF);
 			}
-			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
+//			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
 
 			lasts2 = s2;
 		}
