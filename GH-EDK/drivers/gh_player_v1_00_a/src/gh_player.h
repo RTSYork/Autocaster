@@ -64,6 +64,9 @@
 #define THRESHOLD_ON	0
 #define THRESHOLD_OFF	1
 
+#define TYPE_OLD 0
+#define TYPE_NEW 1
+
 
 /**************************** Type Definitions *****************************/
 
@@ -229,7 +232,7 @@ typedef struct {
 
 void ghPlayer_SetPosition(u32 baseAddress, point position, u8 fret);
 void ghPlayer_SetThreshold(u32 baseAddress, pixel value, u8 fret, u8 onOff);
-void ghPlayer_SetControl(u32 baseAddress, u8 strumValue, u8 fretValue, u8 enable);
+void ghPlayer_SetControl(u32 baseAddress, u8 strumValue, u8 fretValue, u8 type, u8 enable);
 
 u32 ghPlayer_GetStatus(u32 baseAddress);
 
