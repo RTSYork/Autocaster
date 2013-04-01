@@ -274,7 +274,7 @@ namespace Image_Filter
                     
 
                     // Mixed image and note detection
-                    if ((y > 150 && y < 200) && ((y >> 2) + (y >> 4)) == (width >> 1) - x - 92)
+                    if ((y >= 201 && y < 211) && x == 60)// ((y >> 2) + (y >> 4)) == (width >> 1) - x - 92)
                     {
                         newPixel = Color.FromArgb(0, 255, 0);
                         if (grey3 == 255)
@@ -285,7 +285,7 @@ namespace Image_Filter
                              greens[index].Add(y);
                         }
                     }
-                    else if ((y > 150 && y < 200) && ((y >> 3) + (y >> 5)) == (width >> 1) - x - 48)
+                    else if ((y >= 196 && y < 206) && x == 138)// && ((y >> 3) + (y >> 5)) == (width >> 1) - x - 48)
                     {
                         newPixel = Color.FromArgb(255, 0, 0);
                         if (grey3 == 255)
@@ -294,7 +294,7 @@ namespace Image_Filter
                             else
                                 reds[index].Add(y);
                     }
-                    else if ((y > 150 && y < 200) && x == (width >> 1))
+                    else if ((y >= 194 && y < 204) && x == 220)// && x == (width >> 1))
                     {
                         newPixel = Color.FromArgb(255, 255, 0);
                         if (grey3 == 255)
@@ -303,7 +303,7 @@ namespace Image_Filter
                             else
                                 yellows[index].Add(y);
                     }
-                    else if ((y > 150 && y < 200) && ((y >> 3) + (y >> 5)) == x - 48 - (width >> 1))
+                    else if ((y >= 196 && y < 206) && x == 302)// && ((y >> 3) + (y >> 5)) == x - 48 - (width >> 1))
                     {
                         newPixel = Color.FromArgb(0, 0, 255);
                         if (grey3 == 255)
@@ -312,7 +312,7 @@ namespace Image_Filter
                             else
                                 blues[index].Add(y);
                     }
-                    else if ((y > 150 && y < 200) && ((y >> 2) + (y >> 4)) == x - 92 - (width >> 1))
+                    else if ((y >= 201 && y < 211) && x == 380)// && ((y >> 2) + (y >> 4)) == x - 92 - (width >> 1))
                     {
                         newPixel = Color.FromArgb(255, 128, 0);
                         if (grey3 == 255)
