@@ -19,39 +19,50 @@ volatile u32 lBtnStateOld;
 
 XIntc btnIntCtrl;
 
-// 1 Player
-#define G_X 470
-#define G_Y 601
-#define R_X 556
-#define R_Y 597
+// --- 1 Player ---
+#define G_X 476
+#define G_Y 581
+#define R_X 559
+#define R_Y 577
 #define Y_X 640
-#define Y_Y 595
-#define B_X 724
-#define B_Y 597
-#define O_X 810
-#define O_Y 601
-// 2 Player
-//#define G_X 212
-//#define G_Y 611
-//#define R_X 285
-//#define R_Y 607
+#define Y_Y 575
+#define B_X 721
+#define B_Y 577
+#define O_X 804
+#define O_Y 581
+// --- 2 Player ---
+//#define G_X 218
+//#define G_Y 593
+//#define R_X 288
+//#define R_Y 589
 //#define Y_X 358
-//#define Y_Y 606
-//#define B_X 432
-//#define B_Y 608
-//#define O_X 505
-//#define O_Y 612
-// 3 Player
-//#define G_X 114
-//#define G_Y 623
-//#define R_X 184
-//#define R_Y 619
+//#define Y_Y 588
+//#define B_X 429
+//#define B_Y 590
+//#define O_X 499
+//#define O_Y 594
+// --- 3 Player ---
+//#define G_X 109
+//#define G_Y 607
+//#define R_X 182
+//#define R_Y 603
 //#define Y_X 249
-//#define Y_Y 618
-//#define B_X 313
-//#define B_Y 618
-//#define O_X 376
-//#define O_Y 621
+//#define Y_Y 602
+//#define B_X 311
+//#define B_Y 602
+//#define O_X 371
+//#define O_Y 605
+// --- Filtered fret detector ---
+//#define G_X 480
+//#define G_Y 571
+//#define R_X 558
+//#define R_Y 566
+//#define Y_X 640
+//#define Y_Y 564
+//#define B_X 722
+//#define B_Y 566
+//#define O_X 800
+//#define O_Y 571
 
 // Positions of note detectors (x, y)
 point gPos = {G_X, G_Y};
