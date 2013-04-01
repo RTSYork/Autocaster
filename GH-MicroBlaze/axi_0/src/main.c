@@ -87,7 +87,7 @@ int main(void)
 	//startTimer(0);
 	//startTimer(1);
 
-	setLeds(0x80);
+	setLeds(0);
 
 
 	int lasts0 = SWITCH_OFF;
@@ -142,7 +142,7 @@ int main(void)
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, enable);
+	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
 
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
@@ -206,7 +206,7 @@ int main(void)
 				enable = 0;
 				setLed(LED2, LED_OFF);
 			}
-			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, enable);
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
 
 			lasts2 = s2;
 		}
@@ -237,18 +237,48 @@ int main(void)
 		s6 = getSwitch(SWITCH6);
 		s7 = getSwitch(SWITCH7);
 		if (s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
-			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON)
+			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_MIX);
-			else if (s7 == SWITCH_ON)
+				setLed(LED4, LED_ON);
+				setLed(LED5, LED_ON);
+				setLed(LED6, LED_ON);
+				setLed(LED7, LED_ON);
+			}
+			else if (s7 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_EDGE);
-			else if (s6 == SWITCH_ON)
+				setLed(LED4, LED_OFF);
+				setLed(LED5, LED_OFF);
+				setLed(LED6, LED_OFF);
+				setLed(LED7, LED_ON);
+			}
+			else if (s6 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH2);
-			else if (s5 == SWITCH_ON)
+				setLed(LED4, LED_OFF);
+				setLed(LED5, LED_OFF);
+				setLed(LED6, LED_ON);
+				setLed(LED7, LED_OFF);
+			}
+			else if (s5 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_BLUR);
-			else if (s4 == SWITCH_ON)
+				setLed(LED4, LED_OFF);
+				setLed(LED5, LED_ON);
+				setLed(LED6, LED_OFF);
+				setLed(LED7, LED_OFF);
+			}
+			else if (s4 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_GREY);
-			else
+				setLed(LED4, LED_ON);
+				setLed(LED5, LED_OFF);
+				setLed(LED6, LED_OFF);
+				setLed(LED7, LED_OFF);
+			}
+			else {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+				setLed(LED4, LED_OFF);
+				setLed(LED5, LED_OFF);
+				setLed(LED6, LED_OFF);
+				setLed(LED7, LED_OFF);
+			}
 
 			lasts4 = s4;
 			lasts5 = s5;
