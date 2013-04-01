@@ -437,12 +437,12 @@ output                                    IP2Bus_Error;
 		.SmoothValue (smoothValue),
 		.StrumTime   (strumTime),
 		
-		.Frets  (frets1),
-		.Strum  (strum1),
-		.Whammy (whammy1),
-		.Tilt   (tilt1),
-		.LEDs   (leds1),
-		.Status (status1)
+		.Frets       (frets1),
+		.Strum       (strum1),
+		.Whammy      (whammy1),
+		.Tilt        (tilt1),
+		.LEDs        (leds1),
+		.Status      (status1)
 	);
 	
 	player_filtered player_new (
@@ -453,7 +453,7 @@ output                                    IP2Bus_Error;
 		.VSync       (VSync),
 		.PClk        (PClk),
 		.VDE         (VDE),
-		.RGB         (RGB),
+		.Pixel       (RGB[0]),
 		.GreenPos    (greenPos),
 		.RedPos      (redPos),
 		.YellowPos   (yellowPos),
@@ -461,12 +461,12 @@ output                                    IP2Bus_Error;
 		.OrangePos   (orangePos),
 		.StrumTime   (strumTime),
 		
-		.Frets  (frets2),
-		.Strum  (strum2),
-		.Whammy (whammy2),
-		.Tilt   (tilt2),
-		.LEDs   (leds2),
-		.Status (status2)
+		.Frets       (frets2),
+		.Strum       (strum2),
+		.Whammy      (whammy2),
+		.Tilt        (tilt2),
+		.LEDs        (leds2),
+		.Status      (status2)
 	);
   
 endmodule

@@ -7,7 +7,7 @@ module player_filtered
 	VSync,
 	PClk,
 	VDE,
-	RGB,
+	Pixel,
 	GreenPos,
 	RedPos,
 	YellowPos,
@@ -30,7 +30,7 @@ input         HSync;
 input         VSync;
 input         PClk;
 input         VDE;
-input  [23:0] RGB;
+input         Pixel;
 input  [23:0] GreenPos;
 input  [23:0] RedPos;
 input  [23:0] YellowPos;
@@ -57,11 +57,11 @@ output [14:0] Status;
 	
 	assign
 		Frets  = Enable ? {fretO, fretB, fretY, fretR, fretG} : 5'b0,
-		Strum  = Enable ? (strumG | strumR | strumY | strumB | strumO) : 1'b0,
+		Strum  = Enable ? strumOut : 1'b0,
 		Whammy = Enable ? whammyVal : 8'b0,
 		Tilt   = Enable ? tiltVal : 1'b0,
-		LEDs   = {tiltVal, whammyVal[7], (strumG | strumR | strumY | strumB | strumO), fretO, fretB, fretY, fretR, fretG},
-		Status = {tiltVal, whammyVal, (strumG | strumR | strumY | strumB | strumO), fretO, fretB, fretY, fretR, fretG};
+		LEDs   = {tiltVal, whammyVal[7], strumOut, fretO, fretB, fretY, fretR, fretG},
+		Status = {tiltVal, whammyVal, strumOut, fretO, fretB, fretY, fretR, fretG};
 	
 	
 	always @(posedge PClk)
@@ -109,6 +109,91 @@ output [14:0] Status;
 	);
 	
 	
+	// Strum Controller
+	mkStrum Strummer (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.strumTime_in  (StrumTime),
+		.fret_g        (fretG),
+		.fret_r        (fretR),
+		.fret_y        (fretY),
+		.fret_b        (fretB),
+		.fret_o        (fretO),
+		
+		.strum         (strumOut)
+	);
+	
+	
+	// Green Fret Controller
+	mkFretFiltered GreenFret (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.hsync         (hClk),
+		.vde           (VDE),
+		.pixel_in      (Pixel),
+		.xPos_in       (GreenPos[10:0]),
+		.yPos_in       (GreenPos[21:12]),
+		
+		.press         (fretG)
+	);
+	
+	// Red Fret Controller
+	mkFretFiltered RedFret (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.hsync         (hClk),
+		.vde           (VDE),
+		.pixel_in      (Pixel),
+		.xPos_in       (RedPos[10:0]),
+		.yPos_in       (RedPos[21:12]),
+		
+		.press         (fretR)
+	);
+	
+	// Yellow Fret Controller
+	mkFretFiltered YellowFret (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.hsync         (hClk),
+		.vde           (VDE),
+		.pixel_in      (Pixel),
+		.xPos_in       (YellowPos[10:0]),
+		.yPos_in       (YellowPos[21:12]),
+		
+		.press         (fretY)
+	);
+	
+	// Blue Fret Controller
+	mkFretFiltered BlueFret (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.hsync         (hClk),
+		.vde           (VDE),
+		.pixel_in      (Pixel),
+		.xPos_in       (BluePos[10:0]),
+		.yPos_in       (BluePos[21:12]),
+		
+		.press         (fretB)
+	);
+	
+	// Orange Fret Controller
+	mkFretFiltered OrangeFret (
+		.CLK           (PClk),
+		.RST_N         (RST),
+		.vsync         (vClk),
+		.hsync         (hClk),
+		.vde           (VDE),
+		.pixel_in      (Pixel),
+		.xPos_in       (OrangePos[10:0]),
+		.yPos_in       (OrangePos[21:12]),
+		
+		.press         (fretO)
+	);
 
 	
 	
