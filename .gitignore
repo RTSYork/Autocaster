@@ -3,3 +3,8 @@
 ##
 .DS_Store
 .fuse_hidden*
+
+##
+# General Windows
+##
+[Tt]humbs.db
