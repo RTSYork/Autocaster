@@ -21,9 +21,9 @@ module mkBlur (Blur);
 
 	Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Reg#(Bit#(   2)) lastPxl <- mkReg(0);
-	Reg#(Bit#(   1)) currPxl <- mkReg(0);
+	Wire#(Bit#(   1)) currPxl <- mkWire;
 	
-	Reg#(Bit#(4)) blurred <- mkReg(0);
+	Wire#(Bit#(4)) blurred <- mkDWire(0);
 	
 	Reg#(UInt#(11)) x <- mkReg(0);
 	
