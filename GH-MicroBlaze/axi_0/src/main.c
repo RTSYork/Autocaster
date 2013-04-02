@@ -92,6 +92,7 @@ int main(void)
 
 	int lasts0 = SWITCH_OFF;
 	int lasts2 = SWITCH_OFF;
+	int lasts3 = SWITCH_OFF;
 	int lasts4 = SWITCH_OFF;
 	int lasts5 = SWITCH_OFF;
 	int lasts6 = SWITCH_OFF;
@@ -213,34 +214,36 @@ int main(void)
 			lasts2 = s2;
 		}
 
-		s3 = getSwitch(SWITCH3);
-		if (s3 == SWITCH_ON) {
-			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
-			xil_printf("%d%d%d%d%d %d %d%d%d%d%d%d%d%d %d \r",
-					BIT_CHECK(status, 0),
-					BIT_CHECK(status, 1)  >> 1,
-					BIT_CHECK(status, 2)  >> 2,
-					BIT_CHECK(status, 3)  >> 3,
-					BIT_CHECK(status, 4)  >> 4,
-					BIT_CHECK(status, 5)  >> 5,
-					BIT_CHECK(status, 6)  >> 6,
-					BIT_CHECK(status, 7)  >> 7,
-					BIT_CHECK(status, 8)  >> 8,
-					BIT_CHECK(status, 9)  >> 9,
-					BIT_CHECK(status, 10) >> 10,
-					BIT_CHECK(status, 11) >> 11,
-					BIT_CHECK(status, 12) >> 12,
-					BIT_CHECK(status, 13) >> 13,
-					BIT_CHECK(status, 14) >> 14);
-		}
+//		s3 = getSwitch(SWITCH3);
+//		if (s3 == SWITCH_ON) {
+//			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
+//			xil_printf("%d%d%d%d%d %d %d%d%d%d%d%d%d%d %d \r",
+//					BIT_CHECK(status, 0),
+//					BIT_CHECK(status, 1)  >> 1,
+//					BIT_CHECK(status, 2)  >> 2,
+//					BIT_CHECK(status, 3)  >> 3,
+//					BIT_CHECK(status, 4)  >> 4,
+//					BIT_CHECK(status, 5)  >> 5,
+//					BIT_CHECK(status, 6)  >> 6,
+//					BIT_CHECK(status, 7)  >> 7,
+//					BIT_CHECK(status, 8)  >> 8,
+//					BIT_CHECK(status, 9)  >> 9,
+//					BIT_CHECK(status, 10) >> 10,
+//					BIT_CHECK(status, 11) >> 11,
+//					BIT_CHECK(status, 12) >> 12,
+//					BIT_CHECK(status, 13) >> 13,
+//					BIT_CHECK(status, 14) >> 14);
+//		}
 
+		s3 = getSwitch(SWITCH3);
 		s4 = getSwitch(SWITCH4);
 		s5 = getSwitch(SWITCH5);
 		s6 = getSwitch(SWITCH6);
 		s7 = getSwitch(SWITCH7);
-		if (s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
-			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON) {
+		if (s3 != lasts3 || s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
+			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON && s3 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_MIX);
+				setLed(LED3, LED_ON);
 				setLed(LED4, LED_ON);
 				setLed(LED5, LED_ON);
 				setLed(LED6, LED_ON);
@@ -248,6 +251,7 @@ int main(void)
 			}
 			else if (s7 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_EDGE);
+				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
 				setLed(LED6, LED_OFF);
@@ -255,6 +259,7 @@ int main(void)
 			}
 			else if (s6 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH2);
+				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
 				setLed(LED6, LED_ON);
@@ -262,26 +267,38 @@ int main(void)
 			}
 			else if (s5 == SWITCH_ON) {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_BLUR);
+				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_ON);
 				setLed(LED6, LED_OFF);
 				setLed(LED7, LED_OFF);
 			}
 			else if (s4 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_GREY);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH1);
+				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_ON);
+				setLed(LED5, LED_OFF);
+				setLed(LED6, LED_OFF);
+				setLed(LED7, LED_OFF);
+			}
+			else if (s3 == SWITCH_ON) {
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_GREY);
+				setLed(LED3, LED_ON);
+				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
 				setLed(LED6, LED_OFF);
 				setLed(LED7, LED_OFF);
 			}
 			else {
 				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
 				setLed(LED6, LED_OFF);
 				setLed(LED7, LED_OFF);
 			}
 
+			lasts3 = s3;
 			lasts4 = s4;
 			lasts5 = s5;
 			lasts6 = s6;
