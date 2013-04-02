@@ -20,9 +20,9 @@ endinterface
 module mkEdge (Edge);
 
 	Reg#(Bit#(1280)) lastRow <- mkReg(0);
-	Reg#(Bit#(   1)) currPxl <- mkReg(0);
+	Wire#(Bit#(1))   currPxl <- mkWire;
 	
-	Reg#(Bit#(1)) filtered <- mkReg(0);
+	Wire#(Bit#(1)) filtered <- mkDWire(0);
 	
 	Reg#(UInt#(11)) x <- mkReg(0);
 	
