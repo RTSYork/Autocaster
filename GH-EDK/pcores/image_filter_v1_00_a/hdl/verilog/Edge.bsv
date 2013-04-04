@@ -19,7 +19,7 @@ endinterface
 (* synthesize *)
 module mkEdge (Edge);
 
-	Reg#(Bit#(1280)) lastRow <- mkReg(0);
+	//Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Wire#(Bit#(1))   currPxl <- mkWire;
 	
 	Wire#(Bit#(1)) filtered <- mkDWire(0);
@@ -50,9 +50,9 @@ module mkEdge (Edge);
 	
 	// Calculate edge filter
 	rule blur_pixel(vde_pulse && ready);
-		filtered <= lastRow[x] & ~currPxl;
+		filtered <= ~currPxl;//lastRow[x] & ~currPxl;
 
-		lastRow[x] <= currPxl;
+		//lastRow[x] <= currPxl;
 	endrule
 	
 	
