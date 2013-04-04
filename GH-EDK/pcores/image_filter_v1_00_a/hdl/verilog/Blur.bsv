@@ -19,7 +19,7 @@ endinterface
 (* synthesize *)
 module mkBlur (Blur);
 
-	Reg#(Bit#(1280)) lastRow <- mkReg(0);
+	//Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Reg#(Bit#(   2)) lastPxl <- mkReg(0);
 	Wire#(Bit#(   1)) currPxl <- mkWire;
 	
@@ -51,10 +51,10 @@ module mkBlur (Blur);
 	
 	// Calculate blur
 	rule blur_pixel(vde_pulse && ready);
-		blurred <= {currPxl, lastPxl, lastRow[x]};
+		blurred <= {currPxl, currPxl, lastPxl};//lastRow[x]};
 		
 		lastPxl    <= {currPxl, lastPxl[1]};
-		lastRow[x] <= currPxl;
+		//lastRow[x] <= currPxl;
 	endrule
 	
 	
