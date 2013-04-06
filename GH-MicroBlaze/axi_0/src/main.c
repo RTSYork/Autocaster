@@ -133,17 +133,17 @@ int main(void)
 
 	// Control values
 //	u8 smoothValue = 3; //4;
-//	u8 strumValue = 2; //3;
+//	u8 delay = 10; //3;
 	u8 enable = 0;
 
 	// Status value
-	u32 status = 0;
+//	u32 status = 0;
 
 	// Reset GH Player core
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
+//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, enable);
 	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
 
 //	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);

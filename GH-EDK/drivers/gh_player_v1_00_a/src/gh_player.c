@@ -20,8 +20,8 @@ void ghPlayer_SetThreshold(u32 baseAddress, pixel value, u8 fret, u8 onOff) {
 	GH_PLAYER_mWriteSlaveReg2(baseAddress, ((fret*3) + onOff) * 4, (value.r<<16) | (value.g<<8) | value.b);
 }
 
-void ghPlayer_SetControl(u32 baseAddress, u8 strumValue, u8 fretValue, u8 type, u8 enable) {
-	GH_PLAYER_mWriteSlaveReg0(baseAddress, 0, (strumValue<<6) | (fretValue<<2) | (type<<1) | enable);
+void ghPlayer_SetControl(u32 baseAddress, u8 strumValue, u8 delay, u8 type, u8 enable) {
+	GH_PLAYER_mWriteSlaveReg0(baseAddress, 0, (strumValue<<7) | (delay<<2) | (type<<1) | enable);
 }
 
 u32 ghPlayer_GetStatus(u32 baseAddress) {
