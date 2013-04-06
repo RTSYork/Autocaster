@@ -23,7 +23,7 @@ module player
 	OrangeOn,
 	OrangeOff,
 	OrangePos,
-	SmoothValue,
+	DelayValue,
 	StrumTime,
 	
 	Frets,
@@ -57,7 +57,7 @@ input  [23:0] BluePos;
 input  [23:0] OrangeOn;
 input  [23:0] OrangeOff;
 input  [23:0] OrangePos;
-input   [3:0] SmoothValue;
+input   [4:0] DelayValue;
 input   [3:0] StrumTime;
 
 output  [4:0] Frets;
@@ -72,16 +72,21 @@ output [14:0] Status;
 	wire       strumG, strumR, strumY, strumB, strumO;
 	wire [7:0] whammyVal;
 	wire       tiltVal;
+	wire [4:0] fretsVal, fretsDly;
+	wire       strumVal, strumDly;
 	
 	reg vClk, vSyncLast, vSyncLast2;
 	reg hClk, hSyncLast, hSyncLast2;
 	
+	assign
+		fretsVal  = {fretO, fretB, fretY, fretR, fretG},
+		strumVal  = (strumG | strumR | strumY | strumB | strumO);
 	
 	assign
-		Frets  = (Enable == 1'b1) ? {fretO, fretB, fretY, fretR, fretG} : 5'b0,
-		Strum  = (Enable == 1'b1) ? (strumG | strumR | strumY | strumB | strumO) : 1'b0,
-		Whammy = (Enable == 1'b1) ? whammyVal : 8'b0,
-		Tilt   = (Enable == 1'b1) ? tiltVal : 1'b0,
+		Frets  = Enable ? fretsDly : 5'b0,
+		Strum  = Enable ? strumDly : 1'b0,
+		Whammy = Enable ? whammyVal : 8'b0,
+		Tilt   = Enable ? tiltVal : 1'b0,
 		LEDs   = {tiltVal, whammyVal[7], (strumG | strumR | strumY | strumB | strumO), fretO, fretB, fretY, fretR, fretG},
 		Status = {tiltVal, whammyVal, (strumG | strumR | strumY | strumB | strumO), fretO, fretB, fretY, fretR, fretG};
 	
@@ -109,6 +114,20 @@ output [14:0] Status;
 			hClk <= 1'b0;
 		end
 	end
+	
+	
+	// Delay
+	mkDelay Delay (
+		.CLK          (PClk),
+		.RST_N        (RST),
+		.vsync        (vClk),
+		.delay_in     (DelayValue),
+		.frets        (fretsVal),
+		.strum        (strumVal),
+		
+		.frets_out    (fretsDly),
+		.strum_out    (strumDly)
+	);
 	
 	
 	// Whammy Controller
@@ -146,7 +165,7 @@ output [14:0] Status;
 		.yPos_val      (GreenPos[21:12]),
 		.trigUp_val    (GreenOn),
 		.trigDown_val  (GreenOff),
-		.smoothing_val (SmoothValue),
+		.smoothing_val (4'b0),
 		.strumTime_val (StrumTime),
 		
 		.press         (fretG),
@@ -168,7 +187,7 @@ output [14:0] Status;
 		.yPos_val      (RedPos[21:12]),
 		.trigUp_val    (RedOn),
 		.trigDown_val  (RedOff),
-		.smoothing_val (SmoothValue),
+		.smoothing_val (4'b0),
 		.strumTime_val (StrumTime),
 		
 		.press         (fretR),
@@ -190,7 +209,7 @@ output [14:0] Status;
 		.yPos_val      (YellowPos[21:12]),
 		.trigUp_val    (YellowOn),
 		.trigDown_val  (YellowOff),
-		.smoothing_val (SmoothValue),
+		.smoothing_val (4'b0),
 		.strumTime_val (StrumTime),
 		
 		.press         (fretY),
@@ -212,7 +231,7 @@ output [14:0] Status;
 		.yPos_val      (BluePos[21:12]),
 		.trigUp_val    (BlueOn),
 		.trigDown_val  (BlueOff),
-		.smoothing_val (SmoothValue),
+		.smoothing_val (4'b0),
 		.strumTime_val (StrumTime),
 		
 		.press         (fretB),
@@ -234,7 +253,7 @@ output [14:0] Status;
 		.yPos_val      (OrangePos[21:12]),
 		.trigUp_val    (OrangeOn),
 		.trigDown_val  (OrangeOff),
-		.smoothing_val (SmoothValue),
+		.smoothing_val (4'b0),
 		.strumTime_val (StrumTime),
 		
 		.press         (fretO),

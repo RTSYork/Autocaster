@@ -141,7 +141,7 @@ output                                    IP2Bus_Error;
 	wire       [23 : 0]                       orangeOn;
 	wire       [23 : 0]                       orangeOff;
 	wire       [23 : 0]                       orangePos;
-	wire       [ 3 : 0]                       smoothValue;
+	wire       [ 3 : 0]                       delayValue;
 	wire       [ 3 : 0]                       strumTime;
 	
 	wire                                      player1Enable;
@@ -192,8 +192,8 @@ output                                    IP2Bus_Error;
 	assign
 		playerEnable = slv_reg0[0],
 		playerType   = slv_reg0[1],
-		smoothValue  = slv_reg0[5:2],
-		strumTime    = slv_reg0[9:6],
+		delayValue   = slv_reg0[6:2],
+		strumTime    = slv_reg0[10:7],
 		greenOn      = slv_reg2[24:0],
 		greenOff     = slv_reg3[24:0],
 		greenPos     = slv_reg4[24:0],
@@ -256,7 +256,7 @@ output                                    IP2Bus_Error;
 
 			if ( Bus2IP_Resetn == 1'b0 )
 				begin
-					slv_reg0  <= 32'b00000000000000000000000_0100_0101_0; // Strum time 4, Smooth value 5, Output off
+					slv_reg0  <= 32'b000000000000000000000_0100_00101_0_0; // Strum time 4, Delay value 5, Old type, Output off
 					slv_reg1  <= 32'b0;
 					slv_reg2  <= 32'h00_055907;  // Green
 					slv_reg3  <= 32'h00_28590A;
@@ -434,7 +434,7 @@ output                                    IP2Bus_Error;
 		.OrangeOn    (orangeOn),
 		.OrangeOff   (orangeOff),
 		.OrangePos   (orangePos),
-		.SmoothValue (smoothValue),
+		.DelayValue  (delayValue),
 		.StrumTime   (strumTime),
 		
 		.Frets       (frets1),
