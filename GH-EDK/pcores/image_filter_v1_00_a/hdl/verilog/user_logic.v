@@ -150,6 +150,11 @@ output                                    IP2Bus_Error;
 	wire                                      enable;
 	wire       [ 5 : 0]                       filterDisplay;
 	wire       [ 8 : 0]                       threshold;
+	
+	reg                                       valid, valid2;
+	reg     [C_AXI_STREAM_DATA_WIDTH/8-1 : 0] keep, keep2;
+	reg                                       last, last2;
+	reg                                       ready, ready2;
 
 	// Nets for user logic slave model s/w accessible register example
 	reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -178,17 +183,32 @@ output                                    IP2Bus_Error;
 		M_AXIS_S2MM_TDATA = enable ? {8'b0, dispOut} : S_AXIS_S2MM_TDATA,
 		RGB_OUT           = enable ? {24{procOut}} : rgbIn;
 	
+		
 	// Tie together unmodified lines of AXIS bus
 	assign
-		M_AXIS_S2MM_TVALID = S_AXIS_S2MM_TVALID,
-		M_AXIS_S2MM_TKEEP  = S_AXIS_S2MM_TKEEP,
-		M_AXIS_S2MM_TLAST  = S_AXIS_S2MM_TLAST,
-		S_AXIS_S2MM_TREADY = M_AXIS_S2MM_TREADY;
+		M_AXIS_S2MM_TVALID = enable ? valid2 : S_AXIS_S2MM_TVALID,
+		M_AXIS_S2MM_TKEEP  = enable ? keep2  : S_AXIS_S2MM_TKEEP,
+		M_AXIS_S2MM_TLAST  = enable ? last2  : S_AXIS_S2MM_TLAST,
+		S_AXIS_S2MM_TREADY = enable ? ready2 : M_AXIS_S2MM_TREADY;
+	
+	// Delay AXIS signals through some resisters
+	always @(posedge ACLK)
+		begin
+			valid  <= S_AXIS_S2MM_TVALID;
+			keep   <= S_AXIS_S2MM_TKEEP;
+			last   <= S_AXIS_S2MM_TLAST;
+			ready  <= M_AXIS_S2MM_TREADY;
+			
+			valid2 <= valid;
+			keep2  <= keep;
+			last2  <= last;
+			ready2 <= ready;
+		end
   
 	// AXIS clock outputs
 	assign
 		M_AXIS_S2MM_ACLK = ACLK,
-		M_AXIS_S2MM_ACLK = ACLK;
+		S_AXIS_S2MM_ACLK = ACLK;
 	
 	
 
@@ -274,7 +294,7 @@ output                                    IP2Bus_Error;
 		.CLK          (ACLK),
 		.RST          (Bus2IP_Resetn),
 		.HSync        (S_AXIS_S2MM_TLAST),
-		.VDE          (S_AXIS_S2MM_TKEEP),
+		.VDE          (S_AXIS_S2MM_TVALID),
 		.Display      (filterDisplay),
 		.RGBin        (rgbIn),
 		.Threshold    (threshold),
