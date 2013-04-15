@@ -186,23 +186,23 @@ output                                    IP2Bus_Error;
 		
 	// Tie together unmodified lines of AXIS bus
 	assign
-		M_AXIS_S2MM_TVALID = enable ? valid2 : S_AXIS_S2MM_TVALID,
-		M_AXIS_S2MM_TKEEP  = enable ? keep2  : S_AXIS_S2MM_TKEEP,
-		M_AXIS_S2MM_TLAST  = enable ? last2  : S_AXIS_S2MM_TLAST,
-		S_AXIS_S2MM_TREADY = enable ? ready2 : M_AXIS_S2MM_TREADY;
+		M_AXIS_S2MM_TVALID = 0 ? valid2 : S_AXIS_S2MM_TVALID,
+		M_AXIS_S2MM_TKEEP  = 0 ? keep2  : S_AXIS_S2MM_TKEEP,
+		M_AXIS_S2MM_TLAST  = 0 ? last2  : S_AXIS_S2MM_TLAST,
+		S_AXIS_S2MM_TREADY = 0 ? ready2 : M_AXIS_S2MM_TREADY;
 	
 	// Delay AXIS signals through some resisters
 	always @(posedge ACLK)
 		begin
-			valid  <= S_AXIS_S2MM_TVALID;
-			keep   <= S_AXIS_S2MM_TKEEP;
-			last   <= S_AXIS_S2MM_TLAST;
-			ready  <= M_AXIS_S2MM_TREADY;
+			valid2  <= S_AXIS_S2MM_TVALID;
+			keep2   <= S_AXIS_S2MM_TKEEP;
+			last2   <= S_AXIS_S2MM_TLAST;
+			ready2  <= M_AXIS_S2MM_TREADY;
 			
-			valid2 <= valid;
-			keep2  <= keep;
-			last2  <= last;
-			ready2 <= ready;
+			//valid2 <= valid;
+			//keep2  <= keep;
+			//last2  <= last;
+			//ready2 <= ready;
 		end
   
 	// AXIS clock outputs
