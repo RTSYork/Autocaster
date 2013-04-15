@@ -13,6 +13,7 @@ module player_filtered
 	YellowPos,
 	BluePos,
 	OrangePos,
+	DelayValue,
 	StrumTime,
 	
 	Frets,
@@ -36,6 +37,7 @@ input  [23:0] RedPos;
 input  [23:0] YellowPos;
 input  [23:0] BluePos;
 input  [23:0] OrangePos;
+input  [ 4:0] DelayValue;
 input  [ 3:0] StrumTime;
 
 output [ 4:0] Frets;
@@ -50,18 +52,23 @@ output [14:0] Status;
 	wire       strumG, strumR, strumY, strumB, strumO;
 	wire [7:0] whammyVal;
 	wire       tiltVal;
+	wire [4:0] fretsVal, fretsDly;
+	wire       strumVal, strumDly;
 	
 	reg vClk, vSyncLast, vSyncLast2;
 	reg hClk, hSyncLast, hSyncLast2;
 	
 	
 	assign
-		Frets  = Enable ? {fretO, fretB, fretY, fretR, fretG} : 5'b0,
-		Strum  = Enable ? strumOut : 1'b0,
+		fretsVal  = {fretO, fretB, fretY, fretR, fretG};
+		
+	assign
+		Frets  = Enable ? fretsDly : 5'b0,
+		Strum  = Enable ? strumDly : 1'b0,
 		Whammy = Enable ? whammyVal : 8'b0,
 		Tilt   = Enable ? tiltVal : 1'b0,
-		LEDs   = {tiltVal, whammyVal[7], strumOut, fretO, fretB, fretY, fretR, fretG},
-		Status = {tiltVal, whammyVal, strumOut, fretO, fretB, fretY, fretR, fretG};
+		LEDs   = {tiltVal, whammyVal[7], strumDly, fretsVal},
+		Status = {tiltVal, whammyVal, strumDly, fretsVal};
 	
 	
 	always @(posedge PClk)
@@ -87,6 +94,20 @@ output [14:0] Status;
 			hClk <= 1'b0;
 		end
 	end
+	
+	
+	// Delay
+	mkDelay Delay (
+		.CLK          (PClk),
+		.RST_N        (RST),
+		.vsync        (vClk),
+		.delay_in     (DelayValue),
+		.frets        (fretsVal),
+		.strum        (strumVal),
+		
+		.frets_out    (fretsDly),
+		.strum_out    (strumDly)
+	);
 	
 	
 	// Whammy Controller
@@ -121,7 +142,7 @@ output [14:0] Status;
 		.fret_b        (fretB),
 		.fret_o        (fretO),
 		
-		.strum         (strumOut)
+		.strum         (strumVal)
 	);
 	
 	

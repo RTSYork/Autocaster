@@ -459,6 +459,7 @@ output                                    IP2Bus_Error;
 		.YellowPos   (yellowPos),
 		.BluePos     (bluePos),
 		.OrangePos   (orangePos),
+		.DelayValue  (delayValue),
 		.StrumTime   (strumTime),
 		
 		.Frets       (frets2),
