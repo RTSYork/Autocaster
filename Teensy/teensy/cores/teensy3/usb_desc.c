@@ -32,7 +32,7 @@
 static uint8_t device_descriptor[] = {
         18,                                     // bLength
         1,                                      // bDescriptorType
-        0x10, 0x01,                             // bcdUSB (was 0x00, 0x02 - USB 2.0) - guitar is 10 01
+        0x00, 0x01,                             // bcdUSB (was 0x00, 0x02 - USB 2.0) - RB guitar is 10 01, GH guitar is 00 01
 #ifdef DEVICE_CLASS
         DEVICE_CLASS,                           // bDeviceClass
 #else
@@ -51,10 +51,10 @@ static uint8_t device_descriptor[] = {
         EP0_SIZE,                               // bMaxPacketSize0
         LSB(VENDOR_ID), MSB(VENDOR_ID),         // idVendor
         LSB(PRODUCT_ID), MSB(PRODUCT_ID),       // idProduct
-        0x00, 0x02,                             // bcdDevice (was 0x00, 0x01) - guitar is 00 02
+        0x08, 0x01,                             // bcdDevice (was 0x00, 0x01) - rb guitar is 00 02, gh guitar is 08 01
         1,                                      // iManufacturer
         2,                                      // iProduct
-        0,                                      // iSerialNumber (was 3) - guitar is 0
+        3,                                      // iSerialNumber (was 3) - rb guitar is 0, gh guitar is 3
         1                                       // bNumConfigurations
 };
 
@@ -256,7 +256,7 @@ static uint8_t flightsim_report_desc[] = {
 };
 #endif
 
-#ifdef GUITAR_INTERFACE
+#ifdef GUITAR_RB_INTERFACE
 static uint8_t guitar_report_desc[] = {
         0x05, 0x01,                     // Usage Page (Generic Desktop)
         0x09, 0x05,                     // Usage (Game Pad)
@@ -332,6 +332,166 @@ static uint8_t guitar_report_desc[] = {
         0x95, 0x04,                     //   Report Count (4)
         0x81, 0x02,                     //   Input (variable,absolute)
 
+        0xC0                            // End Collection
+};
+#endif
+
+#ifdef GUITAR_GH_INTERFACE
+static uint8_t guitar_report_desc[] = {
+        0x05, 0x01,                     // Usage Page (Generic Desktop)
+        0x09, 0x05,                     // Usage (Game Pad)
+        0xA1, 0x01,                     // Collection (Application)
+        0x15, 0x00,                     //   Logical Minimum (0)
+        0x25, 0x01,                     //   Logical Maximum (1)
+	0x35, 0x00,                     //   Physical Minimum (0)
+        0x45, 0x01,                     //   Physical Maximum (1)
+        0x75, 0x01,                     //   Report Size (1)
+        0x95, 0x0D,                     //   Report Count (13)
+        0x05, 0x09,                     //   Usage Page (Button)
+        0x19, 0x01,                     //   Usage Minimum (Button #1)
+        0x29, 0x0D,                     //   Usage Maximum (Button #13)
+        0x81, 0x02,                     //   Input (variable,absolute)
+	
+        0x95, 0x03,                     //   Report Count (3)
+	0x81, 0x01,                     //   Input (constant,array,absolute)
+        0x05, 0x01,                     //   Usage Page (Generic Desktop)
+        0x25, 0x07,                     //   Logical Maximum (7)
+        0x46, 0x3B, 0x01,               //   Physical Maximum (315)
+        0x75, 0x04,                     //   Report Size (4)
+        0x95, 0x01,                     //   Report Count (1)
+        0x65, 0x14,                     //   Unit (Eng Rot: Degree)
+        0x09, 0x39,                     //   Usage (Hat switch)
+        0x81, 0x42,                     //   Input (variable,absolute,null_state)
+	
+        0x65, 0x00,                     //   Unit (None)
+        0x95, 0x01,                     //   Report Count (1)
+	0x81, 0x01,                     //   Input (constant,array,absolute)
+        0x26, 0xFF, 0x00,               //   Logical Maximum (255)
+        0x46, 0xFF, 0x00,               //   Physical Maximum (255)
+        0x09, 0x30,                     //   Usage (X)
+        0x09, 0x31,                     //   Usage (Y)
+        0x09, 0x32,                     //   Usage (Z)
+        0x09, 0x35,                     //   Usage (Rz)
+	
+        0x75, 0x08,                     //   Report Size (8)
+        0x95, 0x04,                     //   Report Count (4)
+        0x81, 0x02,                     //   Input (variable,absolute)
+
+        0x06, 0x00, 0xFF,               //   Usage Page (Vendor-Defined 1)
+        0x09, 0x20,                     //   Usage (Vendor-Defined 32)
+        0x09, 0x21,                     //   Usage (Vendor-Defined 33)
+        0x09, 0x22,                     //   Usage (Vendor-Defined 34)
+        0x09, 0x23,                     //   Usage (Vendor-Defined 35)
+	0x09, 0x24,                     //   Usage (Vendor-Defined 36)
+        0x09, 0x25,                     //   Usage (Vendor-Defined 37)
+        0x09, 0x26,                     //   Usage (Vendor-Defined 38)
+        0x09, 0x27,                     //   Usage (Vendor-Defined 39)
+	0x09, 0x28,                     //   Usage (Vendor-Defined 40)
+        0x09, 0x29,                     //   Usage (Vendor-Defined 41)
+        0x09, 0x2A,                     //   Usage (Vendor-Defined 42)
+        0x09, 0x2B,                     //   Usage (Vendor-Defined 43)
+
+	0x95, 0x0C,                     //   Report Count (12)
+	
+        0x81, 0x02,                     //   Input (variable,absolute)
+        0x0A, 0x21, 0x26,               //   Usage (Vendor-Defined 9761)
+	0x95, 0x08,                     //   Report Count (8)
+        0xB1, 0x02,                     //   Feature (Data,Var,Abs,NWrp,Lin,Pref,NNul,NVol,Bit)
+        0x0A, 0x21, 0x26,               //   Usage (Vendor-Defined 9761)
+	
+	0x91, 0x02,                     //   Output (Data,Var,Abs,NWrp,Lin,Pref,NNul,NVol,Bit)
+        0x26, 0xFF, 0x03,               //   Logical Maximum (1023)
+        0x46, 0xFF, 0x03,               //   Physical Maximum (1023)
+	
+	0x09, 0x2C,                     //   Usage (Vendor-Defined 44)
+        0x09, 0x2D,                     //   Usage (Vendor-Defined 45)
+        0x09, 0x2E,                     //   Usage (Vendor-Defined 46)
+        0x09, 0x2F,                     //   Usage (Vendor-Defined 47)
+	
+        0x75, 0x10,                     //   Report Size (16)
+        0x95, 0x04,                     //   Report Count (4)
+        0x81, 0x02,                     //   Input (variable,absolute)
+
+        0xC0                            // End Collection
+};
+#endif
+
+#ifdef GUITAR_RJ_INTERFACE
+static uint8_t guitar_report_desc[] = {
+        0x05, 0x01,                     // Usage Page (Generic Desktop)
+        0x09, 0x05,                     // Usage (Game Pad)
+        0xA1, 0x01,                     // Collection (Application)
+        0x15, 0x00,                     //   Logical Minimum (0)
+        0x25, 0x01,                     //   Logical Maximum (1)
+	0x35, 0x00,                     //   Physical Minimum (0)
+        0x45, 0x01,                     //   Physical Maximum (1)
+        0x75, 0x01,                     //   Report Size (1)
+        0x95, 0x0D,                     //   Report Count (13)
+        0x05, 0x09,                     //   Usage Page (Button)
+        0x19, 0x01,                     //   Usage Minimum (Button #1)
+        0x29, 0x0D,                     //   Usage Maximum (Button #13)
+        0x81, 0x02,                     //   Input (variable,absolute)
+	
+        0x95, 0x03,                     //   Report Count (3)
+	0x81, 0x01,                     //   Input (constant,array,absolute)
+        0x05, 0x01,                     //   Usage Page (Generic Desktop)
+        0x25, 0x07,                     //   Logical Maximum (7)
+        0x46, 0x3B, 0x01,               //   Physical Maximum (315)
+        0x75, 0x04,                     //   Report Size (4)
+        0x95, 0x01,                     //   Report Count (1)
+        0x65, 0x14,                     //   Unit (Eng Rot: Degree)
+        0x09, 0x39,                     //   Usage (Hat switch)
+        0x81, 0x42,                     //   Input (variable,absolute,null_state)
+	
+        0x65, 0x00,                     //   Unit (None)
+        0x95, 0x01,                     //   Report Count (1)
+	0x81, 0x01,                     //   Input (constant,array,absolute)
+        0x26, 0xFF, 0x00,               //   Logical Maximum (255)
+        0x46, 0xFF, 0x00,               //   Physical Maximum (255)
+        0x09, 0x30,                     //   Usage (X)
+        0x09, 0x31,                     //   Usage (Y)
+        0x09, 0x32,                     //   Usage (Z)
+        0x09, 0x35,                     //   Usage (Rz)
+	
+        0x75, 0x08,                     //   Report Size (8)
+        0x95, 0x04,                     //   Report Count (4)
+        0x81, 0x02,                     //   Input (variable,absolute)
+/*
+        0x06, 0x00, 0xFF,               //   Usage Page (Vendor-Defined 1)
+        0x09, 0x20,                     //   Usage (Vendor-Defined 32)
+        0x09, 0x21,                     //   Usage (Vendor-Defined 33)
+        0x09, 0x22,                     //   Usage (Vendor-Defined 34)
+        0x09, 0x23,                     //   Usage (Vendor-Defined 35)
+	0x09, 0x24,                     //   Usage (Vendor-Defined 36)
+        0x09, 0x25,                     //   Usage (Vendor-Defined 37)
+        0x09, 0x26,                     //   Usage (Vendor-Defined 38)
+        0x09, 0x27,                     //   Usage (Vendor-Defined 39)
+	0x09, 0x28,                     //   Usage (Vendor-Defined 40)
+        0x09, 0x29,                     //   Usage (Vendor-Defined 41)
+        0x09, 0x2A,                     //   Usage (Vendor-Defined 42)
+        0x09, 0x2B,                     //   Usage (Vendor-Defined 43)
+
+	0x95, 0x0C,                     //   Report Count (12)
+	
+        0x81, 0x02,                     //   Input (variable,absolute)
+        0x0A, 0x21, 0x26,               //   Usage (Vendor-Defined 9761)
+	0x95, 0x08,                     //   Report Count (8)
+        0xB1, 0x02,                     //   Feature (Data,Var,Abs,NWrp,Lin,Pref,NNul,NVol,Bit)
+        0x0A, 0x21, 0x26,               //   Usage (Vendor-Defined 9761)
+	
+	0x91, 0x02,                     //   Output (Data,Var,Abs,NWrp,Lin,Pref,NNul,NVol,Bit)
+        0x26, 0xFF, 0x03,               //   Logical Maximum (1023)
+        0x46, 0xFF, 0x03,               //   Physical Maximum (1023)
+	
+	0x09, 0x2C,                     //   Usage (Vendor-Defined 44)
+        0x09, 0x2D,                     //   Usage (Vendor-Defined 45)
+        0x09, 0x2E,                     //   Usage (Vendor-Defined 46)
+        0x09, 0x2F,                     //   Usage (Vendor-Defined 47)
+	
+        0x75, 0x10,                     //   Report Size (16)
+        0x95, 0x04,                     //   Report Count (4)
+        0x81, 0x02,                     //   Input (variable,absolute)
+*/
         0xC0                            // End Collection
 };
 #endif
@@ -712,11 +872,11 @@ static uint8_t config_descriptor[CONFIG_DESC_SIZE] = {
         JOYSTICK_INTERVAL,                      // bInterval
 #endif // JOYSTICK_INTERFACE
 
-#ifdef GUITAR_INTERFACE
+#ifdef GUITAR_RB_INTERFACE
         // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
         9,                                      // bLength
         4,                                      // bDescriptorType
-        GUITAR_INTERFACE,                       // bInterfaceNumber
+        GUITAR_RB_INTERFACE,                    // bInterfaceNumber
         0,                                      // bAlternateSetting
         NUM_ENDPOINTS,                          // bNumEndpoints
         0x03,                                   // bInterfaceClass (0x03 = HID)
@@ -740,13 +900,78 @@ static uint8_t config_descriptor[CONFIG_DESC_SIZE] = {
         GUITAR_SIZE, 0,                         // wMaxPacketSize
         GUITAR_INTERVAL1,                       // bInterval
 	// endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
-        //7,                                      // bLength
-        //5,                                      // bDescriptorType
-        //GUITAR_ENDPOINT2,                       // bEndpointAddress
-        //0x03,                                   // bmAttributes (0x03=intr)
-        //GUITAR_SIZE, 0,                         // wMaxPacketSize
-        //GUITAR_INTERVAL2,                       // bInterval
-#endif // GUITAR_INTERFACE
+        7,                                      // bLength
+        5,                                      // bDescriptorType
+        GUITAR_ENDPOINT2,                       // bEndpointAddress
+        0x03,                                   // bmAttributes (0x03=intr)
+        GUITAR_SIZE, 0,                         // wMaxPacketSize
+        GUITAR_INTERVAL2,                       // bInterval
+#endif // GUITAR_RB_INTERFACE
+
+#ifdef GUITAR_GH_INTERFACE
+        // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+        9,                                      // bLength
+        4,                                      // bDescriptorType
+        GUITAR_GH_INTERFACE,                    // bInterfaceNumber
+        0,                                      // bAlternateSetting
+        NUM_ENDPOINTS,                          // bNumEndpoints
+        0x03,                                   // bInterfaceClass (0x03 = HID)
+        0x00,                                   // bInterfaceSubClass
+        0x00,                                   // bInterfaceProtocol
+        0,                                      // iInterface
+        // HID interface descriptor, HID 1.11 spec, section 6.2.1
+        9,                                      // bLength
+        0x21,                                   // bDescriptorType
+        0x10, 0x01,                             // bcdHID
+        0,                                      // bCountryCode
+        1,                                      // bNumDescriptors
+        0x22,                                   // bDescriptorType
+        LSB(sizeof(guitar_report_desc)),        // wDescriptorLength
+        MSB(sizeof(guitar_report_desc)),
+        // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+        7,                                      // bLength
+        5,                                      // bDescriptorType
+        GUITAR_ENDPOINT1 | 0x80,                // bEndpointAddress
+        0x03,                                   // bmAttributes (0x03=intr)
+        GUITAR_SIZE, 0,                         // wMaxPacketSize
+        GUITAR_INTERVAL1,                       // bInterval
+	// endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+        7,                                      // bLength
+        5,                                      // bDescriptorType
+        GUITAR_ENDPOINT2,                       // bEndpointAddress
+        0x03,                                   // bmAttributes (0x03=intr)
+        GUITAR_SIZE, 0,                         // wMaxPacketSize
+        GUITAR_INTERVAL2,                       // bInterval
+#endif // GUITAR_GH_INTERFACE
+
+#ifdef GUITAR_RJ_INTERFACE
+        // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+        9,                                      // bLength
+        4,                                      // bDescriptorType
+        GUITAR_RJ_INTERFACE,                    // bInterfaceNumber
+        0,                                      // bAlternateSetting
+        NUM_ENDPOINTS,                          // bNumEndpoints
+        0x03,                                   // bInterfaceClass (0x03 = HID)
+        0x00,                                   // bInterfaceSubClass
+        0x00,                                   // bInterfaceProtocol
+        0,                                      // iInterface
+        // HID interface descriptor, HID 1.11 spec, section 6.2.1
+        9,                                      // bLength
+        0x21,                                   // bDescriptorType
+        0x10, 0x01,                             // bcdHID
+        0,                                      // bCountryCode
+        1,                                      // bNumDescriptors
+        0x22,                                   // bDescriptorType
+        LSB(sizeof(guitar_report_desc)),        // wDescriptorLength
+        MSB(sizeof(guitar_report_desc)),
+        // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+        7,                                      // bLength
+        5,                                      // bDescriptorType
+        GUITAR_ENDPOINT1 | 0x80,                // bEndpointAddress
+        0x03,                                   // bmAttributes (0x03=intr)
+        GUITAR_SIZE, 0,                         // wMaxPacketSize
+        GUITAR_INTERVAL1,                       // bInterval
+#endif // GUITAR_GH_INTERFACE
 
 };
 
@@ -822,9 +1047,17 @@ const usb_descriptor_list_t usb_descriptor_list[] = {
 	{0x2200, FLIGHTSIM_INTERFACE, flightsim_report_desc, sizeof(flightsim_report_desc)},
 	{0x2100, FLIGHTSIM_INTERFACE, config_descriptor+FLIGHTSIM_DESC_OFFSET, 9},
 #endif
-#ifdef GUITAR_INTERFACE
-        {0x2200, GUITAR_INTERFACE, guitar_report_desc, sizeof(guitar_report_desc)},
-        {0x2100, GUITAR_INTERFACE, config_descriptor+GUITAR_DESC_OFFSET, 9},
+#ifdef GUITAR_RB_INTERFACE
+        {0x2200, GUITAR_RB_INTERFACE, guitar_report_desc, sizeof(guitar_report_desc)},
+        {0x2100, GUITAR_RB_INTERFACE, config_descriptor+GUITAR_DESC_OFFSET, 9},
+#endif
+#ifdef GUITAR_GH_INTERFACE
+        {0x2200, GUITAR_GH_INTERFACE, guitar_report_desc, sizeof(guitar_report_desc)},
+        {0x2100, GUITAR_GH_INTERFACE, config_descriptor+GUITAR_DESC_OFFSET, 9},
+#endif
+#ifdef GUITAR_RJ_INTERFACE
+        {0x2200, GUITAR_RJ_INTERFACE, guitar_report_desc, sizeof(guitar_report_desc)},
+        {0x2100, GUITAR_RJ_INTERFACE, config_descriptor+GUITAR_DESC_OFFSET, 9},
 #endif
         {0x0300, 0x0000, (const uint8_t *)&string0, 4},
         {0x0301, 0x0409, (const uint8_t *)&string1, 2 + MANUFACTURER_NAME_LEN * 2},

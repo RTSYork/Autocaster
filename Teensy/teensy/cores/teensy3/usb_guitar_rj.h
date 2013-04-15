@@ -1,7 +1,7 @@
-#ifndef USBguitar_h_
-#define USBguitar_h_
+#ifndef USBguitarrj_h_
+#define USBguitarrj_h_
 
-#if defined(USB_GUITAR)
+#if defined(USB_GUITAR_RJ)
 
 #include <inttypes.h>
 
@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 int usb_guitar_send(void);
-extern uint32_t usb_guitar_data[7];
+extern uint32_t usb_guitar_data[2];
 #ifdef __cplusplus
 }
 #endif
@@ -18,10 +18,10 @@ extern uint32_t usb_guitar_data[7];
 // C++ interface
 #ifdef __cplusplus
 
-#define RED	2
-#define GREEN	3
-#define YELLOW	4
-#define BLUE	1
+#define RED	3
+#define GREEN	2
+#define YELLOW	1
+#define BLUE	4
 #define ORANGE	5
 #define TILT	6
 #define SOLO	7
@@ -29,7 +29,7 @@ extern uint32_t usb_guitar_data[7];
 #define SELECT	9
 #define PS	13
 
-class usb_guitar_class
+class usb_guitar_rj_class
 {
         public:
         void begin(void) { }
@@ -47,7 +47,7 @@ class usb_guitar_class
 		button(TILT, val);
 	}
 	void strum(bool on) {
-                uint32_t val = (on ? 0x00000000 : 0x00080000);
+                uint32_t val = (on ? 0x00000000 : 0x000F0000);
 		usb_guitar_data[0] = (usb_guitar_data[0] & 0xFF00FFFF) | val;
                 if (!manual_mode) usb_guitar_send();
         }
@@ -70,7 +70,7 @@ class usb_guitar_class
 	}
         inline void hat(int dir) {
                 uint32_t val;
-                if (dir < 0) val = 8;
+                if (dir < 0) val = 15;
                 else if (dir < 23) val = 0;
                 else if (dir < 68) val = 1;
                 else if (dir < 113) val = 2;
@@ -91,18 +91,18 @@ class usb_guitar_class
 	void setExtras(void) {
 		usb_guitar_data[2] = 0x00000000;
 		usb_guitar_data[3] = 0x00000000;
-		usb_guitar_data[4] = 0x00000000;
-		usb_guitar_data[5] = 0x00020002;
+		usb_guitar_data[4] = 0xF9000000;
+		usb_guitar_data[5] = 0x00027901;
 		usb_guitar_data[6] = 0x00020002;
                 if (!manual_mode) usb_guitar_send();
         }
 	private:
 	static uint8_t manual_mode;
 };
-extern usb_guitar_class Guitar;
+extern usb_guitar_rj_class Guitar;
 
 #endif // __cplusplus
 
-#endif // USB_GUITAR
-#endif // USBguitar_h_
+#endif // USB_GUITAR_RJ
+#endif // USBguitarrj_h_
 

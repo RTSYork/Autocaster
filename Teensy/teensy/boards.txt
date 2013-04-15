@@ -110,8 +110,12 @@ teensy3.menu.keys.en-gb.build.define1=-DLAYOUT_UNITED_KINGDOM
 teensy3.menu.keys.usint.name=US International
 teensy3.menu.keys.usint.build.define1=-DLAYOUT_US_INTERNATIONAL
 
-teensy3.menu.usb.guitar.name=Guitar Controller
-teensy3.menu.usb.guitar.build.define0=-DUSB_GUITAR
+teensy3.menu.usb.guitar1.name=Rock Band Guitar
+teensy3.menu.usb.guitar1.build.define0=-DUSB_GUITAR_RB
+teensy3.menu.usb.guitar2.name=Guitar Hero Guitar
+teensy3.menu.usb.guitar2.build.define0=-DUSB_GUITAR_GH
+teensy3.menu.usb.guitar3.name=My Guitar
+teensy3.menu.usb.guitar3.build.define0=-DUSB_GUITAR_RJ
 
 
 teensy2.name=Teensy 2.0

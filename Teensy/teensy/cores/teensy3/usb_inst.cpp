@@ -35,7 +35,17 @@ FlightSimClass FlightSim;
 usb_seremu_class Serial;
 #endif
 
-#ifdef USB_GUITAR
-usb_guitar_class Guitar;
-uint8_t usb_guitar_class::manual_mode = 0;
+#ifdef USB_GUITAR_RB
+usb_guitar_rb_class Guitar;
+uint8_t usb_guitar_rb_class::manual_mode = 0;
+#endif
+
+#ifdef USB_GUITAR_GH
+usb_guitar_gh_class Guitar;
+uint8_t usb_guitar_gh_class::manual_mode = 0;
+#endif
+
+#ifdef USB_GUITAR_RJ
+usb_guitar_rj_class Guitar;
+uint8_t usb_guitar_rj_class::manual_mode = 0;
 #endif

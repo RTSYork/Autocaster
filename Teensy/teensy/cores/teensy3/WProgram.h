@@ -28,7 +28,9 @@
 #include "usb_midi.h"
 #include "usb_rawhid.h"
 #include "usb_flightsim.h"
-#include "usb_guitar.h"
+#include "usb_guitar_rb.h"
+#include "usb_guitar_gh.h"
+#include "usb_guitar_rj.h"
 
 //#include "WCharacter.h"
 #include "WString.h"

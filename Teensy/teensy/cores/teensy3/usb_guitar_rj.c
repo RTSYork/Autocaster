@@ -1,13 +1,13 @@
 #include "usb_dev.h"
-#include "usb_guitar.h"
+#include "usb_guitar_rj.h"
 #include "core_pins.h" // for yield()
 #include "HardwareSerial.h"
 #include <string.h> // for memcpy()
 
-#ifdef GUITAR_INTERFACE // defined by usb_dev.h -> usb_desc.h
+#ifdef GUITAR_RJ_INTERFACE // defined by usb_dev.h -> usb_desc.h
 
 
-uint32_t usb_guitar_data[7];
+uint32_t usb_guitar_data[2];
 
 
 // Maximum number of transmit packets to queue so we don't starve other endpoints for memory
@@ -53,8 +53,8 @@ int usb_guitar_send(void)
                 yield();
         }
 	transmit_previous_timeout = 0;
-	memcpy(tx_packet->buf, usb_guitar_data, 27);
-        tx_packet->len = 27;
+	memcpy(tx_packet->buf, usb_guitar_data, 7);
+        tx_packet->len = 7;
         usb_tx(GUITAR_ENDPOINT1, tx_packet);
 	//serial_print("ok\n");
         return 0;
@@ -63,4 +63,4 @@ int usb_guitar_send(void)
 
 
 
-#endif // GUITAR_INTERFACE
+#endif // GUITAR_RJ_INTERFACE

@@ -261,28 +261,72 @@ let me know?  http://forum.pjrc.com/forums/4-Suggestions-amp-Bug-Reports
   #define ENDPOINT3_CONFIG	ENDPOINT_TRANSIMIT_ONLY
   #define ENDPOINT4_CONFIG	ENDPOINT_RECEIVE_ONLY
 
-#elif defined(USB_GUITAR)
+#elif defined(USB_GUITAR_RB)
   #define VENDOR_ID		0x12BA // 0x12BA
   #define PRODUCT_ID		0x0200 // 0x0200
   #define MANUFACTURER_NAME	{'L','i','c','e','n','s','e','d',' ','b','y',' ','S','o','n','y',' ','C','o','m','p','u','t','e','r',' ','E','n','t','e','r','t','a','i','n','m','e','n','t',' ','A','m','e','r','i','c','a'}
   #define MANUFACTURER_NAME_LEN	47
- #define PRODUCT_NAME		{'H','a','r','m','o','n','i','x',' ','G','u','i','t','a','r',' ','f','o','r',' ','P','l','a','y','S','t','a','t','i','o','n',0xAE,'3'} // 0xAE = '®'
+  #define PRODUCT_NAME		{'H','a','r','m','o','n','i','x',' ','G','u','i','t','a','r',' ','f','o','r',' ','P','l','a','y','S','t','a','t','i','o','n',0xAE,'3'} // 0xAE = '®'
   #define PRODUCT_NAME_LEN	33
   #define EP0_SIZE		8
-  #define NUM_ENDPOINTS         1//2
+  #define NUM_ENDPOINTS         2
   #define NUM_USB_BUFFERS	16
   #define NUM_INTERFACE		1
-  #define GUITAR_INTERFACE	0	// Guitar
+  #define GUITAR_RB_INTERFACE	0	// Rock Band Guitar
   #define GUITAR_ENDPOINT1	1
-  //#define GUITAR_ENDPOINT2	2
+  #define GUITAR_ENDPOINT2	2
   #define GUITAR_SIZE		64
   #define GUITAR_INTERVAL1	10
-  //#define GUITAR_INTERVAL2	1
+  #define GUITAR_INTERVAL2	1
   #define GUITAR_DESC_OFFSET	(9 + 9)
-  #define CONFIG_DESC_SIZE	(9 + 9+9+7)// 0x0029
+  #define CONFIG_DESC_SIZE	(9 + 9+9+7+7)
   #define ENDPOINT1_CONFIG	ENDPOINT_TRANSIMIT_ONLY
-  //#define ENDPOINT2_CONFIG	ENDPOINT_TRANSIMIT_ONLY
+  #define ENDPOINT2_CONFIG	ENDPOINT_RECEIVE_ONLY
 
+#elif defined(USB_GUITAR_GH)
+  #define VENDOR_ID		0x12BA // 0x12BA
+  #define PRODUCT_ID		0x0100 // 0x0100
+  #define MANUFACTURER_NAME	{'L','i','c','e','n','s','e','d',' ','b','y',' ','S','o','n','y',' ','C','o','m','p','u','t','e','r',' ','E','n','t','e','r','t','a','i','n','m','e','n','t',' ','A','m','e','r','i','c','a'}
+  #define MANUFACTURER_NAME_LEN	47
+  #define PRODUCT_NAME		{'G','u','i','t','a','r','H','e','r','o',' ','f','o','r',' ','P','l','a','y','s','t','a','t','i','o','n',' ','(','R',')',' ','3'}
+  #define PRODUCT_NAME_LEN	32
+  #define EP0_SIZE		32
+  #define NUM_ENDPOINTS         2
+  #define NUM_USB_BUFFERS	16
+  #define NUM_INTERFACE		1
+  #define GUITAR_GH_INTERFACE	0	// Guitar Hero Guitar
+  #define GUITAR_ENDPOINT1	1
+  #define GUITAR_ENDPOINT2	2
+  #define GUITAR_SIZE		64
+  #define GUITAR_INTERVAL1	10
+  #define GUITAR_INTERVAL2	10
+  #define GUITAR_DESC_OFFSET	(9 + 9)
+  #define CONFIG_DESC_SIZE	(9 + 9+9+7+7)
+  #define ENDPOINT1_CONFIG	ENDPOINT_TRANSIMIT_ONLY
+  #define ENDPOINT2_CONFIG	ENDPOINT_RECEIVE_ONLY
+  
+#elif defined(USB_GUITAR_RJ)
+  #define VENDOR_ID		0x12BA // 0x12BA
+  #define PRODUCT_ID		0x0100 // 0x0100
+  #define MANUFACTURER_NAME	{'L','i','c','e','n','s','e','d',' ','b','y',' ','S','o','n','y',' ','C','o','m','p','u','t','e','r',' ','E','n','t','e','r','t','a','i','n','m','e','n','t',' ','A','m','e','r','i','c','a'}
+  #define MANUFACTURER_NAME_LEN	47
+  #define PRODUCT_NAME		{'G','u','i','t','a','r','H','e','r','o',' ','f','o','r',' ','P','l','a','y','s','t','a','t','i','o','n',' ','(','R',')',' ','3'}
+  #define PRODUCT_NAME_LEN	32
+  #define EP0_SIZE		32
+  #define NUM_ENDPOINTS         1
+  #define NUM_USB_BUFFERS	16
+  #define NUM_INTERFACE		1
+  #define GUITAR_RJ_INTERFACE	0	// My Guitar
+  #define GUITAR_ENDPOINT1	1
+  #define GUITAR_ENDPOINT2	2
+  #define GUITAR_SIZE		64
+  #define GUITAR_INTERVAL1	10
+  #define GUITAR_INTERVAL2	10
+  #define GUITAR_DESC_OFFSET	(9 + 9)
+  #define CONFIG_DESC_SIZE	(9 + 9+9+7)
+  #define ENDPOINT1_CONFIG	ENDPOINT_TRANSIMIT_ONLY
+  #define ENDPOINT2_CONFIG	ENDPOINT_RECEIVE_ONLY
+  
 #endif
 
 // NUM_ENDPOINTS = number of non-zero endpoints (0 to 15)
