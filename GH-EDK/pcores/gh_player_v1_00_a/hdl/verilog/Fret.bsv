@@ -80,9 +80,11 @@ module mkFret #(parameter UInt#(2) lOffset,
 		y <= 0;
 		
 		// Update fret value (needs at least two in agreement)
-		fretPressed <= (fretValue1 && fretValue2) ||
-		               (fretValue1 && fretValue3) ||
-		               (fretValue2 && fretValue3);
+//		fretPressed <= (fretValue1 && fretValue2) ||
+//		               (fretValue1 && fretValue3) ||
+//		               (fretValue2 && fretValue3);
+		fretPressed <= fretValue2;
+		
 	endrule
 	
 	// New line on each HSync pulse
