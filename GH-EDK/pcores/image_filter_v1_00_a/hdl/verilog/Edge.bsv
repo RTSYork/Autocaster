@@ -1,6 +1,8 @@
 // Performs edge detection on a greyscale image
 // using function (p[x,y-1] & ~p[x,y])
 
+import Vector :: * ;
+
 (* always_ready *)
 interface Edge;
 	(* always_enabled, prefix = "" *)
@@ -19,6 +21,7 @@ endinterface
 (* synthesize *)
 module mkEdge (Edge);
 
+	Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
 	//Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Wire#(Bit#(1))   currPxl <- mkWire;
 	
@@ -50,9 +53,9 @@ module mkEdge (Edge);
 	
 	// Calculate edge filter
 	rule blur_pixel(vde_pulse && ready);
-		filtered <= ~currPxl;//lastRow[x] & ~currPxl;
+		filtered <= lastRow[x] & ~currPxl;
 
-		//lastRow[x] <= currPxl;
+		lastRow[x] <= currPxl;
 	endrule
 	
 	
