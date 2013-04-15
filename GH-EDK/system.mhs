@@ -496,33 +496,3 @@ BEGIN image_filter
  PORT ACLK = clk_100_0000MHzPLL0
 END
 
-BEGIN chipscope_axi_monitor
- PARAMETER INSTANCE = chipscope_axi_monitor_0
- PARAMETER HW_VER = 3.05.a
- PARAMETER C_MAX_SEQUENCER_LEVELS = 2
- PARAMETER C_USE_INTERFACE = 1
- PARAMETER C_NUM_DATA_SAMPLES = 4096
- BUS_INTERFACE MON_AXI_S = axi_hdmi_0_M_AXIS_S2MM
- PORT chipscope_icon_control = chipscope_axi_monitor_0_icon_ctrl
- PORT MON_AXI_ACLK = clk_100_0000MHzPLL0
-END
-
-BEGIN chipscope_icon
- PARAMETER INSTANCE = chipscope_icon_0
- PARAMETER HW_VER = 1.06.a
- PARAMETER C_NUM_CONTROL_PORTS = 2
- PORT control0 = chipscope_axi_monitor_0_icon_ctrl
- PORT control1 = chipscope_axi_monitor_1_icon_ctrl
-END
-
-BEGIN chipscope_axi_monitor
- PARAMETER INSTANCE = chipscope_axi_monitor_1
- PARAMETER HW_VER = 3.05.a
- PARAMETER C_MAX_SEQUENCER_LEVELS = 2
- PARAMETER C_USE_INTERFACE = 1
- PARAMETER C_NUM_DATA_SAMPLES = 4096
- BUS_INTERFACE MON_AXI_S = image_filter_0_M_AXIS_S2MM
- PORT chipscope_icon_control = chipscope_axi_monitor_1_icon_ctrl
- PORT MON_AXI_ACLK = clk_100_0000MHzPLL0
-END
-
