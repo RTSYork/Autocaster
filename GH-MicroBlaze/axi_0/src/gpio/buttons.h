@@ -20,7 +20,11 @@ extern point rPos;
 extern point yPos;
 extern point bPos;
 extern point oPos;
-extern int offset;
+extern u8 delay;
+
+extern u8 playerEnable;
+extern u8 type;
+extern u8 strumValue;
 
 void initButtonInterrupt(XIntc controller);
 void enableButtonInterrupt(void);

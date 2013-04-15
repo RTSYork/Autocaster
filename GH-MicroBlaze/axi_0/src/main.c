@@ -120,21 +120,21 @@ int main(void)
 //	point oPos = {376, 621};
 
 	// Thresholds of note detectors
-//	pixel gOn  = {0x05, 0x59, 0x07};
-//	pixel gOff = {0x28, 0x59, 0x0A};
-//	pixel rOn  = {0x68, 0x21, 0x23};
-//	pixel rOff = {0x47, 0x0C, 0x1E};
-//	pixel yOn  = {0x7C, 0x6D, 0x0F};
-//	pixel yOff = {0x7A, 0x6D, 0x11};
-//	pixel bOn  = {0x11, 0x33, 0x99};
-//	pixel bOff = {0x2D, 0x30, 0x66};
-//	pixel oOn  = {0x7F, 0x3A, 0x0F};
-//	pixel oOff = {0x7A, 0x3D, 0x07};
+	pixel gOn  = {0x05, 0x59, 0x07};
+	pixel gOff = {0x28, 0x59, 0x0A};
+	pixel rOn  = {0x68, 0x21, 0x23};
+	pixel rOff = {0x57, 0x1C, 0x1E}; // pixel rOff = {0x47, 0x0C, 0x1E};
+	pixel yOn  = {0x7C, 0x6D, 0x1E}; // pixel yOn  = {0x7C, 0x6D, 0x0F};
+	pixel yOff = {0x7A, 0x6D, 0x1E}; // pixel yOff = {0x7A, 0x6D, 0x11};
+	pixel bOn  = {0x11, 0x33, 0x99};
+	pixel bOff = {0x2D, 0x30, 0x66};
+	pixel oOn  = {0x7F, 0x3A, 0x0F};
+	pixel oOff = {0x7A, 0x3D, 0x07};
 
 	// Control values
-//	u8 smoothValue = 3; //4;
-//	u8 delay = 10; //3;
-	u8 enable = 0;
+	//u8 delay = 2; //4;
+	//u8 strumValue = 2;
+	//u8 playerEnable = 0;
 
 	// Status value
 //	u32 status = 0;
@@ -143,19 +143,19 @@ int main(void)
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, enable);
-	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
+	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, playerEnable);
+//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, playerEnable);
 
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOn,  FRET_RED,    THRESHOLD_ON);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOff, FRET_RED,    THRESHOLD_OFF);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOn,  FRET_YELLOW, THRESHOLD_ON);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOff, FRET_YELLOW, THRESHOLD_OFF);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOn,  FRET_BLUE,   THRESHOLD_ON);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOff, FRET_BLUE,   THRESHOLD_OFF);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOn,  FRET_ORANGE, THRESHOLD_ON);
-//	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOff, FRET_ORANGE, THRESHOLD_OFF);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOn,  FRET_RED,    THRESHOLD_ON);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, rOff, FRET_RED,    THRESHOLD_OFF);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOn,  FRET_YELLOW, THRESHOLD_ON);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, yOff, FRET_YELLOW, THRESHOLD_OFF);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOn,  FRET_BLUE,   THRESHOLD_ON);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, bOff, FRET_BLUE,   THRESHOLD_OFF);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOn,  FRET_ORANGE, THRESHOLD_ON);
+	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, oOff, FRET_ORANGE, THRESHOLD_OFF);
 
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
 	ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
@@ -165,9 +165,10 @@ int main(void)
 
 
 	// Reset Image Filter core, set threshold, enable
+	u8 filtersEnable = 0;
 	IMAGE_FILTER_mReset(XPAR_IMAGE_FILTER_0_BASEADDR);
 	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 200);
-	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_NONE);
 
 
 	while (1) {
@@ -201,15 +202,15 @@ int main(void)
 		s2 = getSwitch(SWITCH2);
 		if (s2 != lasts2) {
 			if (s2 == SWITCH_ON) {
-				enable = 1;
+				playerEnable = 1;
 				setLed(LED2, LED_ON);
 			}
 			else {
-				enable = 0;
+				playerEnable = 0;
 				setLed(LED2, LED_OFF);
 			}
-//			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, smoothValue, TYPE_OLD, enable);
-			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, playerEnable);
+			//ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
 
 			lasts2 = s2;
 		}
@@ -242,7 +243,7 @@ int main(void)
 		s7 = getSwitch(SWITCH7);
 		if (s3 != lasts3 || s4 != lasts4 || s5 != lasts5 || s6 != lasts6 || s7 != lasts7) {
 			if (s7 == SWITCH_ON && s6 == SWITCH_ON && s5 == SWITCH_ON && s4 == SWITCH_ON && s3 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_MIX);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_MIX);
 				setLed(LED3, LED_ON);
 				setLed(LED4, LED_ON);
 				setLed(LED5, LED_ON);
@@ -250,7 +251,7 @@ int main(void)
 				setLed(LED7, LED_ON);
 			}
 			else if (s7 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_EDGE);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_EDGE);
 				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
@@ -258,7 +259,7 @@ int main(void)
 				setLed(LED7, LED_ON);
 			}
 			else if (s6 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH2);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_THRESH2);
 				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
@@ -266,7 +267,7 @@ int main(void)
 				setLed(LED7, LED_OFF);
 			}
 			else if (s5 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_BLUR);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_BLUR);
 				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_ON);
@@ -274,7 +275,7 @@ int main(void)
 				setLed(LED7, LED_OFF);
 			}
 			else if (s4 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_THRESH1);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_THRESH1);
 				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_ON);
 				setLed(LED5, LED_OFF);
@@ -282,7 +283,7 @@ int main(void)
 				setLed(LED7, LED_OFF);
 			}
 			else if (s3 == SWITCH_ON) {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_GREY);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_GREY);
 				setLed(LED3, LED_ON);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);
@@ -290,7 +291,7 @@ int main(void)
 				setLed(LED7, LED_OFF);
 			}
 			else {
-				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, 1, FILTER_NONE);
+				imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_NONE);
 				setLed(LED3, LED_OFF);
 				setLed(LED4, LED_OFF);
 				setLed(LED5, LED_OFF);

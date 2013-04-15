@@ -53,16 +53,27 @@ XIntc btnIntCtrl;
 //#define O_X 371
 //#define O_Y 605
 // --- Filtered fret detector ---
-#define G_X 480
-#define G_Y 571
-#define R_X 558
-#define R_Y 566
+//#define G_X 480
+//#define G_Y 571
+//#define R_X 558
+//#define R_Y 566
+//#define Y_X 640
+//#define Y_Y 564
+//#define B_X 722
+//#define B_Y 566
+//#define O_X 800
+//#define O_Y 571
+// --- Delayed fret detector ---
+#define G_X 476+19
+#define G_Y 581-45-1
+#define R_X 559+8
+#define R_Y 577-45
 #define Y_X 640
-#define Y_Y 564
-#define B_X 722
-#define B_Y 566
-#define O_X 800
-#define O_Y 571
+#define Y_Y 575-45
+#define B_X 721-8
+#define B_Y 577-45
+#define O_X 804-19
+#define O_Y 581-45-1
 
 // Positions of note detectors (x, y)
 point gPos = {G_X, G_Y};
@@ -70,7 +81,11 @@ point rPos = {R_X, R_Y};
 point yPos = {Y_X, Y_Y};
 point bPos = {B_X, B_Y};
 point oPos = {O_X, O_Y};
-int offset = 0;
+u8 delay = 2;
+
+u8 playerEnable = 0;
+u8 type = TYPE_OLD;
+u8 strumValue = 1;
 
 
 void initButtonInterrupt(XIntc controller) {
@@ -144,21 +159,22 @@ void PushBtnHandler(void *CallBackRef) {
 		// Up button pressed
 		//xil_printf("U");
 
-		offset--;
+		delay--;
 
-		gPos.y = G_Y + offset;
-		rPos.y = R_Y + offset;
-		yPos.y = Y_Y + offset;
-		bPos.y = B_Y + offset;
-		oPos.y = O_Y + offset;
+//		gPos.y = G_Y + offset;
+//		rPos.y = R_Y + offset;
+//		yPos.y = Y_Y + offset;
+//		bPos.y = B_Y + offset;
+//		oPos.y = O_Y + offset;
+//
+//		gPos.x = G_X - (offset/3);
+//		rPos.x = R_X - (offset/6);
+//		yPos.x = Y_X;
+//		bPos.x = B_X + (offset/6);
+//		oPos.x = O_X + (offset/3);
 
-		gPos.x = G_X - (offset/3);
-		rPos.x = R_X - (offset/6);
-		yPos.x = Y_X;
-		bPos.x = B_X + (offset/6);
-		oPos.x = O_X + (offset/3);
-
-		xil_printf("Y Offset: %2d\r\n", offset);
+		xil_printf("Delay: %2d\r\n", delay);
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
 
 		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
 		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
@@ -172,27 +188,28 @@ void PushBtnHandler(void *CallBackRef) {
 		// Down button pressed
 		//xil_printf("D");
 
-		offset++;
+		delay++;
 
-		gPos.y = G_Y + offset;
-		rPos.y = R_Y + offset;
-		yPos.y = Y_Y + offset;
-		bPos.y = B_Y + offset;
-		oPos.y = O_Y + offset;
+//		gPos.y = G_Y + offset;
+//		rPos.y = R_Y + offset;
+//		yPos.y = Y_Y + offset;
+//		bPos.y = B_Y + offset;
+//		oPos.y = O_Y + offset;
+//
+//		gPos.x = G_X - (offset/3);
+//		rPos.x = R_X - (offset/6);
+//		yPos.x = Y_X;
+//		bPos.x = B_X + (offset/6);
+//		oPos.x = O_X + (offset/3);
 
-		gPos.x = G_X - (offset/3);
-		rPos.x = R_X - (offset/6);
-		yPos.x = Y_X;
-		bPos.x = B_X + (offset/6);
-		oPos.x = O_X + (offset/3);
+		xil_printf("Delay: %2d\r\n", delay);
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
 
-		xil_printf("Y Offset: %2d\r\n", offset);
-
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, yPos, FRET_YELLOW);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
+//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
+//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
+//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, yPos, FRET_YELLOW);
+//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
+//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
 	}
 
 	if ((lBtnChanges & BUTTON_LEFT) && (lBtnStateNew & BUTTON_LEFT))
