@@ -31,12 +31,14 @@ output [23:0] DisplayOut;
 	wire        edgeOut;
 	wire [23:0] mixOut;
 	
+	reg hClk, hSyncLast, hSyncLast2;
+	
 	
 	// Assign process output
 	assign
 		ProcessOut = edgeOut;
 	
-	// Assign display output			 
+	// Assign display output
 	assign DisplayOut = Display[5] ?     mixOut       :
 	                    Display[4] ? {24{edgeOut}}    :
 	                    Display[3] ? {24{thresh2Out}} :
@@ -44,6 +46,19 @@ output [23:0] DisplayOut;
 	                    Display[1] ? {24{thresh1Out}} :
 	                    Display[0] ? { 3{greyOut}}    :
 	                                     RGBin        ;
+	
+	
+	always @(posedge CLK)
+	begin
+		hSyncLast <= VDE;
+		hSyncLast2 <= hSyncLast;
+		
+		if (hSyncLast && !hSyncLast2) begin
+			hClk <= 1'b1;
+		end else begin
+			hClk <= 1'b0;
+		end
+	end
 	
 	
 	// Convert image to greyscale
@@ -63,7 +78,7 @@ output [23:0] DisplayOut;
 	mkBlur Blur (
 		.CLK        (CLK),
 		.RST_N      (RST),
-		.hsync      (HSync),
+		.hsync      (hClk),
 		.vde        (VDE),
 		.bin_in     (thresh1Out),
 		.gry_out    (blurOut)
@@ -80,7 +95,7 @@ output [23:0] DisplayOut;
 	mkEdge Edge (
 		.CLK        (CLK),
 		.RST_N      (RST),
-		.hsync      (HSync),
+		.hsync      (hClk),
 		.vde        (VDE),
 		.bin_in     (thresh2Out),
 		.bin_out    (edgeOut)
