@@ -1,5 +1,7 @@
 // Guitar Hero-style game player (for filtered video)
 
+import Vector :: * ;
+
 (* always_ready *)
 interface FretFiltered;
 	(* enable = "vsync" *)
@@ -23,9 +25,7 @@ endinterface
 (* synthesize *)
 module mkFretFiltered (FretFiltered);
 	
-	Reg#(Bool) fretValue1  <- mkReg(False);
-	Reg#(Bool) fretValue2  <- mkReg(False);
-	Reg#(Bool) fretValue3  <- mkReg(False);
+	Vector#(10, Reg#(Bit#(Bool))) fretValues <- replicateM(mkReg(False));
 	Reg#(Bool) fretPressed <- mkReg(False);
 	
 	Wire#(Bool) pixelValue <- mkWire;
@@ -59,6 +59,20 @@ module mkFretFiltered (FretFiltered);
 	// New pixel each clock when VDE is high
 	rule new_pixel(vde_pulse && !hsync_pulse && !vsync_pulse);
 		x <= x + 1;
+	endrule
+	
+	
+	// Triggers for start of a note
+	rule start_pixel1(x == xPos && y == yPos && !fretPressed && !vsync_pulse);
+		fretValue1 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel2(x == xPos && y == yPos+1 && !fretPressed && !vsync_pulse);
+		fretValue2 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel3(x == xPos && y == yPos+2 && !fretPressed && !vsync_pulse);
+		fretValue3 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
 	
