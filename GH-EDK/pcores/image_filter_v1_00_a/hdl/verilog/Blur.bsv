@@ -21,7 +21,7 @@ endinterface
 (* synthesize *)
 module mkBlur (Blur);
 
-	Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
+	Vector#(2000, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
 	//Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Reg#(Bit#(2))    lastPxl <- mkReg(0);
 	Wire#(Bit#(1))   currPxl <- mkWire;
@@ -44,7 +44,7 @@ module mkBlur (Blur);
 	
 	
 	// Calculate blur
-	rule blur_pixel(vde_pulse && ready);
+	rule blur_pixel(ready);
 		blurred <= {lastRow[x], lastPxl, currPxl};
 		
 		lastPxl    <= {currPxl, lastPxl[1]};
@@ -58,7 +58,7 @@ module mkBlur (Blur);
 	endrule
 	
 	// New pixel each clock when VDE is high
-	rule new_pixel(vde_pulse && !hsync_pulse && ready);
+	rule new_pixel(!hsync_pulse && ready);
 		x <= x + 1;
 	endrule
 	
