@@ -154,7 +154,6 @@ output                                    IP2Bus_Error;
 	reg                                       valid, valid2;
 	reg     [C_AXI_STREAM_DATA_WIDTH/8-1 : 0] keep, keep2;
 	reg                                       last, last2;
-	reg                                       ready, ready2;
 
 	// Nets for user logic slave model s/w accessible register example
 	reg        [C_SLV_DWIDTH-1 : 0]           slv_reg0;
@@ -186,10 +185,10 @@ output                                    IP2Bus_Error;
 		
 	// Tie together unmodified lines of AXIS bus
 	assign
-		M_AXIS_S2MM_TVALID = 0 ? valid2 : S_AXIS_S2MM_TVALID,
-		M_AXIS_S2MM_TKEEP  = 0 ? keep2  : S_AXIS_S2MM_TKEEP,
-		M_AXIS_S2MM_TLAST  = 0 ? last2  : S_AXIS_S2MM_TLAST,
-		S_AXIS_S2MM_TREADY = 0 ? ready2 : M_AXIS_S2MM_TREADY;
+		M_AXIS_S2MM_TVALID = enable ? valid2 : S_AXIS_S2MM_TVALID,
+		M_AXIS_S2MM_TKEEP  = enable ? keep2  : S_AXIS_S2MM_TKEEP,
+		M_AXIS_S2MM_TLAST  = enable ? last2  : S_AXIS_S2MM_TLAST,
+		S_AXIS_S2MM_TREADY = M_AXIS_S2MM_TREADY;
 	
 	// Delay AXIS signals through some resisters
 	always @(posedge ACLK)
@@ -294,7 +293,7 @@ output                                    IP2Bus_Error;
 		.CLK          (ACLK),
 		.RST          (Bus2IP_Resetn),
 		.HSync        (S_AXIS_S2MM_TLAST),
-		.VDE          (S_AXIS_S2MM_TVALID),
+		.VDE          (S_AXIS_S2MM_TVALID & M_AXIS_S2MM_TREADY),
 		.Display      (filterDisplay),
 		.RGBin        (rgbIn),
 		.Threshold    (threshold),
