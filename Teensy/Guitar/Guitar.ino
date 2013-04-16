@@ -30,18 +30,6 @@ int whammyValue = 128;
  * 21 - Whammy Bar 6
  * 22 - Whammy Bar 7 (MSB)
  **/
- 
-/*
- *           0---------- 1---------- 2---------- 3---------- 4---------- 5---------- 6----------
- *           00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
- * USB Data: 00 00 08 7F 7F 80 7F 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 02 00 02 00 02
- */
-  
-/*
- *           0---------- 1---------- 2---------- 3---------- 4---------- 5---------- 6----------
- *           00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
- * USB Data: 00 00 0F 80 80 80 80 00 00 00 00 00 00 00 00 00 00 00 00 F9 01 79 02 00 02 00 02
- */
 
 void setup() {
   
@@ -72,9 +60,10 @@ void setup() {
   digitalWrite(ledPin, LOW);
   delay(250);
   digitalWrite(ledPin, HIGH);
-  
-  //serial_begin(BAUD2DIV(9800));
-  //serial_print("test");
+  delay(250);
+  digitalWrite(ledPin, LOW);
+  delay(250);
+  digitalWrite(ledPin, HIGH);
 }
 
 
@@ -101,9 +90,9 @@ void loop() {
   
   Guitar.button(START,  digitalRead(10));
   Guitar.button(SELECT, digitalRead(11));
-  Guitar.button(PS,     digitalRead(12));
+  //Guitar.button(PS,     digitalRead(12));
   
-  Guitar.tilt(digitalRead(14));
+  //Guitar.tilt(digitalRead(14));
   
   whammyValue = (!digitalRead(15) ? 0 : 1)        +
                 (!digitalRead(16) ? 0 : (1 << 1)) +
@@ -120,7 +109,7 @@ void loop() {
   // Send data
   Guitar.send_now();
   
-  // a brief delay, so this runs "only" 200 times per second
-  delay(5);
+  // a brief delay, so this runs "only" 500 times per second
+  delay(2);
 }
 
