@@ -109,7 +109,7 @@ void loop() {
   // Send data
   Guitar.send_now();
   
-  // a brief delay, so this runs "only" 500 times per second
-  delay(2);
+  // a brief delay, so this runs "only" 200 times per second
+  delay(5);
 }
 
