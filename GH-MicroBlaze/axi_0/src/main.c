@@ -120,16 +120,16 @@ int main(void)
 //	point oPos = {376, 621};
 
 	// Thresholds of note detectors
-	pixel gOn  = {0x02, 0x68, 0x02};
-	pixel gOff = {0x4C, 0x66, 0x19};
-	pixel rOn  = {0x66, 0x21, 0x23};
-	pixel rOff = {0x5B, 0x26, 0x26};
+	pixel gOn  = {0x02, 0x80, 0x02}; // pixel gOn  = {0x02, 0x68, 0x02};
+	pixel gOff = {0x4E, 0x6B, 0x20}; // pixel gOff = {0x4C, 0x66, 0x19};
+	pixel rOn  = {0x79, 0x21, 0x23}; // pixel rOn  = {0x66, 0x21, 0x23};
+	pixel rOff = {0x67, 0x30, 0x30}; // pixel rOff = {0x5B, 0x26, 0x26};
 	pixel yOn  = {0x6D, 0x6B, 0x05};
 	pixel yOff = {0x7A, 0x6D, 0x4C};
 	pixel bOn  = {0x1C, 0x33, 0x9B};
 	pixel bOff = {0x30, 0x38, 0x72};
 	pixel oOn  = {0x87, 0x3D, 0x02};
-	pixel oOff = {0x7A, 0x3F, 0x19};		
+	pixel oOff = {0x7A, 0x3F, 0x19};
 
 	// Control values
 	//u8 delay = 2; //4;
@@ -144,7 +144,6 @@ int main(void)
 
 	// Set initial register values
 	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, playerEnable);
-//	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, playerEnable);
 
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
