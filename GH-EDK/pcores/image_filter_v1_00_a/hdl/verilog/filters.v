@@ -35,8 +35,16 @@ output [23:0] DisplayOut;
 	
 	
 	// Assign process output
-	assign
-		ProcessOut = edgeOut;
+	//assign
+	//	ProcessOut = edgeOut;
+		
+	assign ProcessOut = Display[5] ? edgeOut    :
+	                    Display[4] ? edgeOut    :
+	                    Display[3] ? thresh2Out :
+	                    Display[2] ? blurOut[7] :
+	                    Display[1] ? thresh1Out :
+	                    Display[0] ? greyOut[7] :
+	                                 thresh2Out ;
 	
 	// Assign display output
 	assign DisplayOut = Display[5] ?     mixOut       :
