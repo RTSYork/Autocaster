@@ -196,7 +196,7 @@ output                                    IP2Bus_Error;
 			valid2  <= S_AXIS_S2MM_TVALID;
 			keep2   <= S_AXIS_S2MM_TKEEP;
 			last2   <= S_AXIS_S2MM_TLAST;
-			ready2  <= M_AXIS_S2MM_TREADY;
+			//ready2  <= M_AXIS_S2MM_TREADY;
 			
 			//valid2 <= valid;
 			//keep2  <= keep;
