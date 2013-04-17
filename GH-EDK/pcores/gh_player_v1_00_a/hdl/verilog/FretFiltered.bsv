@@ -25,7 +25,7 @@ endinterface
 (* synthesize *)
 module mkFretFiltered (FretFiltered);
 	
-	Vector#(8, Reg#(Bool)) fretValues <- replicateM(mkReg(False));
+	Vector#(14, Reg#(Bool)) fretValues <- replicateM(mkReg(False));
 	Reg#(Bool) fretPressed <- mkReg(False);
 	
 	Wire#(Bool) pixelValue <- mkWire;
@@ -47,14 +47,20 @@ module mkFretFiltered (FretFiltered);
 		y <= 0;
 		
 		// Update fret value (true if any of the detector pixels see a fret)
-		fretPressed <= (fretValues[0] ||
-		                fretValues[1] ||
-		                fretValues[2] ||
-		                fretValues[3] ||
-		                fretValues[4] ||
-		                fretValues[5] ||
-		                fretValues[6] ||
-		                fretValues[7]);
+		fretPressed <= (fretValues[ 0] ||
+		                fretValues[ 1] ||
+		                fretValues[ 2] ||
+		                fretValues[ 3] ||
+		                fretValues[ 4] ||
+		                fretValues[ 5] ||
+		                fretValues[ 6] ||
+		                fretValues[ 7] ||
+		                fretValues[ 8] ||
+		                fretValues[ 9] ||
+		                fretValues[10] ||
+		                fretValues[11] ||
+		                fretValues[12] ||
+		                fretValues[13]);
 	endrule
 	
 	// New line on each HSync pulse
@@ -100,6 +106,30 @@ module mkFretFiltered (FretFiltered);
 	
 	rule start_pixel7(x == xPosition && y == yPosition+7 && !vsync_pulse);
 		fretValues[7] <= pixelValue;
+	endrule
+	
+	rule start_pixel8(x == xPosition && y == yPosition+8 && !vsync_pulse);
+		fretValues[8] <= pixelValue;
+	endrule
+	
+	rule start_pixel9(x == xPosition && y == yPosition+9 && !vsync_pulse);
+		fretValues[9] <= pixelValue;
+	endrule
+	
+	rule start_pixel10(x == xPosition && y == yPosition+10 && !vsync_pulse);
+		fretValues[10] <= pixelValue;
+	endrule
+	
+	rule start_pixel11(x == xPosition && y == yPosition+11 && !vsync_pulse);
+		fretValues[11] <= pixelValue;
+	endrule
+	
+	rule start_pixel12(x == xPosition && y == yPosition+12 && !vsync_pulse);
+		fretValues[12] <= pixelValue;
+	endrule
+	
+	rule start_pixel13(x == xPosition && y == yPosition+13 && !vsync_pulse);
+		fretValues[13] <= pixelValue;
 	endrule
 	
 	

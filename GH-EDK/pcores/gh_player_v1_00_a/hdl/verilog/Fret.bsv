@@ -37,6 +37,8 @@ module mkFret #(parameter UInt#(2) lOffset,
 	Reg#(Bool) fretValue1 <- mkReg(False);
 	Reg#(Bool) fretValue2 <- mkReg(False);
 	Reg#(Bool) fretValue3 <- mkReg(False);
+	Reg#(Bool) fretValue4 <- mkReg(False);
+	Reg#(Bool) fretValue5 <- mkReg(False);
 	Reg#(Bool) fretPressed <- mkReg(False);
 	
 	Reg#(Bool) fretPressedDly <- mkReg(False);
@@ -68,6 +70,8 @@ module mkFret #(parameter UInt#(2) lOffset,
 	Wire#(UInt#(11)) xPos1 <- mkWire;
 	Wire#(UInt#(11)) xPos2 <- mkWire;
 	Wire#(UInt#(11)) xPos3 <- mkWire;
+	Wire#(UInt#(11)) xPos4 <- mkWire;
+	Wire#(UInt#(11)) xPos5 <- mkWire;
 	
 	Wire#(UInt#(10)) yPos1 <- mkWire;
 	Wire#(UInt#(10)) yPos2 <- mkWire;
@@ -80,7 +84,7 @@ module mkFret #(parameter UInt#(2) lOffset,
 		y <= 0;
 		
 		// Update fret value
-		fretPressed <= (fretValue1 || fretValue2 || fretValue3);
+		fretPressed <= (fretValue1 || fretValue2 || fretValue3 || fretValue4 || fretValue5);
 	endrule
 	
 	// New line on each HSync pulse
@@ -131,12 +135,20 @@ module mkFret #(parameter UInt#(2) lOffset,
 		fretValue1 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
-	rule start_pixel2(x == xPos2 && y == yPos2 && !fretPressed && !vsync_pulse);
+	rule start_pixel2(x == xPos2 && y == yPos1 && !fretPressed && !vsync_pulse);
 		fretValue2 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
-	rule start_pixel3(x == xPos3 && y == yPos3 && !fretPressed && !vsync_pulse);
+	rule start_pixel3(x == xPos3 && y == yPos2 && !fretPressed && !vsync_pulse);
 		fretValue3 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel4(x == xPos4 && y == yPos3 && !fretPressed && !vsync_pulse);
+		fretValue4 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel5(x == xPos5 && y == yPos3 && !fretPressed && !vsync_pulse);
+		fretValue5 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
 	
@@ -145,12 +157,20 @@ module mkFret #(parameter UInt#(2) lOffset,
 		fretValue1 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
-	rule end_pixel2(x == xPos2 && y == yPos2 && fretPressed && !vsync_pulse);
+	rule end_pixel2(x == xPos2 && y == yPos1 && fretPressed && !vsync_pulse);
 		fretValue2 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
-	rule end_pixel3(x == xPos3 && y == yPos3 && fretPressed && !vsync_pulse);
+	rule end_pixel3(x == xPos3 && y == yPos2 && fretPressed && !vsync_pulse);
 		fretValue3 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	endrule
+	
+	rule end_pixel4(x == xPos4 && y == yPos3 && fretPressed && !vsync_pulse);
+		fretValue4 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	endrule
+	
+	rule end_pixel5(x == xPos5 && y == yPos3 && fretPressed && !vsync_pulse);
+		fretValue5 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
 	
@@ -179,9 +199,11 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Get X position
 	method Action xPos(UInt#(11) val);
-		xPos1 <= val - 4;
-		xPos2 <= val + 1;
-		xPos3 <= val + 6;
+		xPos1 <= val - 3;
+		xPos2 <= val - 1;
+		xPos3 <= val + 1;
+		xPos4 <= val + 3;
+		xPos5 <= val + 5;
 	endmethod
 	
 	// Get Y position
