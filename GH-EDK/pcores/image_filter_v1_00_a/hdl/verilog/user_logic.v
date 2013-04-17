@@ -185,9 +185,9 @@ output                                    IP2Bus_Error;
 		
 	// Tie together unmodified lines of AXIS bus
 	assign
-		M_AXIS_S2MM_TVALID = enable ? valid2 : S_AXIS_S2MM_TVALID,
-		M_AXIS_S2MM_TKEEP  = enable ? keep2  : S_AXIS_S2MM_TKEEP,
-		M_AXIS_S2MM_TLAST  = enable ? last2  : S_AXIS_S2MM_TLAST,
+		M_AXIS_S2MM_TVALID = 0 ? valid2 : S_AXIS_S2MM_TVALID,
+		M_AXIS_S2MM_TKEEP  = 0 ? keep2  : S_AXIS_S2MM_TKEEP,
+		M_AXIS_S2MM_TLAST  = 0 ? last2  : S_AXIS_S2MM_TLAST,
 		S_AXIS_S2MM_TREADY = M_AXIS_S2MM_TREADY;
 	
 	// Delay AXIS signals through some resisters
