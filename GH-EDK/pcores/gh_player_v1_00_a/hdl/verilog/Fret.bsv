@@ -41,15 +41,15 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	Reg#(Bool) fretPressedDly <- mkReg(False);
 	Reg#(UInt#(4)) pressDelay <- mkReg(0);
-	Reg#(UInt#(4)) smoothVal <- mkReg(0);
+	Wire#(UInt#(4)) smoothVal <- mkWire;
 	
 	Reg#(UInt#(4)) strumCount <- mkReg(0);
 	Reg#(Bool) strumOutput <- mkReg(False);
-	Reg#(UInt#(4)) strumTimeVal <- mkReg(0);
+	Wire#(UInt#(4)) strumTimeVal <- mkWire;
 	
-	Reg#(UInt#(8)) red <- mkReg(0);
-	Reg#(UInt#(8)) green <- mkReg(0);
-	Reg#(UInt#(8)) blue <- mkReg(0);
+	Wire#(UInt#(8)) red   <- mkWire;
+	Wire#(UInt#(8)) green <- mkWire;
+	Wire#(UInt#(8)) blue  <- mkWire;
 	
 	PulseWire hsync_pulse <- mkPulseWire();
 	PulseWire vsync_pulse <- mkPulseWire();
@@ -58,20 +58,20 @@ module mkFret #(parameter UInt#(2) lOffset,
 	Reg#(UInt#(11)) x <- mkReg(0);
 	Reg#(UInt#(10)) y <- mkReg(0);
 	
-	Reg#(UInt#(8)) trigUpR <- mkReg(0);
-	Reg#(UInt#(8)) trigUpG <- mkReg(0);
-	Reg#(UInt#(8)) trigUpB <- mkReg(0);
-	Reg#(UInt#(8)) trigDownR <- mkReg(0);
-	Reg#(UInt#(8)) trigDownG <- mkReg(0);
-	Reg#(UInt#(8)) trigDownB <- mkReg(0);
+	Wire#(UInt#(8)) trigUpR   <- mkWire;
+	Wire#(UInt#(8)) trigUpG   <- mkWire;
+	Wire#(UInt#(8)) trigUpB   <- mkWire;
+	Wire#(UInt#(8)) trigDownR <- mkWire;
+	Wire#(UInt#(8)) trigDownG <- mkWire;
+	Wire#(UInt#(8)) trigDownB <- mkWire;
 	
-	Reg#(UInt#(11)) xPos1 <- mkReg(0);
-	Reg#(UInt#(11)) xPos2 <- mkReg(0);
-	Reg#(UInt#(11)) xPos3 <- mkReg(0);
+	Wire#(UInt#(11)) xPos1 <- mkWire;
+	Wire#(UInt#(11)) xPos2 <- mkWire;
+	Wire#(UInt#(11)) xPos3 <- mkWire;
 	
-	Reg#(UInt#(10)) yPos1 <- mkReg(0);
-	Reg#(UInt#(10)) yPos2 <- mkReg(0);
-	Reg#(UInt#(10)) yPos3 <- mkReg(0);
+	Wire#(UInt#(10)) yPos1 <- mkWire;
+	Wire#(UInt#(10)) yPos2 <- mkWire;
+	Wire#(UInt#(10)) yPos3 <- mkWire;
 
 
 	// New frame on each VSync pulse
@@ -79,12 +79,8 @@ module mkFret #(parameter UInt#(2) lOffset,
 		x <= 0;
 		y <= 0;
 		
-		// Update fret value (needs at least two in agreement)
-//		fretPressed <= (fretValue1 && fretValue2) ||
-//		               (fretValue1 && fretValue3) ||
-//		               (fretValue2 && fretValue3);
-		fretPressed <= fretValue2;
-		
+		// Update fret value
+		fretPressed <= (fretValue1 || fretValue2 || fretValue3);
 	endrule
 	
 	// New line on each HSync pulse
@@ -183,9 +179,9 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Get X position
 	method Action xPos(UInt#(11) val);
-		xPos1 <= val - 15;
+		xPos1 <= val - 4;
 		xPos2 <= val + 1;
-		xPos3 <= val + 17;
+		xPos3 <= val + 6;
 	endmethod
 	
 	// Get Y position
