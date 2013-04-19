@@ -1,4 +1,4 @@
-// Guitar Hero-style game player
+// Strum bar controller for Guitar Hero-style game player
 
 (* always_ready *)
 interface Strum;
@@ -17,7 +17,7 @@ endinterface
 (* synthesize *)
 module mkStrum (Strum);
 	
-	Reg#(Bit#(5)) frets <- mkReg(0);
+	Wire#(Bit#(5)) frets <- mkWire;
 	Reg#(Bool) fretPressed <- mkReg(False);
 	
 	Reg#(UInt#(4)) strumCount <- mkReg(0);
@@ -29,7 +29,7 @@ module mkStrum (Strum);
 
 	// New frame on each VSync pulse
 	rule new_frame(vsync_pulse);
-		fretPressed <= !(frets == 0);
+		fretPressed <= (frets != 0);
 	endrule
 	
 	

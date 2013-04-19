@@ -19,13 +19,8 @@ interface Fret;
 	method Action trigUp(Bit#(24) val);
 	(* always_enabled *)
 	method Action trigDown(Bit#(24) val);
-	(* always_enabled *)
-	method Action smoothing(UInt#(4) val);
-	(* always_enabled *)
-	method Action strumTime(UInt#(4) val);
 	
 	method Bool press();
-	method Bool strum();
 endinterface
 
 
@@ -40,14 +35,6 @@ module mkFret #(parameter UInt#(2) lOffset,
 	Reg#(Bool) fretValue4 <- mkReg(False);
 	Reg#(Bool) fretValue5 <- mkReg(False);
 	Reg#(Bool) fretPressed <- mkReg(False);
-	
-	Reg#(Bool) fretPressedDly <- mkReg(False);
-	Reg#(UInt#(4)) pressDelay <- mkReg(0);
-	Wire#(UInt#(4)) smoothVal <- mkWire;
-	
-	Reg#(UInt#(4)) strumCount <- mkReg(0);
-	Reg#(Bool) strumOutput <- mkReg(False);
-	Wire#(UInt#(4)) strumTimeVal <- mkWire;
 	
 	Wire#(UInt#(8)) red   <- mkWire;
 	Wire#(UInt#(8)) green <- mkWire;
@@ -96,37 +83,6 @@ module mkFret #(parameter UInt#(2) lOffset,
 	// New pixel each clock when VDE is high
 	rule new_pixel(vde_pulse && !hsync_pulse && !vsync_pulse);
 		x <= x + 1;
-	endrule
-	
-	
-	rule fret_delay_inc(!fretPressed && fretPressedDly && pressDelay != smoothVal && vsync_pulse);
-		pressDelay <= pressDelay + 1;
-	endrule
-	
-	rule fret_delay_done(!fretPressed && fretPressedDly && pressDelay == smoothVal && vsync_pulse);
-		fretPressedDly <= False;
-		pressDelay <= 0;
-	endrule
-	
-	rule fret_on(fretPressed);
-		fretPressedDly <= True;
-	endrule
-	
-	
-	// Set strum on for max 3 frames, 1 frame after fret pressed
-	rule strum_on(vsync_pulse && fretPressedDly && strumCount < strumTimeVal);
-		strumOutput <= True;
-		strumCount <= strumCount + 1;
-	endrule
-	
-	rule strum_off(vsync_pulse && fretPressedDly && strumCount == strumTimeVal);
-		strumOutput <= False;
-		strumCount <= (strumTimeVal + 1);
-	endrule
-	
-	rule strum_reset(vsync_pulse && !fretPressedDly && strumCount != 0);
-		strumOutput <= False;
-		strumCount <= 0;
 	endrule
 	
 	
@@ -227,25 +183,10 @@ module mkFret #(parameter UInt#(2) lOffset,
 		trigDownB <= unpack(val[7:0]);
 	endmethod
 	
-	// Get Smoothing Value
-	method Action smoothing(UInt#(4) val);
-		smoothVal <= val;
-	endmethod
-	
-	// Get Strum Time
-	method Action strumTime(UInt#(4) val);
-		strumTimeVal <= val;
-	endmethod
-	
 	
 	// Output fret pressed value
 	method Bool press();
-		return fretPressedDly;
-	endmethod
-
-	// Output strum value
-	method Bool strum();
-		return strumOutput;
+		return fretPressed;
 	endmethod
 
 endmodule

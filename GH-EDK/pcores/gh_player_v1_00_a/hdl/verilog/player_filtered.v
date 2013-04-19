@@ -49,7 +49,6 @@ output [14:0] Status;
 
 
 	wire       fretG, fretR, fretY, fretB, fretO;
-	wire       strumG, strumR, strumY, strumB, strumO;
 	wire [7:0] whammyVal;
 	wire       tiltVal;
 	wire [4:0] fretsVal, fretsDly;
@@ -67,8 +66,8 @@ output [14:0] Status;
 		Strum  = Enable ? strumDly : 1'b0,
 		Whammy = Enable ? whammyVal : 8'b0,
 		Tilt   = Enable ? tiltVal : 1'b0,
-		LEDs   = {tiltVal, whammyVal[7], strumDly, fretsVal},
-		Status = {tiltVal, whammyVal, strumDly, fretsVal};
+		LEDs   = {tiltVal, whammyVal[7], strumDly, fretsDly},
+		Status = {tiltVal, whammyVal, strumDly, fretsDly};
 	
 	
 	always @(posedge PClk)
