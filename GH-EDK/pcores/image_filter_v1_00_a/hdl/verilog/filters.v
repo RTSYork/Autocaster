@@ -44,7 +44,7 @@ output [23:0] DisplayOut;
 	                    Display[2] ? blurOut[7] :
 	                    Display[1] ? thresh1Out :
 	                    Display[0] ? greyOut[7] :
-	                                 thresh2Out ;
+	                                 greyOut[7] ;
 	
 	// Assign display output
 	assign DisplayOut = Display[5] ?     mixOut       :

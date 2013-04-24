@@ -166,7 +166,7 @@ int main(void)
 	// Reset Image Filter core, set threshold, enable
 	u8 filtersEnable = 0;
 	IMAGE_FILTER_mReset(XPAR_IMAGE_FILTER_0_BASEADDR);
-	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 200);
+	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 128);
 	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_NONE);
 
 
