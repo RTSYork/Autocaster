@@ -81,7 +81,7 @@ point rPos = {R_X, R_Y};
 point yPos = {Y_X, Y_Y};
 point bPos = {B_X, B_Y};
 point oPos = {O_X, O_Y};
-u8 delay = 5;
+u8 delay = 4;
 
 u8 playerEnable = 0;
 u8 type = TYPE_OLD;

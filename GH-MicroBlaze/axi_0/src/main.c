@@ -143,7 +143,7 @@ int main(void)
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, playerEnable);
+	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
 
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
