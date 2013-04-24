@@ -187,13 +187,13 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Get X position
 	method Action xPos(UInt#(11) val);
-		xPos1 <= val - 5;
-		xPos2 <= val - 3;
-		xPos3 <= val - 1;
+		xPos1 <= val - 2;
+		xPos2 <= val - 1;
+		xPos3 <= val;
 		xPos4 <= val + 1;
-		xPos5 <= val + 3;
-		xPos6 <= val + 5;
-		xPos7 <= val + 7;
+		xPos5 <= val + 2;
+		xPos6 <= val + 3;
+		xPos7 <= val + 4;
 	endmethod
 	
 	// Get Y position
