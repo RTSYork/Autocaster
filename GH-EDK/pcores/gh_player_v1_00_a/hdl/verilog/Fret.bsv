@@ -1,5 +1,7 @@
 // Guitar Hero-style game player
 
+import Vector :: * ;
+
 (* always_ready *)
 interface Fret;
 	(* enable = "vsync" *)
@@ -28,13 +30,9 @@ endinterface
 module mkFret #(parameter UInt#(2) lOffset,
                 parameter UInt#(2) rOffset) (Fret);
 	
-	
-	Reg#(Bool) fretValue1 <- mkReg(False);
-	Reg#(Bool) fretValue2 <- mkReg(False);
-	Reg#(Bool) fretValue3 <- mkReg(False);
-	Reg#(Bool) fretValue4 <- mkReg(False);
-	Reg#(Bool) fretValue5 <- mkReg(False);
+	Vector#(7, Reg#(Bool)) fretValues <- replicateM(mkReg(False));
 	Reg#(Bool) fretPressed <- mkReg(False);
+	Reg#(Bool) fretPressedDly <- mkReg(False);
 	
 	Wire#(UInt#(8)) red   <- mkWire;
 	Wire#(UInt#(8)) green <- mkWire;
@@ -59,6 +57,8 @@ module mkFret #(parameter UInt#(2) lOffset,
 	Wire#(UInt#(11)) xPos3 <- mkWire;
 	Wire#(UInt#(11)) xPos4 <- mkWire;
 	Wire#(UInt#(11)) xPos5 <- mkWire;
+	Wire#(UInt#(11)) xPos6 <- mkWire;
+	Wire#(UInt#(11)) xPos7 <- mkWire;
 	
 	Wire#(UInt#(10)) yPos1 <- mkWire;
 	Wire#(UInt#(10)) yPos2 <- mkWire;
@@ -71,7 +71,13 @@ module mkFret #(parameter UInt#(2) lOffset,
 		y <= 0;
 		
 		// Update fret value
-		fretPressed <= (fretValue1 || fretValue2 || fretValue3 || fretValue4 || fretValue5);
+		fretPressed <= (fretValues[ 0] ||
+		                fretValues[ 1] ||
+		                fretValues[ 2] ||
+		                fretValues[ 3] ||
+		                fretValues[ 4] ||
+		                fretValues[ 5] ||
+		                fretValues[ 6]);
 	endrule
 	
 	// New line on each HSync pulse
@@ -86,47 +92,73 @@ module mkFret #(parameter UInt#(2) lOffset,
 	endrule
 	
 	
+	// Slight low-pass filter for release (1 frame)
+	rule fret_on(fretPressed && !fretPressedDly);
+		fretPressedDly <= True;
+	endrule
+	
+	rule fret_off(!fretPressed && fretPressedDly && vsync_pulse);
+		fretPressedDly <= False;
+	endrule
+	
+	
 	// Triggers for start of a note
 	rule start_pixel1(x == xPos1 && y == yPos1 && !fretPressed && !vsync_pulse);
-		fretValue1 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+		fretValues[0] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
 	rule start_pixel2(x == xPos2 && y == yPos1 && !fretPressed && !vsync_pulse);
-		fretValue2 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+		fretValues[1] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
 	rule start_pixel3(x == xPos3 && y == yPos2 && !fretPressed && !vsync_pulse);
-		fretValue3 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+		fretValues[2] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
-	rule start_pixel4(x == xPos4 && y == yPos3 && !fretPressed && !vsync_pulse);
-		fretValue4 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	rule start_pixel4(x == xPos4 && y == yPos2 && !fretPressed && !vsync_pulse);
+		fretValues[3] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
-	rule start_pixel5(x == xPos5 && y == yPos3 && !fretPressed && !vsync_pulse);
-		fretValue5 <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	rule start_pixel5(x == xPos5 && y == yPos2 && !fretPressed && !vsync_pulse);
+		fretValues[4] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel6(x == xPos6 && y == yPos3 && !fretPressed && !vsync_pulse);
+		fretValues[5] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
+	endrule
+	
+	rule start_pixel7(x == xPos7 && y == yPos3 && !fretPressed && !vsync_pulse);
+		fretValues[6] <= (red >= trigUpR && green >= trigUpG && blue >= trigUpB);
 	endrule
 	
 	
 	// Triggers for end of a note
 	rule end_pixel1(x == xPos1 && y == yPos1 && fretPressed && !vsync_pulse);
-		fretValue1 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+		fretValues[0] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
 	rule end_pixel2(x == xPos2 && y == yPos1 && fretPressed && !vsync_pulse);
-		fretValue2 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+		fretValues[1] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
 	rule end_pixel3(x == xPos3 && y == yPos2 && fretPressed && !vsync_pulse);
-		fretValue3 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+		fretValues[2] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
-	rule end_pixel4(x == xPos4 && y == yPos3 && fretPressed && !vsync_pulse);
-		fretValue4 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	rule end_pixel4(x == xPos4 && y == yPos2 && fretPressed && !vsync_pulse);
+		fretValues[3] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
-	rule end_pixel5(x == xPos5 && y == yPos3 && fretPressed && !vsync_pulse);
-		fretValue5 <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	rule end_pixel5(x == xPos5 && y == yPos2 && fretPressed && !vsync_pulse);
+		fretValues[4] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	endrule
+	
+	rule end_pixel6(x == xPos6 && y == yPos3 && fretPressed && !vsync_pulse);
+		fretValues[5] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
+	endrule
+	
+	rule end_pixel7(x == xPos7 && y == yPos3 && fretPressed && !vsync_pulse);
+		fretValues[6] <= (red >= trigDownR || green >= trigDownG || blue >= trigDownB);
 	endrule
 	
 	
@@ -155,11 +187,13 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Get X position
 	method Action xPos(UInt#(11) val);
-		xPos1 <= val - 3;
-		xPos2 <= val - 1;
-		xPos3 <= val + 1;
-		xPos4 <= val + 3;
-		xPos5 <= val + 5;
+		xPos1 <= val - 5;
+		xPos2 <= val - 3;
+		xPos3 <= val - 1;
+		xPos4 <= val + 1;
+		xPos5 <= val + 3;
+		xPos6 <= val + 5;
+		xPos7 <= val + 7;
 	endmethod
 	
 	// Get Y position
@@ -186,7 +220,7 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Output fret pressed value
 	method Bool press();
-		return fretPressed;
+		return fretPressedDly;
 	endmethod
 
 endmodule
