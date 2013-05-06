@@ -8,3 +8,6 @@
 # General Windows
 ##
 [Tt]humbs.db
+
+*.swp
+
