@@ -148,10 +148,10 @@
 <pad name="P$67" x="33.975" y="4.85" drill="0.65" diameter="1" shape="octagon"/>
 <pad name="P$68" x="34.775" y="6" drill="0.65" diameter="1" shape="octagon"/>
 <hole x="42.325" y="3.375" drill="1.75"/>
-<text x="6.68" y="6.765" size="1" layer="1">1</text>
-<text x="34.945" y="8.675" size="1" layer="1">34</text>
-<text x="35.285" y="6.315" size="1" layer="1">68</text>
-<text x="6.115" y="4.32" size="1" layer="1">35</text>
+<text x="6.68" y="6.765" size="1" layer="25">1</text>
+<text x="34.945" y="8.675" size="1" layer="25">34</text>
+<text x="35.285" y="6.315" size="1" layer="25">68</text>
+<text x="6.115" y="4.32" size="1" layer="25">35</text>
 <wire x1="0" y1="0" x2="5.1" y2="0" width="0.127" layer="21"/>
 <wire x1="5.1" y1="0" x2="37.5" y2="0" width="0.127" layer="21"/>
 <wire x1="37.5" y1="0" x2="42.7" y2="0" width="0.127" layer="21"/>
@@ -5976,11 +5976,6 @@ type RDH, grid 15 mm</description>
 <label x="91.44" y="-33.02" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="VHDCI" gate="G$1" pin="GND2"/>
-<wire x1="-40.64" y1="127" x2="-30.48" y2="127" width="0.1524" layer="91"/>
-<label x="-30.48" y="127" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="VHDCI" gate="G$1" pin="GND67"/>
 <wire x1="-40.64" y1="-38.1" x2="-30.48" y2="-38.1" width="0.1524" layer="91"/>
 <label x="-30.48" y="-38.1" size="1.778" layer="95"/>
@@ -6180,9 +6175,9 @@ type RDH, grid 15 mm</description>
 <label x="78.74" y="106.68" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="VHDCI" gate="G$1" pin="P$49"/>
-<wire x1="-30.48" y1="7.62" x2="-40.64" y2="7.62" width="0.1524" layer="91"/>
-<label x="-30.48" y="7.62" size="1.778" layer="95"/>
+<pinref part="VHDCI" gate="G$1" pin="P$47"/>
+<wire x1="-30.48" y1="12.7" x2="-40.64" y2="12.7" width="0.1524" layer="91"/>
+<label x="-30.48" y="12.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="WHAMMY0" class="0">
@@ -6214,14 +6209,14 @@ type RDH, grid 15 mm</description>
 <junction x="109.22" y="109.22"/>
 </segment>
 <segment>
-<pinref part="SIL1" gate="A" pin="10"/>
-<wire x1="116.84" y1="58.42" x2="114.3" y2="58.42" width="0.1524" layer="91"/>
-<label x="114.3" y="58.42" size="1.778" layer="95" rot="R180"/>
+<pinref part="TEENSY3.0" gate="G$1" pin="10"/>
+<wire x1="30.48" y1="48.26" x2="25.4" y2="48.26" width="0.1524" layer="91"/>
+<label x="25.4" y="48.26" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TEENSY3.0" gate="G$1" pin="8"/>
-<wire x1="30.48" y1="53.34" x2="25.4" y2="53.34" width="0.1524" layer="91"/>
-<label x="25.4" y="53.34" size="1.778" layer="95" rot="R180"/>
+<pinref part="SIL1" gate="A" pin="12"/>
+<wire x1="116.84" y1="53.34" x2="114.3" y2="53.34" width="0.1524" layer="91"/>
+<label x="114.3" y="53.34" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="N$33" class="0">
@@ -6411,14 +6406,14 @@ type RDH, grid 15 mm</description>
 <junction x="121.92" y="109.22"/>
 </segment>
 <segment>
-<pinref part="SIL1" gate="A" pin="11"/>
-<wire x1="116.84" y1="55.88" x2="114.3" y2="55.88" width="0.1524" layer="91"/>
-<label x="114.3" y="55.88" size="1.778" layer="95" rot="R180"/>
+<pinref part="TEENSY3.0" gate="G$1" pin="7"/>
+<wire x1="30.48" y1="55.88" x2="25.4" y2="55.88" width="0.1524" layer="91"/>
+<label x="25.4" y="55.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TEENSY3.0" gate="G$1" pin="9"/>
-<wire x1="30.48" y1="50.8" x2="25.4" y2="50.8" width="0.1524" layer="91"/>
-<label x="25.4" y="50.8" size="1.778" layer="95" rot="R180"/>
+<pinref part="SIL1" gate="A" pin="9"/>
+<wire x1="116.84" y1="60.96" x2="114.3" y2="60.96" width="0.1524" layer="91"/>
+<label x="114.3" y="60.96" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="WHAMMY6" class="0">
@@ -6472,14 +6467,14 @@ type RDH, grid 15 mm</description>
 <junction x="96.52" y="109.22"/>
 </segment>
 <segment>
-<pinref part="SIL1" gate="A" pin="9"/>
-<wire x1="116.84" y1="60.96" x2="114.3" y2="60.96" width="0.1524" layer="91"/>
-<label x="114.3" y="60.96" size="1.778" layer="95" rot="R180"/>
+<pinref part="TEENSY3.0" gate="G$1" pin="9"/>
+<wire x1="30.48" y1="50.8" x2="25.4" y2="50.8" width="0.1524" layer="91"/>
+<label x="25.4" y="50.8" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TEENSY3.0" gate="G$1" pin="7"/>
-<wire x1="30.48" y1="55.88" x2="25.4" y2="55.88" width="0.1524" layer="91"/>
-<label x="25.4" y="55.88" size="1.778" layer="95" rot="R180"/>
+<pinref part="SIL1" gate="A" pin="11"/>
+<wire x1="116.84" y1="55.88" x2="114.3" y2="55.88" width="0.1524" layer="91"/>
+<label x="114.3" y="55.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="START" class="0">
@@ -6494,14 +6489,14 @@ type RDH, grid 15 mm</description>
 <junction x="134.62" y="109.22"/>
 </segment>
 <segment>
-<pinref part="SIL1" gate="A" pin="12"/>
-<wire x1="116.84" y1="53.34" x2="114.3" y2="53.34" width="0.1524" layer="91"/>
-<label x="114.3" y="53.34" size="1.778" layer="95" rot="R180"/>
+<pinref part="TEENSY3.0" gate="G$1" pin="8"/>
+<wire x1="30.48" y1="53.34" x2="25.4" y2="53.34" width="0.1524" layer="91"/>
+<label x="25.4" y="53.34" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TEENSY3.0" gate="G$1" pin="10"/>
-<wire x1="30.48" y1="48.26" x2="25.4" y2="48.26" width="0.1524" layer="91"/>
-<label x="25.4" y="48.26" size="1.778" layer="95" rot="R180"/>
+<pinref part="SIL1" gate="A" pin="10"/>
+<wire x1="116.84" y1="58.42" x2="114.3" y2="58.42" width="0.1524" layer="91"/>
+<label x="114.3" y="58.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SELECT" class="0">
@@ -6531,9 +6526,9 @@ type RDH, grid 15 mm</description>
 <label x="25.4" y="58.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="VHDCI" gate="G$1" pin="P$47"/>
-<wire x1="-30.48" y1="12.7" x2="-40.64" y2="12.7" width="0.1524" layer="91"/>
-<label x="-30.48" y="12.7" size="1.778" layer="95"/>
+<pinref part="VHDCI" gate="G$1" pin="P$49"/>
+<wire x1="-30.48" y1="7.62" x2="-40.64" y2="7.62" width="0.1524" layer="91"/>
+<label x="-30.48" y="7.62" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="3V3" class="0">
