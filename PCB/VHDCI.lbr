@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -132,10 +132,10 @@
 <pad name="P$67" x="33.975" y="4.85" drill="0.65" diameter="1" shape="octagon"/>
 <pad name="P$68" x="34.775" y="6" drill="0.65" diameter="1" shape="octagon"/>
 <hole x="42.325" y="3.375" drill="1.75"/>
-<text x="6.68" y="6.765" size="1" layer="1">1</text>
-<text x="34.945" y="8.675" size="1" layer="1">34</text>
-<text x="35.285" y="6.315" size="1" layer="1">68</text>
-<text x="6.115" y="4.32" size="1" layer="1">35</text>
+<text x="6.68" y="6.765" size="1" layer="25">1</text>
+<text x="34.945" y="8.675" size="1" layer="25">34</text>
+<text x="35.285" y="6.315" size="1" layer="25">68</text>
+<text x="6.115" y="4.32" size="1" layer="25">35</text>
 <wire x1="0" y1="0" x2="5.1" y2="0" width="0.127" layer="21"/>
 <wire x1="5.1" y1="0" x2="37.5" y2="0" width="0.127" layer="21"/>
 <wire x1="37.5" y1="0" x2="42.7" y2="0" width="0.127" layer="21"/>
