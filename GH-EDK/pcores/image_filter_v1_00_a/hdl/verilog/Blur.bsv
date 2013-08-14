@@ -21,8 +21,8 @@ endinterface
 (* synthesize *)
 module mkBlur (Blur);
 
-	Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
-	//Reg#(Bit#(1280)) lastRow <- mkReg(0);
+	//Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
+	Reg#(Bit#(1280)) lastRow <- mkReg(0);
 	Reg#(Bit#(2))    lastPxl <- mkReg(0);
 	Wire#(Bit#(1))   currPxl <- mkWire;
 	
