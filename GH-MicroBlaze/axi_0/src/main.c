@@ -155,7 +155,7 @@ int main(void)
 	//u8 playerEnable = 0;
 
 	// Status value
-//	u32 status = 0;
+	u32 status = 0;
 
 	// Reset GH Player core
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
@@ -232,27 +232,22 @@ int main(void)
 			lasts2 = s2;
 		}
 
-//		s3 = getSwitch(SWITCH3);
-//		if (s3 == SWITCH_ON) {
-//			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
-//			xil_printf("%d%d%d%d%d %d %d%d%d%d%d%d%d%d %d \r",
-//					BIT_CHECK(status, 0),
-//					BIT_CHECK(status, 1)  >> 1,
-//					BIT_CHECK(status, 2)  >> 2,
-//					BIT_CHECK(status, 3)  >> 3,
-//					BIT_CHECK(status, 4)  >> 4,
-//					BIT_CHECK(status, 5)  >> 5,
-//					BIT_CHECK(status, 6)  >> 6,
-//					BIT_CHECK(status, 7)  >> 7,
-//					BIT_CHECK(status, 8)  >> 8,
-//					BIT_CHECK(status, 9)  >> 9,
-//					BIT_CHECK(status, 10) >> 10,
-//					BIT_CHECK(status, 11) >> 11,
-//					BIT_CHECK(status, 12) >> 12,
-//					BIT_CHECK(status, 13) >> 13,
-//					BIT_CHECK(status, 14) >> 14);
-//		}
-
+		s3 = getSwitch(SWITCH3);
+		if (s3 == SWITCH_ON) {
+			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
+			print("\x1b[H\n");
+			print(" GRYBO  S | W | T %d %d %d\n");
+			xil_printf(" %d%d%d%d%d  %d | %d | %d\n\n",
+					BIT_CHECK(status, 0),
+					BIT_CHECK(status, 1)  >> 1,
+					BIT_CHECK(status, 2)  >> 2,
+					BIT_CHECK(status, 3)  >> 3,
+					BIT_CHECK(status, 4)  >> 4,
+					BIT_CHECK(status, 5)  >> 5,
+					BIT_CHECK(status, 13)  >> 13,
+					BIT_CHECK(status, 14) >> 14);
+		}
+/*
 		s3 = getSwitch(SWITCH3);
 		s4 = getSwitch(SWITCH4);
 		s5 = getSwitch(SWITCH5);
@@ -321,7 +316,7 @@ int main(void)
 			lasts5 = s5;
 			lasts6 = s6;
 			lasts7 = s7;
-		}
+		}*/
 	}
 
 	/* never reached */
