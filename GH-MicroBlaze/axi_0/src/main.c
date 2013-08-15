@@ -38,7 +38,8 @@
 #include "gpio/switches.h"	// Switch controls
 #include "gpio/bitops.h"	// Bit operations
 #include "interrupts.h"		// Interrupt control
-//#include "timer.h"			// Timer
+//#include "timer.h"		// Timer
+#include "ethernet.h"		// Ethernet
 
 /* Frame size constants
  */
@@ -86,6 +87,11 @@ int main(void)
 	//initTimer(intCtrl);
 	//startTimer(0);
 	//startTimer(1);
+
+
+	// Set up Ethernet
+	ethernetInit();
+
 
 	setLeds(0);
 
