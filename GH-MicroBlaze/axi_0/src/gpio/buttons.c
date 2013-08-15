@@ -8,6 +8,7 @@
 #include "../hdmi/vdma.h"
 #include "xuartlite.h"
 #include "xuartlite_l.h"
+#include "../ethernet.h"
 
 #define BTNS_BASEADDR XPAR_PUSH_BUTTONS_5BITS_BASEADDR
 #define BTNS_DEVICE_ID XPAR_PUSH_BUTTONS_5BITS_DEVICE_ID
@@ -226,7 +227,7 @@ void PushBtnHandler(void *CallBackRef) {
 		// Right button pressed
 		//xil_printf("R");
 
-		/* Output frame over UART */
+		/* Output frame over UART *//*
 		register int i;
 		u8 r, g, b;
 		register u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
@@ -238,6 +239,13 @@ void PushBtnHandler(void *CallBackRef) {
 			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, r);
 			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, g);
 			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
+		}
+		*/
+		/* Output frame over Ethernet */
+		register int i;
+		register u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
+		for (i = 0; i < 1280 * 720 ; i += 320) {
+			ethernetSend(1280, (u8*)(vbufptr + i));
 		}
 	}
 
