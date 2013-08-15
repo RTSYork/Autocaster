@@ -65,16 +65,27 @@ XIntc btnIntCtrl;
 //#define O_X 800
 //#define O_Y 571
 // --- Delayed fret detector ---
-#define G_X 476+19+5+4
-#define G_Y 581-45-15-15
-#define R_X 559+8+2+3
-#define R_Y 577-45-15-15
-#define Y_X 640
-#define Y_Y 575-45-15-15
-#define B_X 721-8-2-3
-#define B_Y 577-45-15-15
-#define O_X 804-19-5-4
-#define O_Y 581-45-15-15
+//#define G_X 476+19+5+4
+//#define G_Y 581-45-15-15
+//#define R_X 559+8+2+3
+//#define R_Y 577-45-15-15
+//#define Y_X 640
+//#define Y_Y 575-45-15-15
+//#define B_X 721-8-2-3
+//#define B_Y 577-45-15-15
+//#define O_X 804-19-5-4
+//#define O_Y 581-45-15-15
+// --- Guitar Hero ---
+#define G_X 495
+#define G_Y 506
+#define R_X 568
+#define R_Y 502
+#define Y_X 639
+#define Y_Y 500
+#define B_X 711
+#define B_Y 502
+#define O_X 783
+#define O_Y 506
 
 // Positions of note detectors (x, y)
 point gPos = {G_X, G_Y};
