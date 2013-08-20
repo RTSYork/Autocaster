@@ -22,7 +22,7 @@ endinterface
 module mkBlur (Blur);
 
 	//Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
-	Reg#(Bit#(1280)) lastRow <- mkReg(0);
+	Reg#(Bit#(640))  lastRow <- mkReg(0);
 	Reg#(Bit#(2))    lastPxl <- mkReg(0);
 	Wire#(Bit#(1))   currPxl <- mkWire;
 	
@@ -30,8 +30,9 @@ module mkBlur (Blur);
 	
 	Reg#(UInt#(11)) x <- mkReg(0);
 	
-	Reg#(Bool) ready <- mkReg(False);
-	
+	Reg#(Bool) ready   <- mkReg(False);
+	Reg#(Bool) working <- mkReg(False);
+
 	
 	PulseWire hsync_pulse <- mkPulseWire();
 	PulseWire vde_pulse <- mkPulseWire();
@@ -44,11 +45,16 @@ module mkBlur (Blur);
 	
 	
 	// Calculate blur
-	rule blur_pixel(ready);
-		blurred <= {lastRow[x], lastPxl, currPxl};
+	rule blur_pixel(ready && working);
+		blurred <= {lastRow[x-320], lastPxl, currPxl};
 		
-		lastPxl    <= {currPxl, lastPxl[1]};
-		lastRow[x] <= currPxl;
+		lastPxl        <= {currPxl, lastPxl[1]};
+		lastRow[x-320] <= currPxl;
+	endrule
+
+	// Bypass blur outside sub-frame
+	rule no_blur(ready && !working);
+		blurred <= {currPxl, currPxl, currPxl, currPxl};
 	endrule
 	
 	
@@ -60,6 +66,16 @@ module mkBlur (Blur);
 	// New pixel each clock when VDE is high
 	rule new_pixel(!hsync_pulse && ready);
 		x <= x + 1;
+	endrule
+
+
+	// Set sub-frame to work on
+	rule start_subframe(x == 320);
+		working <= True;
+	endrule
+
+	rule stop_subframe(x == 960);
+		working <= False;
 	endrule
 	
 	

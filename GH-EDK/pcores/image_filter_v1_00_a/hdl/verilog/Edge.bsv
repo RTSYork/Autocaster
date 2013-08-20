@@ -22,14 +22,15 @@ endinterface
 module mkEdge (Edge);
 
 	//Vector#(1280, Reg#(Bit#(1))) lastRow <- replicateM(mkReg(0));
-	Reg#(Bit#(1280)) lastRow <- mkReg(0);
-	Wire#(Bit#(1))   currPxl <- mkWire;
+	Reg#(Bit#(640)) lastRow <- mkReg(0);
+	Wire#(Bit#(1))  currPxl <- mkWire;
 	
 	Wire#(Bit#(1)) filtered <- mkDWire(0);
 	
 	Reg#(UInt#(11)) x <- mkReg(0);
 	
-	Reg#(Bool) ready <- mkReg(False);
+	Reg#(Bool) ready   <- mkReg(False);
+	Reg#(Bool) working <- mkReg(False);
 	
 	
 	PulseWire hsync_pulse <- mkPulseWire();
@@ -52,10 +53,25 @@ module mkEdge (Edge);
 	endrule
 	
 	// Calculate edge filter
-	rule blur_pixel(vde_pulse && ready);
-		filtered <= lastRow[x] & ~currPxl;
+	rule filter_pixel(vde_pulse && ready && working);
+		filtered <= lastRow[x-320] & ~currPxl;
 
-		lastRow[x] <= currPxl;
+		lastRow[x-320] <= currPxl;
+	endrule
+
+	// Bypass filter outside sub-frame
+	rule no_filter(ready && !working);
+		filtered <= currPxl;
+	endrule
+
+
+	// Set sub-frame to work on
+	rule start_subframe(x == 320);
+		working <= True;
+	endrule
+
+	rule stop_subframe(x == 960);
+		working <= False;
 	endrule
 	
 	
