@@ -38,7 +38,8 @@
 #include "gpio/switches.h"	// Switch controls
 #include "gpio/bitops.h"	// Bit operations
 #include "interrupts.h"		// Interrupt control
-//#include "timer.h"			// Timer
+//#include "timer.h"		// Timer
+#include "ethernet.h"		// Ethernet
 
 /* Frame size constants
  */
@@ -87,6 +88,11 @@ int main(void)
 	//startTimer(0);
 	//startTimer(1);
 
+
+	// Set up Ethernet
+	ethernetInit();
+
+
 	setLeds(0);
 
 
@@ -120,16 +126,28 @@ int main(void)
 //	point oPos = {376, 621};
 
 	// Thresholds of note detectors
-	pixel gOn  = {0x02, 0x80, 0x02}; // pixel gOn  = {0x02, 0x68, 0x02};
-	pixel gOff = {0x4E, 0x6B, 0x20}; // pixel gOff = {0x4C, 0x66, 0x19};
-	pixel rOn  = {0x79, 0x21, 0x23}; // pixel rOn  = {0x66, 0x21, 0x23};
-	pixel rOff = {0x67, 0x30, 0x30}; // pixel rOff = {0x5B, 0x26, 0x26};
-	pixel yOn  = {0x6D, 0x6B, 0x05};
-	pixel yOff = {0x7A, 0x6D, 0x4C};
-	pixel bOn  = {0x1C, 0x33, 0x9B};
-	pixel bOff = {0x30, 0x38, 0x72};
-	pixel oOn  = {0x87, 0x3D, 0x02};
-	pixel oOff = {0x7A, 0x3F, 0x19};
+//	pixel gOn  = {0x02, 0x80, 0x02}; // pixel gOn  = {0x02, 0x68, 0x02};
+//	pixel gOff = {0x4E, 0x6B, 0x20}; // pixel gOff = {0x4C, 0x66, 0x19};
+//	pixel rOn  = {0x79, 0x21, 0x23}; // pixel rOn  = {0x66, 0x21, 0x23};
+//	pixel rOff = {0x67, 0x30, 0x30}; // pixel rOff = {0x5B, 0x26, 0x26};
+//	pixel yOn  = {0x6D, 0x6B, 0x05};
+//	pixel yOff = {0x7A, 0x6D, 0x4C};
+//	pixel bOn  = {0x1C, 0x33, 0x9B};
+//	pixel bOff = {0x30, 0x38, 0x72};
+//	pixel oOn  = {0x87, 0x3D, 0x02};
+//	pixel oOff = {0x7A, 0x3F, 0x19};
+
+	// Guitar Hero thresholds
+	pixel gOn  = {0x00, 0x70, 0x00};
+	pixel gOff = {0x40, 0x40, 0x40};
+	pixel rOn  = {0x9A, 0x00, 0x00};
+	pixel rOff = {0x4A, 0x4A, 0x4A};
+	pixel yOn  = {0xBB, 0x60, 0x00};
+	pixel yOff = {0x50, 0x50, 0x50};
+	pixel bOn  = {0x00, 0x00, 0x9A};
+	pixel bOff = {0x4A, 0x4A, 0x4A};
+	pixel oOn  = {0xA0, 0x50, 0x00};
+	pixel oOff = {0x40, 0x40, 0x40};
 
 	// Control values
 	//u8 delay = 2; //4;
@@ -137,7 +155,7 @@ int main(void)
 	//u8 playerEnable = 0;
 
 	// Status value
-//	u32 status = 0;
+	u32 status = 0;
 
 	// Reset GH Player core
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
@@ -214,27 +232,22 @@ int main(void)
 			lasts2 = s2;
 		}
 
-//		s3 = getSwitch(SWITCH3);
-//		if (s3 == SWITCH_ON) {
-//			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
-//			xil_printf("%d%d%d%d%d %d %d%d%d%d%d%d%d%d %d \r",
-//					BIT_CHECK(status, 0),
-//					BIT_CHECK(status, 1)  >> 1,
-//					BIT_CHECK(status, 2)  >> 2,
-//					BIT_CHECK(status, 3)  >> 3,
-//					BIT_CHECK(status, 4)  >> 4,
-//					BIT_CHECK(status, 5)  >> 5,
-//					BIT_CHECK(status, 6)  >> 6,
-//					BIT_CHECK(status, 7)  >> 7,
-//					BIT_CHECK(status, 8)  >> 8,
-//					BIT_CHECK(status, 9)  >> 9,
-//					BIT_CHECK(status, 10) >> 10,
-//					BIT_CHECK(status, 11) >> 11,
-//					BIT_CHECK(status, 12) >> 12,
-//					BIT_CHECK(status, 13) >> 13,
-//					BIT_CHECK(status, 14) >> 14);
-//		}
-
+		s3 = getSwitch(SWITCH3);
+		if (s3 == SWITCH_ON) {
+			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
+			print("\x1b[H\n");
+			print(" GRYBO  S | W | T %d %d %d\n");
+			xil_printf(" %d%d%d%d%d  %d | %d | %d\n\n",
+					BIT_CHECK(status, 0),
+					BIT_CHECK(status, 1)  >> 1,
+					BIT_CHECK(status, 2)  >> 2,
+					BIT_CHECK(status, 3)  >> 3,
+					BIT_CHECK(status, 4)  >> 4,
+					BIT_CHECK(status, 5)  >> 5,
+					BIT_CHECK(status, 13)  >> 13,
+					BIT_CHECK(status, 14) >> 14);
+		}
+/*
 		s3 = getSwitch(SWITCH3);
 		s4 = getSwitch(SWITCH4);
 		s5 = getSwitch(SWITCH5);
@@ -303,7 +316,7 @@ int main(void)
 			lasts5 = s5;
 			lasts6 = s6;
 			lasts7 = s7;
-		}
+		}*/
 	}
 
 	/* never reached */

@@ -75,6 +75,18 @@
  PORT gh_player_0_WHAMMY_pin = gh_player_0_WHAMMY, DIR = O, VEC = [7:0]
  PORT gh_player_0_TILT_pin = gh_player_0_TILT, DIR = O
  PORT gh_player_0_LEDS_pin = gh_player_0_LEDS, DIR = O, VEC = [7:0]
+ PORT Ethernet_Lite_TX_EN = Ethernet_Lite_TX_EN, DIR = O
+ PORT Ethernet_Lite_TX_CLK = Ethernet_Lite_TX_CLK, DIR = I
+ PORT Ethernet_Lite_TXD = Ethernet_Lite_TXD, DIR = O, VEC = [3:0]
+ PORT Ethernet_Lite_RX_ER = Ethernet_Lite_RX_ER, DIR = I
+ PORT Ethernet_Lite_RX_DV = Ethernet_Lite_RX_DV, DIR = I
+ PORT Ethernet_Lite_RX_CLK = Ethernet_Lite_RX_CLK, DIR = I
+ PORT Ethernet_Lite_RXD = Ethernet_Lite_RXD, DIR = I, VEC = [3:0]
+ PORT Ethernet_Lite_PHY_RST_N = Ethernet_Lite_PHY_RST_N, DIR = O
+ PORT Ethernet_Lite_MDIO = Ethernet_Lite_MDIO, DIR = IO
+ PORT Ethernet_Lite_MDC = Ethernet_Lite_MDC, DIR = O
+ PORT Ethernet_Lite_CRS = Ethernet_Lite_CRS, DIR = I
+ PORT Ethernet_Lite_COL = Ethernet_Lite_COL, DIR = I
 
 
 BEGIN proc_sys_reset
@@ -98,7 +110,7 @@ BEGIN axi_intc
  BUS_INTERFACE S_AXI = axi4lite_0
  BUS_INTERFACE INTERRUPT = microblaze_0_interrupt
  PORT S_AXI_ACLK = clk_100_0000MHzPLL0
- PORT INTR = Digilent_Usb_Epp_DB_IRQ_EPP & RS232_Uart_1_Interrupt & axi_iic_0_IIC2INTC_Irpt & Push_Buttons_5Bits_IP2INTC_Irpt & axi_vdma_0_mm2s_introut & axi_vdma_0_s2mm_introut
+ PORT INTR = Digilent_Usb_Epp_DB_IRQ_EPP & Push_Buttons_5Bits_IP2INTC_Irpt & RS232_Uart_1_Interrupt & axi_iic_0_IIC2INTC_Irpt & axi_ethernetlite_0_IP2INTC_Irpt & axi_vdma_0_mm2s_introut & axi_vdma_0_s2mm_introut
 END
 
 BEGIN lmb_v10
@@ -494,5 +506,28 @@ BEGIN image_filter
  PORT S_AXI_ACLK = clk_100_0000MHzPLL0
  PORT RGB_OUT = image_filter_0_RGB_OUT
  PORT ACLK = clk_100_0000MHzPLL0
+END
+
+BEGIN axi_ethernetlite
+ PARAMETER INSTANCE = axi_ethernetlite_0
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_S_AXI_PROTOCOL = AXI4LITE
+ PARAMETER C_BASEADDR = 0x40e00000
+ PARAMETER C_HIGHADDR = 0x40e0ffff
+ BUS_INTERFACE S_AXI = axi4lite_0
+ PORT S_AXI_ACLK = clk_100_0000MHzPLL0
+ PORT PHY_tx_en = Ethernet_Lite_TX_EN
+ PORT PHY_tx_clk = Ethernet_Lite_TX_CLK
+ PORT PHY_tx_data = Ethernet_Lite_TXD
+ PORT PHY_rx_er = Ethernet_Lite_RX_ER
+ PORT PHY_dv = Ethernet_Lite_RX_DV
+ PORT PHY_rx_clk = Ethernet_Lite_RX_CLK
+ PORT PHY_rx_data = Ethernet_Lite_RXD
+ PORT PHY_rst_n = Ethernet_Lite_PHY_RST_N
+ PORT PHY_MDIO = Ethernet_Lite_MDIO
+ PORT PHY_MDC = Ethernet_Lite_MDC
+ PORT PHY_crs = Ethernet_Lite_CRS
+ PORT PHY_col = Ethernet_Lite_COL
+ PORT IP2INTC_Irpt = axi_ethernetlite_0_IP2INTC_Irpt
 END
 
