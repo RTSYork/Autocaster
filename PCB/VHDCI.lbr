@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -150,74 +150,74 @@
 </packages>
 <symbols>
 <symbol name="VHDCI-PINS">
-<pin name="P$1" x="7.62" y="83.82" length="middle" rot="R180"/>
-<pin name="GND2" x="7.62" y="81.28" length="middle" rot="R180"/>
-<pin name="P$3" x="7.62" y="78.74" length="middle" rot="R180"/>
-<pin name="P$4" x="7.62" y="76.2" length="middle" rot="R180"/>
-<pin name="GND5" x="7.62" y="73.66" length="middle" rot="R180"/>
-<pin name="P$6" x="7.62" y="71.12" length="middle" rot="R180"/>
-<pin name="P$7" x="7.62" y="68.58" length="middle" rot="R180"/>
-<pin name="GND8" x="7.62" y="66.04" length="middle" rot="R180"/>
-<pin name="P$9" x="7.62" y="63.5" length="middle" rot="R180"/>
-<pin name="P$10" x="7.62" y="60.96" length="middle" rot="R180"/>
-<pin name="GND11" x="7.62" y="58.42" length="middle" rot="R180"/>
-<pin name="P$12" x="7.62" y="55.88" length="middle" rot="R180"/>
-<pin name="P$13" x="7.62" y="53.34" length="middle" rot="R180"/>
-<pin name="GND14" x="7.62" y="50.8" length="middle" rot="R180"/>
-<pin name="P$15" x="7.62" y="48.26" length="middle" rot="R180"/>
-<pin name="VCC16" x="7.62" y="45.72" length="middle" rot="R180"/>
-<pin name="VU17" x="7.62" y="43.18" length="middle" rot="R180"/>
-<pin name="VU18" x="7.62" y="40.64" length="middle" rot="R180"/>
-<pin name="VCC19" x="7.62" y="38.1" length="middle" rot="R180"/>
-<pin name="CLK20" x="7.62" y="35.56" length="middle" rot="R180"/>
-<pin name="GND21" x="7.62" y="33.02" length="middle" rot="R180"/>
-<pin name="P$22" x="7.62" y="30.48" length="middle" rot="R180"/>
-<pin name="P$23" x="7.62" y="27.94" length="middle" rot="R180"/>
-<pin name="GND24" x="7.62" y="25.4" length="middle" rot="R180"/>
-<pin name="P$25" x="7.62" y="22.86" length="middle" rot="R180"/>
-<pin name="P$26" x="7.62" y="20.32" length="middle" rot="R180"/>
-<pin name="GND27" x="7.62" y="17.78" length="middle" rot="R180"/>
-<pin name="P$28" x="7.62" y="15.24" length="middle" rot="R180"/>
-<pin name="P$29" x="7.62" y="12.7" length="middle" rot="R180"/>
-<pin name="GND30" x="7.62" y="10.16" length="middle" rot="R180"/>
-<pin name="P$31" x="7.62" y="7.62" length="middle" rot="R180"/>
-<pin name="P$32" x="7.62" y="5.08" length="middle" rot="R180"/>
-<pin name="GND33" x="7.62" y="2.54" length="middle" rot="R180"/>
-<pin name="P$34" x="7.62" y="0" length="middle" rot="R180"/>
-<pin name="P$35" x="7.62" y="-2.54" length="middle" rot="R180"/>
-<pin name="GND36" x="7.62" y="-5.08" length="middle" rot="R180"/>
-<pin name="P$37" x="7.62" y="-7.62" length="middle" rot="R180"/>
-<pin name="P$38" x="7.62" y="-10.16" length="middle" rot="R180"/>
-<pin name="GND39" x="7.62" y="-12.7" length="middle" rot="R180"/>
-<pin name="P$40" x="7.62" y="-15.24" length="middle" rot="R180"/>
-<pin name="P$41" x="7.62" y="-17.78" length="middle" rot="R180"/>
-<pin name="GND42" x="7.62" y="-20.32" length="middle" rot="R180"/>
-<pin name="P$43" x="7.62" y="-22.86" length="middle" rot="R180"/>
-<pin name="P$44" x="7.62" y="-25.4" length="middle" rot="R180"/>
-<pin name="GND45" x="7.62" y="-27.94" length="middle" rot="R180"/>
-<pin name="P$46" x="7.62" y="-30.48" length="middle" rot="R180"/>
-<pin name="P$47" x="7.62" y="-33.02" length="middle" rot="R180"/>
-<pin name="GND48" x="7.62" y="-35.56" length="middle" rot="R180"/>
-<pin name="P$49" x="7.62" y="-38.1" length="middle" rot="R180"/>
-<pin name="VCC50" x="7.62" y="-40.64" length="middle" rot="R180"/>
-<pin name="VU51" x="7.62" y="-43.18" length="middle" rot="R180"/>
-<pin name="VU52" x="7.62" y="-45.72" length="middle" rot="R180"/>
-<pin name="VCC53" x="7.62" y="-48.26" length="middle" rot="R180"/>
-<pin name="CLK54" x="7.62" y="-50.8" length="middle" rot="R180"/>
-<pin name="GND55" x="7.62" y="-53.34" length="middle" rot="R180"/>
-<pin name="P$56" x="7.62" y="-55.88" length="middle" rot="R180"/>
-<pin name="P$57" x="7.62" y="-58.42" length="middle" rot="R180"/>
-<pin name="GND58" x="7.62" y="-60.96" length="middle" rot="R180"/>
-<pin name="P$59" x="7.62" y="-63.5" length="middle" rot="R180"/>
-<pin name="P$60" x="7.62" y="-66.04" length="middle" rot="R180"/>
-<pin name="GND61" x="7.62" y="-68.58" length="middle" rot="R180"/>
-<pin name="P$62" x="7.62" y="-71.12" length="middle" rot="R180"/>
-<pin name="P$63" x="7.62" y="-73.66" length="middle" rot="R180"/>
-<pin name="GND64" x="7.62" y="-76.2" length="middle" rot="R180"/>
-<pin name="P$65" x="7.62" y="-78.74" length="middle" rot="R180"/>
-<pin name="P$66" x="7.62" y="-81.28" length="middle" rot="R180"/>
-<pin name="GND67" x="7.62" y="-83.82" length="middle" rot="R180"/>
-<pin name="P$68" x="7.62" y="-86.36" length="middle" rot="R180"/>
+<pin name="1P" x="7.62" y="83.82" length="middle" rot="R180"/>
+<pin name="GND1" x="7.62" y="81.28" length="middle" rot="R180"/>
+<pin name="2P" x="7.62" y="78.74" length="middle" rot="R180"/>
+<pin name="3P" x="7.62" y="76.2" length="middle" rot="R180"/>
+<pin name="GND2" x="7.62" y="73.66" length="middle" rot="R180"/>
+<pin name="4P" x="7.62" y="71.12" length="middle" rot="R180"/>
+<pin name="5P" x="7.62" y="68.58" length="middle" rot="R180"/>
+<pin name="GND3" x="7.62" y="66.04" length="middle" rot="R180"/>
+<pin name="6P" x="7.62" y="63.5" length="middle" rot="R180"/>
+<pin name="7P" x="7.62" y="60.96" length="middle" rot="R180"/>
+<pin name="GND4" x="7.62" y="58.42" length="middle" rot="R180"/>
+<pin name="8P" x="7.62" y="55.88" length="middle" rot="R180"/>
+<pin name="9P" x="7.62" y="53.34" length="middle" rot="R180"/>
+<pin name="GND5" x="7.62" y="50.8" length="middle" rot="R180"/>
+<pin name="10P" x="7.62" y="48.26" length="middle" rot="R180"/>
+<pin name="VCC1" x="7.62" y="45.72" length="middle" rot="R180"/>
+<pin name="VU1" x="7.62" y="43.18" length="middle" rot="R180"/>
+<pin name="VU2" x="7.62" y="40.64" length="middle" rot="R180"/>
+<pin name="VCC2" x="7.62" y="38.1" length="middle" rot="R180"/>
+<pin name="11P" x="7.62" y="35.56" length="middle" rot="R180"/>
+<pin name="GND6" x="7.62" y="33.02" length="middle" rot="R180"/>
+<pin name="12P" x="7.62" y="30.48" length="middle" rot="R180"/>
+<pin name="13P" x="7.62" y="27.94" length="middle" rot="R180"/>
+<pin name="GND7" x="7.62" y="25.4" length="middle" rot="R180"/>
+<pin name="14P" x="7.62" y="22.86" length="middle" rot="R180"/>
+<pin name="15P" x="7.62" y="20.32" length="middle" rot="R180"/>
+<pin name="GND8" x="7.62" y="17.78" length="middle" rot="R180"/>
+<pin name="16P" x="7.62" y="15.24" length="middle" rot="R180"/>
+<pin name="17P" x="7.62" y="12.7" length="middle" rot="R180"/>
+<pin name="GND9" x="7.62" y="10.16" length="middle" rot="R180"/>
+<pin name="18P" x="7.62" y="7.62" length="middle" rot="R180"/>
+<pin name="19P" x="7.62" y="5.08" length="middle" rot="R180"/>
+<pin name="GND10" x="7.62" y="2.54" length="middle" rot="R180"/>
+<pin name="20P" x="7.62" y="0" length="middle" rot="R180"/>
+<pin name="1N" x="7.62" y="-2.54" length="middle" rot="R180"/>
+<pin name="GND11" x="7.62" y="-5.08" length="middle" rot="R180"/>
+<pin name="2N" x="7.62" y="-7.62" length="middle" rot="R180"/>
+<pin name="3N" x="7.62" y="-10.16" length="middle" rot="R180"/>
+<pin name="GND12" x="7.62" y="-12.7" length="middle" rot="R180"/>
+<pin name="4N" x="7.62" y="-15.24" length="middle" rot="R180"/>
+<pin name="5N" x="7.62" y="-17.78" length="middle" rot="R180"/>
+<pin name="GND13" x="7.62" y="-20.32" length="middle" rot="R180"/>
+<pin name="6N" x="7.62" y="-22.86" length="middle" rot="R180"/>
+<pin name="7N" x="7.62" y="-25.4" length="middle" rot="R180"/>
+<pin name="GND14" x="7.62" y="-27.94" length="middle" rot="R180"/>
+<pin name="8N" x="7.62" y="-30.48" length="middle" rot="R180"/>
+<pin name="9N" x="7.62" y="-33.02" length="middle" rot="R180"/>
+<pin name="GND15" x="7.62" y="-35.56" length="middle" rot="R180"/>
+<pin name="10N" x="7.62" y="-38.1" length="middle" rot="R180"/>
+<pin name="VCC3" x="7.62" y="-40.64" length="middle" rot="R180"/>
+<pin name="VU3" x="7.62" y="-43.18" length="middle" rot="R180"/>
+<pin name="VU4" x="7.62" y="-45.72" length="middle" rot="R180"/>
+<pin name="VCC4" x="7.62" y="-48.26" length="middle" rot="R180"/>
+<pin name="11N" x="7.62" y="-50.8" length="middle" rot="R180"/>
+<pin name="GND16" x="7.62" y="-53.34" length="middle" rot="R180"/>
+<pin name="12N" x="7.62" y="-55.88" length="middle" rot="R180"/>
+<pin name="13N" x="7.62" y="-58.42" length="middle" rot="R180"/>
+<pin name="GND17" x="7.62" y="-60.96" length="middle" rot="R180"/>
+<pin name="14N" x="7.62" y="-63.5" length="middle" rot="R180"/>
+<pin name="15N" x="7.62" y="-66.04" length="middle" rot="R180"/>
+<pin name="GND18" x="7.62" y="-68.58" length="middle" rot="R180"/>
+<pin name="16N" x="7.62" y="-71.12" length="middle" rot="R180"/>
+<pin name="17N" x="7.62" y="-73.66" length="middle" rot="R180"/>
+<pin name="GND19" x="7.62" y="-76.2" length="middle" rot="R180"/>
+<pin name="18N" x="7.62" y="-78.74" length="middle" rot="R180"/>
+<pin name="19N" x="7.62" y="-81.28" length="middle" rot="R180"/>
+<pin name="GND20" x="7.62" y="-83.82" length="middle" rot="R180"/>
+<pin name="20N" x="7.62" y="-86.36" length="middle" rot="R180"/>
 <wire x1="2.54" y1="86.36" x2="2.54" y2="-88.9" width="0.254" layer="94"/>
 <wire x1="2.54" y1="-88.9" x2="-7.62" y2="-88.9" width="0.254" layer="94"/>
 <wire x1="-7.62" y1="-88.9" x2="-7.62" y2="86.36" width="0.254" layer="94"/>
@@ -235,74 +235,74 @@
 <devices>
 <device name="" package="R-HI-008068-2">
 <connects>
-<connect gate="G$1" pin="CLK20" pad="P$20"/>
-<connect gate="G$1" pin="CLK54" pad="P$54"/>
-<connect gate="G$1" pin="GND11" pad="P$11"/>
-<connect gate="G$1" pin="GND14" pad="P$14"/>
-<connect gate="G$1" pin="GND2" pad="P$2"/>
-<connect gate="G$1" pin="GND21" pad="P$21"/>
-<connect gate="G$1" pin="GND24" pad="P$24"/>
-<connect gate="G$1" pin="GND27" pad="P$27"/>
-<connect gate="G$1" pin="GND30" pad="P$30"/>
-<connect gate="G$1" pin="GND33" pad="P$33"/>
-<connect gate="G$1" pin="GND36" pad="P$36"/>
-<connect gate="G$1" pin="GND39" pad="P$39"/>
-<connect gate="G$1" pin="GND42" pad="P$42"/>
-<connect gate="G$1" pin="GND45" pad="P$45"/>
-<connect gate="G$1" pin="GND48" pad="P$48"/>
-<connect gate="G$1" pin="GND5" pad="P$5"/>
-<connect gate="G$1" pin="GND55" pad="P$55"/>
-<connect gate="G$1" pin="GND58" pad="P$58"/>
-<connect gate="G$1" pin="GND61" pad="P$61"/>
-<connect gate="G$1" pin="GND64" pad="P$64"/>
-<connect gate="G$1" pin="GND67" pad="P$67"/>
-<connect gate="G$1" pin="GND8" pad="P$8"/>
-<connect gate="G$1" pin="P$1" pad="P$1"/>
-<connect gate="G$1" pin="P$10" pad="P$10"/>
-<connect gate="G$1" pin="P$12" pad="P$12"/>
-<connect gate="G$1" pin="P$13" pad="P$13"/>
-<connect gate="G$1" pin="P$15" pad="P$15"/>
-<connect gate="G$1" pin="P$22" pad="P$22"/>
-<connect gate="G$1" pin="P$23" pad="P$23"/>
-<connect gate="G$1" pin="P$25" pad="P$25"/>
-<connect gate="G$1" pin="P$26" pad="P$26"/>
-<connect gate="G$1" pin="P$28" pad="P$28"/>
-<connect gate="G$1" pin="P$29" pad="P$29"/>
-<connect gate="G$1" pin="P$3" pad="P$3"/>
-<connect gate="G$1" pin="P$31" pad="P$31"/>
-<connect gate="G$1" pin="P$32" pad="P$32"/>
-<connect gate="G$1" pin="P$34" pad="P$34"/>
-<connect gate="G$1" pin="P$35" pad="P$35"/>
-<connect gate="G$1" pin="P$37" pad="P$37"/>
-<connect gate="G$1" pin="P$38" pad="P$38"/>
-<connect gate="G$1" pin="P$4" pad="P$4"/>
-<connect gate="G$1" pin="P$40" pad="P$40"/>
-<connect gate="G$1" pin="P$41" pad="P$41"/>
-<connect gate="G$1" pin="P$43" pad="P$43"/>
-<connect gate="G$1" pin="P$44" pad="P$44"/>
-<connect gate="G$1" pin="P$46" pad="P$46"/>
-<connect gate="G$1" pin="P$47" pad="P$47"/>
-<connect gate="G$1" pin="P$49" pad="P$49"/>
-<connect gate="G$1" pin="P$56" pad="P$56"/>
-<connect gate="G$1" pin="P$57" pad="P$57"/>
-<connect gate="G$1" pin="P$59" pad="P$59"/>
-<connect gate="G$1" pin="P$6" pad="P$6"/>
-<connect gate="G$1" pin="P$60" pad="P$60"/>
-<connect gate="G$1" pin="P$62" pad="P$62"/>
-<connect gate="G$1" pin="P$63" pad="P$63"/>
-<connect gate="G$1" pin="P$65" pad="P$65"/>
-<connect gate="G$1" pin="P$66" pad="P$66"/>
-<connect gate="G$1" pin="P$68" pad="P$68"/>
-<connect gate="G$1" pin="P$7" pad="P$7"/>
-<connect gate="G$1" pin="P$9" pad="P$9"/>
-<connect gate="G$1" pin="VCC16" pad="P$16"/>
-<connect gate="G$1" pin="VCC19" pad="P$19"/>
-<connect gate="G$1" pin="VCC50" pad="P$50"/>
-<connect gate="G$1" pin="VCC53" pad="P$53"/>
-<connect gate="G$1" pin="VU17" pad="P$17"/>
-<connect gate="G$1" pin="VU18" pad="P$18"/>
-<connect gate="G$1" pin="VU51" pad="P$51"/>
-<connect gate="G$1" pin="VU52" pad="P$52"/>
+<connect gate="G$1" pin="10N" pad="P$49"/>
+<connect gate="G$1" pin="10P" pad="P$15"/>
+<connect gate="G$1" pin="11N" pad="P$54"/>
+<connect gate="G$1" pin="11P" pad="P$20"/>
+<connect gate="G$1" pin="12N" pad="P$56"/>
+<connect gate="G$1" pin="12P" pad="P$22"/>
+<connect gate="G$1" pin="13N" pad="P$57"/>
+<connect gate="G$1" pin="13P" pad="P$23"/>
+<connect gate="G$1" pin="14N" pad="P$59"/>
+<connect gate="G$1" pin="14P" pad="P$25"/>
+<connect gate="G$1" pin="15N" pad="P$60"/>
+<connect gate="G$1" pin="15P" pad="P$26"/>
+<connect gate="G$1" pin="16N" pad="P$62"/>
+<connect gate="G$1" pin="16P" pad="P$28"/>
+<connect gate="G$1" pin="17N" pad="P$63"/>
+<connect gate="G$1" pin="17P" pad="P$29"/>
+<connect gate="G$1" pin="18N" pad="P$65"/>
+<connect gate="G$1" pin="18P" pad="P$31"/>
+<connect gate="G$1" pin="19N" pad="P$66"/>
+<connect gate="G$1" pin="19P" pad="P$32"/>
+<connect gate="G$1" pin="1N" pad="P$35"/>
+<connect gate="G$1" pin="1P" pad="P$1"/>
+<connect gate="G$1" pin="20N" pad="P$68"/>
+<connect gate="G$1" pin="20P" pad="P$34"/>
+<connect gate="G$1" pin="2N" pad="P$37"/>
+<connect gate="G$1" pin="2P" pad="P$3"/>
+<connect gate="G$1" pin="3N" pad="P$38"/>
+<connect gate="G$1" pin="3P" pad="P$4"/>
+<connect gate="G$1" pin="4N" pad="P$40"/>
+<connect gate="G$1" pin="4P" pad="P$6"/>
+<connect gate="G$1" pin="5N" pad="P$41"/>
+<connect gate="G$1" pin="5P" pad="P$7"/>
+<connect gate="G$1" pin="6N" pad="P$43"/>
+<connect gate="G$1" pin="6P" pad="P$9"/>
+<connect gate="G$1" pin="7N" pad="P$44"/>
+<connect gate="G$1" pin="7P" pad="P$10"/>
+<connect gate="G$1" pin="8N" pad="P$46"/>
+<connect gate="G$1" pin="8P" pad="P$12"/>
+<connect gate="G$1" pin="9N" pad="P$47"/>
+<connect gate="G$1" pin="9P" pad="P$13"/>
+<connect gate="G$1" pin="GND1" pad="P$2"/>
+<connect gate="G$1" pin="GND10" pad="P$33"/>
+<connect gate="G$1" pin="GND11" pad="P$36"/>
+<connect gate="G$1" pin="GND12" pad="P$39"/>
+<connect gate="G$1" pin="GND13" pad="P$42"/>
+<connect gate="G$1" pin="GND14" pad="P$45"/>
+<connect gate="G$1" pin="GND15" pad="P$48"/>
+<connect gate="G$1" pin="GND16" pad="P$55"/>
+<connect gate="G$1" pin="GND17" pad="P$58"/>
+<connect gate="G$1" pin="GND18" pad="P$61"/>
+<connect gate="G$1" pin="GND19" pad="P$64"/>
+<connect gate="G$1" pin="GND2" pad="P$5"/>
+<connect gate="G$1" pin="GND20" pad="P$67"/>
+<connect gate="G$1" pin="GND3" pad="P$8"/>
+<connect gate="G$1" pin="GND4" pad="P$11"/>
+<connect gate="G$1" pin="GND5" pad="P$14"/>
+<connect gate="G$1" pin="GND6" pad="P$21"/>
+<connect gate="G$1" pin="GND7" pad="P$24"/>
+<connect gate="G$1" pin="GND8" pad="P$27"/>
+<connect gate="G$1" pin="GND9" pad="P$30"/>
+<connect gate="G$1" pin="VCC1" pad="P$16"/>
+<connect gate="G$1" pin="VCC2" pad="P$19"/>
+<connect gate="G$1" pin="VCC3" pad="P$50"/>
+<connect gate="G$1" pin="VCC4" pad="P$53"/>
+<connect gate="G$1" pin="VU1" pad="P$17"/>
+<connect gate="G$1" pin="VU2" pad="P$18"/>
+<connect gate="G$1" pin="VU3" pad="P$51"/>
+<connect gate="G$1" pin="VU4" pad="P$52"/>
 </connects>
 <technologies>
 <technology name=""/>
