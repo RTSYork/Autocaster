@@ -127,33 +127,36 @@ NET Ethernet_Lite_TX_EN LOC = "H15"  |  IOSTANDARD = "LVCMOS33";
  #NET "VHDCIIO2<18>" LOC = "P7";  # Bank = 2,  Pin name = *IO_L47N,        		Sch name = EXP-IO19_N
  #NET "VHDCIIO2<19>" LOC = "V5";  # Bank = 2,  Pin name = IO_49N_D4,        		Sch name = EXP-IO20_N 
 
+##
+# GH Player Outputs on VHDCI
+#
+NET gh_player_0_LEDS_pin[0]  LOC = V10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO11N
+NET gh_player_0_LEDS_pin[1]  LOC = N8     | IOSTANDARD = "LVCMOS33"; # VHDC-IO13N
+NET gh_player_0_LEDS_pin[2]  LOC = V8     | IOSTANDARD = "LVCMOS33"; # VHDC-IO14N
+NET gh_player_0_LEDS_pin[3]  LOC = V6     | IOSTANDARD = "LVCMOS33"; # VHDC-IO17N
+NET gh_player_0_LEDS_pin[4]  LOC = T7     | IOSTANDARD = "LVCMOS33"; # VHDC-IO18N
+NET gh_player_0_LEDS_pin[5]  LOC = N10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO7P
+NET gh_player_0_LEDS_pin[6]  LOC = V5     | IOSTANDARD = "LVCMOS33"; # VHDC-IO20N
+NET gh_player_0_LEDS_pin[7]  LOC = U5     | IOSTANDARD = "LVCMOS33"; # VHDC-IO20P
 
-# GH Player LED Outputs on PMOD
-NET gh_player_0_LEDS_pin[0]  LOC = T3     | IOSTANDARD = "LVCMOS33"; # PMOD0
-NET gh_player_0_LEDS_pin[1]  LOC = R3     | IOSTANDARD = "LVCMOS33"; # PMOD1
-NET gh_player_0_LEDS_pin[2]  LOC = P6     | IOSTANDARD = "LVCMOS33"; # PMOD2
-NET gh_player_0_LEDS_pin[3]  LOC = N5     | IOSTANDARD = "LVCMOS33"; # PMOD3
-NET gh_player_0_LEDS_pin[4]  LOC = V9     | IOSTANDARD = "LVCMOS33"; # PMOD4
-NET gh_player_0_LEDS_pin[5]  LOC = T9     | IOSTANDARD = "LVCMOS33"; # PMOD5
-NET gh_player_0_LEDS_pin[6]  LOC = V4     | IOSTANDARD = "LVCMOS33"; # PMOD6
-NET gh_player_0_LEDS_pin[7]  LOC = T4     | IOSTANDARD = "LVCMOS33"; # PMOD7
+NET gh_player_0_FRETS_pin[0]  LOC = N6    | IOSTANDARD = "LVCMOS33"; # VHDC-IO19P
+NET gh_player_0_FRETS_pin[1]  LOC = N7    | IOSTANDARD = "LVCMOS33"; # VHDC-IO16P
+NET gh_player_0_FRETS_pin[2]  LOC = U7    | IOSTANDARD = "LVCMOS33"; # VHDC-IO15P
+NET gh_player_0_FRETS_pin[3]  LOC = R8    | IOSTANDARD = "LVCMOS33"; # VHDC-IO12P
+NET gh_player_0_FRETS_pin[4]  LOC = M10   | IOSTANDARD = "LVCMOS33"; # VHDC-IO8P
 
-# GH Player Controller Outputs on VHDCI
-NET gh_player_0_FRETS_pin[0]  LOC = U16    | IOSTANDARD = "LVCMOS33"; # VHDC-IO1P
-NET gh_player_0_FRETS_pin[1]  LOC = U15    | IOSTANDARD = "LVCMOS33"; # VHDC-IO2P
-NET gh_player_0_FRETS_pin[2]  LOC = U13    | IOSTANDARD = "LVCMOS33"; # VHDC-IO3P
-NET gh_player_0_FRETS_pin[3]  LOC = M11    | IOSTANDARD = "LVCMOS33"; # VHDC-IO4P
-NET gh_player_0_FRETS_pin[4]  LOC = R11    | IOSTANDARD = "LVCMOS33"; # VHDC-IO5P
-NET gh_player_0_STRUM_pin     LOC = T12    | IOSTANDARD = "LVCMOS33"; # VHDC-IO6P
-NET gh_player_0_WHAMMY_pin[0] LOC = N10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO7P
-NET gh_player_0_WHAMMY_pin[1] LOC = M10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO8P
-NET gh_player_0_WHAMMY_pin[2] LOC = U11    | IOSTANDARD = "LVCMOS33"; # VHDC-IO9P
-NET gh_player_0_WHAMMY_pin[3] LOC = R10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO10P
-NET gh_player_0_WHAMMY_pin[4] LOC = U10    | IOSTANDARD = "LVCMOS33"; # VHDC-IO11P
-NET gh_player_0_WHAMMY_pin[5] LOC = R8     | IOSTANDARD = "LVCMOS33"; # VHDC-IO12P
-NET gh_player_0_WHAMMY_pin[6] LOC = M8     | IOSTANDARD = "LVCMOS33"; # VHDC-IO13P
-NET gh_player_0_WHAMMY_pin[7] LOC = U8     | IOSTANDARD = "LVCMOS33"; # VHDC-IO14P
-NET gh_player_0_TILT_pin      LOC = V16    | IOSTANDARD = "LVCMOS33"; # VHDC-IO1N (IO15 on VmodBB)
+NET gh_player_0_STRUM_pin     LOC = V11   | IOSTANDARD = "LVCMOS33"; # VHDC-IO9N
+
+NET gh_player_0_WHAMMY_pin[0] LOC = U10   | IOSTANDARD = "LVCMOS33"; # VHDC-IO11P
+NET gh_player_0_WHAMMY_pin[1] LOC = M11   | IOSTANDARD = "LVCMOS33"; # VHDC-IO4P
+NET gh_player_0_WHAMMY_pin[2] LOC = U13   | IOSTANDARD = "LVCMOS33"; # VHDC-IO3P
+NET gh_player_0_WHAMMY_pin[3] LOC = U16   | IOSTANDARD = "LVCMOS33"; # VHDC-IO1P
+NET gh_player_0_WHAMMY_pin[4] LOC = V16   | IOSTANDARD = "LVCMOS33"; # VHDC-IO1N
+NET gh_player_0_WHAMMY_pin[5] LOC = V15   | IOSTANDARD = "LVCMOS33"; # VHDC-IO2N
+NET gh_player_0_WHAMMY_pin[6] LOC = T11   | IOSTANDARD = "LVCMOS33"; # VHDC-IO5N
+NET gh_player_0_WHAMMY_pin[7] LOC = V12   | IOSTANDARD = "LVCMOS33"; # VHDC-IO6N
+
+NET gh_player_0_TILT_pin      LOC = T10   | IOSTANDARD = "LVCMOS33"; # VHDC-IO10N
 
 
 #
