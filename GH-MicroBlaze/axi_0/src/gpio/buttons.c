@@ -236,7 +236,7 @@ void PushBtnHandler(void *CallBackRef) {
 		//xil_printf("L");
 
 		/* Output series of frames over UART */
-		EnableFrmCntIntr();
+		EnableVDMAUARTIntr();
 	}
 
 	if ((lBtnChanges & BUTTON_RIGHT) && (lBtnStateNew & BUTTON_RIGHT))

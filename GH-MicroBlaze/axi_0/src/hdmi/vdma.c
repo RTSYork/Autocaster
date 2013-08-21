@@ -88,6 +88,8 @@
 #include "xuartlite.h"
 #include "xuartlite_l.h"
 
+#include "../ethernet.h"
+
 /******************** Constant Definitions **********************************/
 
 /*
@@ -153,10 +155,16 @@
 #define VBUFFER_BASE_ADDR		MEM_BASE_ADDR + (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * 4 * NUMBER_OF_READ_FRAMES)
 #define LASTFRAME_START_ADDR	MEM_BASE_ADDR + (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * 4 * (NUMBER_OF_READ_FRAMES-1))
 #define VBUFFER_X				420//433
-#define VBUFFER_Y				370//560
+#define VBUFFER_Y				320//560
 #define VBUFFER_WIDTH			440//414
-#define VBUFFER_HEIGHT			250//50
+#define VBUFFER_HEIGHT			360//50
 #define VBUFFER_FRAMES			120
+
+#define NO_INTERRUPT_MASK 0x00
+#define ETH_INTERRUPT_MASK 0x01
+#define UART_INTERRUPT_MASK 0x02
+
+#define STREAM_DELAY 0
 
 /*
  * Device instance definitions
@@ -190,6 +198,11 @@ static int vBufferX;
 static int vBufferY;
 static u32 *frmptr;
 static u32 *vbufptr;
+
+static u8 interruptMask;
+
+static u16 streamDelay;
+static u8 interlaced;
 
 
 /******************* Function Prototypes ************************************/
@@ -681,7 +694,27 @@ int StartParking(int writeFrame, int readFrame, int output)
 	return Status;
 }
 
-void EnableFrmCntIntr(void) {
+void EnableVDMAEthIntr(void) {
+	streamDelay = 0;
+	interlaced = 0;
+
+	frmptr = (u32 *)(MEM_BASE_ADDR  +
+	              	 (VBUFFER_X * sizeof(u32)) +
+	              	 (VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+	              	 (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+
+	interruptMask |= ETH_INTERRUPT_MASK;
+	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
+}
+
+void DisableVDMAEthIntr(void) {
+	interruptMask &= ~ETH_INTERRUPT_MASK;
+
+	if (interruptMask == NO_INTERRUPT_MASK)
+		XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
+}
+
+void EnableVDMAUARTIntr(void) {
 	StartParking(0, 0, 0);
 
 	vBufferCounter = 0;
@@ -691,8 +724,8 @@ void EnableFrmCntIntr(void) {
 	                 (VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)));
 
 
-
-	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_COMPLETION_MASK, XAXIVDMA_WRITE);
+	interruptMask |= UART_INTERRUPT_MASK;
+	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 }
 
 /*****************************************************************************/
@@ -844,7 +877,7 @@ static void ReadErrorCallBack(void *CallbackRef, u32 Mask)
 ******************************************************************************/
 static void WriteCallBack(void *CallbackRef, u32 Mask)
 {
-	if (Mask & XAXIVDMA_IXR_COMPLETION_MASK) {
+	if (interruptMask & UART_INTERRUPT_MASK) {
 		// Add 1 frame on to counteract buffer at start
 		if (vBufferCounter < (VBUFFER_FRAMES+1)) {
 			vbufptr = (u32 *)(VBUFFER_BASE_ADDR + (vBufferCounter * VBUFFER_HEIGHT * VBUFFER_WIDTH * sizeof(u32)));
@@ -857,7 +890,10 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 			vBufferCounter++;
 		}
 		else {
-			XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_COMPLETION_MASK, XAXIVDMA_WRITE);
+			interruptMask &= ~UART_INTERRUPT_MASK;
+
+			if (interruptMask == NO_INTERRUPT_MASK)
+				XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 
 			StopParking(0);
 
@@ -876,6 +912,34 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 				XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
 			}
 		}
+	}
+
+	if (interruptMask & ETH_INTERRUPT_MASK) {
+		if (streamDelay == 0) {
+			streamDelay = STREAM_DELAY;
+			u8 *PayloadPtr;
+			static u16 x;
+			static u16 y;
+			static u32 pixel;
+
+			// Copy subframe into Ethernet packet
+			for (y = interlaced; y < VBUFFER_HEIGHT; y+=2) {
+				PayloadPtr = (u8 *)TxFrame + XEL_HEADER_SIZE + 28;
+				for (x = 0; x < VBUFFER_WIDTH; x++) {
+					pixel = frmptr[x + (y * FRAME_HORIZONTAL_LEN)];
+					*((u16 *)PayloadPtr) = (u16)(((pixel & 0x00F80000) >> 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x000000F8) >> 3));
+					PayloadPtr += 2;
+				}
+				// Add header and send packet
+				ethernetSend(VBUFFER_WIDTH * 2);
+			}
+
+			interlaced ^= 0x01;
+		}
+		else {
+			streamDelay--;
+		}
+
 	}
 //	xil_printf("w.");
 }

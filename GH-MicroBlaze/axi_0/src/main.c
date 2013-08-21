@@ -95,10 +95,10 @@ int main(void)
 	//startTimer(0);
 	//startTimer(1);
 
+	setLed(LED5, LED_ON);
 
 	// Set up Ethernet
 	ethernetInit();
-
 
 	setLeds(0);
 
@@ -256,6 +256,19 @@ int main(void)
 					BIT_CHECK(status, 5)  >> 5,
 					BIT_CHECK(status, 13)  >> 13,
 					BIT_CHECK(status, 14) >> 14);
+		}
+
+		s4 = getSwitch(SWITCH4);
+		if (s4 != lasts4) {
+			if (s4 == SWITCH_ON) {
+				EnableVDMAEthIntr();
+				setLed(LED4, LED_ON);
+			}
+			else {
+				DisableVDMAEthIntr();
+				setLed(LED4, LED_OFF);
+			}
+			lasts4 = s4;
 		}
 /*
 		s3 = getSwitch(SWITCH3);
