@@ -6,17 +6,17 @@ int whammyValue = 128;
 /**
  * Pin Map
  **
- *  0 - Green Fret
- *  1 - Red Fret
+ *  0 - Orange Fret
+ *  1 - Blue Fret
  *  2 - Yellow Fret
- *  3 - Blue Fret
- *  4 - Orange Fret
+ *  3 - Red Fret
+ *  4 - Green Fret
  *  5 - Up
- *  6 - Right
- *  7 - Down
- *  8 - Left
- *  9 - Start Button
- * 10 - Select Button
+ *  6 - Select Button
+ *  7 - Left
+ *  8 - Start Button
+ *  9 - Right
+ * 10 - Down
  * 13 - LED (on board)
  * 14 - Whammy Bar 0 (LSB)
  * 15 - Whammy Bar 1
@@ -66,27 +66,27 @@ void setup() {
 void loop() {
   
   // Fret buttons
-  Guitar.fret(GREEN,  digitalRead(0));
-  Guitar.fret(RED,    digitalRead(1));
+  Guitar.fret(GREEN,  digitalRead(4));
+  Guitar.fret(RED,    digitalRead(3));
   Guitar.fret(YELLOW, digitalRead(2));
-  Guitar.fret(BLUE,   digitalRead(3));
-  Guitar.fret(ORANGE, digitalRead(4));
+  Guitar.fret(BLUE,   digitalRead(1));
+  Guitar.fret(ORANGE, digitalRead(0));
   
   // Directional buttons (and strum)
   if (digitalRead(5))
     Guitar.hat(0);
-  else if (digitalRead(6))
+  else if (digitalRead(9))
     Guitar.hat(90);
-  else if (digitalRead(7))
+  else if (digitalRead(10))
     Guitar.hat(180);
-  else if (digitalRead(8))
+  else if (digitalRead(7))
     Guitar.hat(270);
   else
     Guitar.strum(false);
   
   // Start and Select (Tilt) buttons
-  Guitar.button(START,  digitalRead(9));
-  Guitar.button(SELECT, digitalRead(10));
+  Guitar.button(START,  digitalRead(8));
+  Guitar.button(SELECT, digitalRead(6));
   
   // Whammy bar
   whammyValue = (!digitalRead(14) ? 0 : 1)        +
