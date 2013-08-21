@@ -61,7 +61,22 @@ int ethernetInit(void) {
 	return XST_SUCCESS;
 }
 
-int ethernetSend(u32 payloadSize, u8* payload) {
+int ethernetSendPayload(u32 payloadSize, u8* payload) {
+	u8 *FramePtr = (u8 *)TxFrame;
+	FramePtr += XEL_HEADER_SIZE + 28;
+
+	// Copy payload into packet
+	u32 i;
+	for (i = 0; i < payloadSize; i++) {
+		*FramePtr++ = payload[i];
+	}
+
+	// Add header and send packet
+	return ethernetSend(payloadSize);
+}
+
+
+int ethernetSend(u32 payloadSize) {
 	XEmacLite *InstancePtr = &EmacLite;
 	u8 *FramePtr = (u8 *)TxFrame;
 
@@ -146,14 +161,12 @@ int ethernetSend(u32 payloadSize, u8* payload) {
 	FramePtr++;
 	FramePtr++;
 
-	/*
-	 * Now fill in the data field with known values so we can verify them
-	 * on receive.
-	 */
-	u32 i;
-	for (i = 0; i < payloadSize; i++) {
-		*FramePtr++ = payload[i];
+	//Wait for the HW to be ready
+	u32 reg;
+	do {
+		reg = XEmacLite_GetTxStatus(XPAR_EMACLITE_0_BASEADDR);
 	}
+	while((reg & (XEL_TSR_XMIT_BUSY_MASK | XEL_TSR_XMIT_ACTIVE_MASK)) != 0);
 
 	/*
 	 * Now send the frame.

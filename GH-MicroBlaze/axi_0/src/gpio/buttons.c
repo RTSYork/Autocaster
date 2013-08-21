@@ -262,7 +262,7 @@ void PushBtnHandler(void *CallBackRef) {
 		register int i;
 		register u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
 		for (i = 0; i < 1280 * 720 ; i += 320) {
-			ethernetSend(1280, (u8*)(vbufptr + i));
+			ethernetSendPayload(1280, (u8*)(vbufptr + i));
 		}
 	}
 

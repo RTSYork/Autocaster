@@ -14,8 +14,11 @@
 
 #define EMACLITE_PHY_DELAY_SEC	4	/* Amount of time to delay waiting on PHY to reset. */
 
+extern u8 TxFrame[XEL_MAX_FRAME_SIZE];
+
 int ethernetInit(void);
-int ethernetSend(u32 payloadSize, u8* payload);
+int ethernetSendPayload(u32 payloadSize, u8* payload);
+int ethernetSend(u32 payloadSize);
 u32 EmacLitePhyDetect(void);
 int EmacLiteSetupPhy(u32 PhyAddress);
 void EmacLitePhyDelay(unsigned int Seconds);
