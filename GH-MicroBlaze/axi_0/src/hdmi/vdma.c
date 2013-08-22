@@ -925,13 +925,15 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 			// Copy subframe into Ethernet packet
 			for (y = interlaced; y < VBUFFER_HEIGHT; y+=2) {
 				PayloadPtr = (u8 *)TxFrame + XEL_HEADER_SIZE + 28;
+				*((u16 *)PayloadPtr) = y;
+				PayloadPtr += 2;
 				for (x = 0; x < VBUFFER_WIDTH; x++) {
 					pixel = frmptr[x + (y * FRAME_HORIZONTAL_LEN)];
 					*((u16 *)PayloadPtr) = (u16)(((pixel & 0x00F80000) >> 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x000000F8) >> 3));
 					PayloadPtr += 2;
 				}
 				// Add header and send packet
-				ethernetSend(VBUFFER_WIDTH * 2);
+				ethernetSend(VBUFFER_WIDTH * 2 + 2);
 			}
 
 			interlaced ^= 0x01;

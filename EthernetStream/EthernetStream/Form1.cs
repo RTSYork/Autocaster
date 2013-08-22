@@ -25,8 +25,6 @@ namespace EthernetStream
         int frameHeight = 360;
 
         Bitmap b;
-        int x;
-        int y;
         byte[] bytes;
         ushort[] imageData;
         byte interlace;
@@ -57,16 +55,12 @@ namespace EthernetStream
 
                 button2.Text = "Stop Listening";
                 udpClient = new UdpClient(0xF00D);
-                udpClient.Client.ReceiveBufferSize = 2949120;
+                udpClient.Client.ReceiveBufferSize = frameWidth * frameHeight * 10;
 
                 open = true;
 
                 b = new Bitmap(frameWidth, frameHeight, PixelFormat.Format16bppRgb565);
                 imageData = new ushort[frameWidth * frameHeight / 2];
-
-                x = 0;
-                y = 0;
-                interlace = 0;
 
                 UdpState s = new UdpState();
                 s.e = RemoteIpEndPoint;
@@ -83,36 +77,26 @@ namespace EthernetStream
 
         public void ReceiveCallback(IAsyncResult ar)
         {
-            
             UdpClient u = (UdpClient)((UdpState)(ar.AsyncState)).u;
             IPEndPoint e = (IPEndPoint)((UdpState)(ar.AsyncState)).e;
             if (open)
             {
                 bytes = u.EndReceive(ar, ref e);
-                //int red;
-                //int green;
-                //int blue;
 
-                for (int i = 0; i < bytes.Length; i += 2)
+                int y = ((bytes[1] << 8) | bytes[0]) / 2;
+                interlace = (byte)(bytes[0] & 0x1);
+
+                for (int x = 0; x < bytes.Length - 2; x++)
                 {
-                    if (y < frameHeight/2)
+                    if (y < frameHeight && x < frameWidth)
                     {
-                        imageData[x + (y * frameWidth)] = (ushort)(((ushort)bytes[i + 1] << 8) | bytes[i]);
-
-                        x++;
-
-                        if (x == frameWidth)
-                        {
-                            x = 0;
-                            y++;
-                        }
+                        imageData[x + (y * frameWidth)] = (ushort)(((ushort)bytes[x*2+3] << 8) | bytes[x*2+2]);
                     }
+                }
 
-                    if (y == frameHeight/2)
-                    {
-                        y = 0;
-                        updateImage();
-                    }
+                if (y == frameHeight / 2 - 1)
+                {
+                    updateImage();
                 }
             }
 
@@ -130,7 +114,6 @@ namespace EthernetStream
 
             byte bitsPerPixel = 16;
 
-            /*This time we convert the IntPtr to a ptr*/
             byte* scan0 = (byte*)bData.Scan0.ToPointer();
 
             for (int i = interlace; i < bData.Height; i+=2)
@@ -138,9 +121,6 @@ namespace EthernetStream
                 for (int j = 0; j < bData.Width; ++j)
                 {
                     byte* data = scan0 + i * bData.Stride + j * bitsPerPixel / 8;
-
-                    //data is a pointer to the first byte of the 3-byte color data
-
                     *((ushort*)data) = imageData[(j + (i/2 * frameWidth))];
                 }
             }
@@ -148,8 +128,6 @@ namespace EthernetStream
             b.UnlockBits(bData);
 
             pictureBox1.Image = b;
-
-            interlace ^= 0x01;
         }
 
     }
