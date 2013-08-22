@@ -9,6 +9,7 @@
 #include "xuartlite.h"
 #include "xuartlite_l.h"
 #include "../ethernet.h"
+#include "../options.h"
 
 #define BTNS_BASEADDR XPAR_PUSH_BUTTONS_5BITS_BASEADDR
 #define BTNS_DEVICE_ID XPAR_PUSH_BUTTONS_5BITS_DEVICE_ID
@@ -20,89 +21,24 @@ volatile u32 lBtnStateOld;
 
 XIntc btnIntCtrl;
 
-// --- 1 Player ---
-//#define G_X 476
-//#define G_Y 581
-//#define R_X 559
-//#define R_Y 577
-//#define Y_X 640
-//#define Y_Y 575
-//#define B_X 721
-//#define B_Y 577
-//#define O_X 804
-//#define O_Y 581
-// --- 2 Player ---
-//#define G_X 218
-//#define G_Y 593
-//#define R_X 288
-//#define R_Y 589
-//#define Y_X 358
-//#define Y_Y 588
-//#define B_X 429
-//#define B_Y 590
-//#define O_X 499
-//#define O_Y 594
-// --- 3 Player ---
-//#define G_X 109
-//#define G_Y 607
-//#define R_X 182
-//#define R_Y 603
-//#define Y_X 249
-//#define Y_Y 602
-//#define B_X 311
-//#define B_Y 602
-//#define O_X 371
-//#define O_Y 605
-// --- Filtered fret detector ---
-//#define G_X 480
-//#define G_Y 571
-//#define R_X 558
-//#define R_Y 566
-//#define Y_X 640
-//#define Y_Y 564
-//#define B_X 722
-//#define B_Y 566
-//#define O_X 800
-//#define O_Y 571
 // --- Delayed fret detector ---
 #if (GAME == RB)
 // Rock Band
-#define G_X 476+19+5+4
-#define G_Y 581-45-15-15
-#define R_X 559+8+2+3
-#define R_Y 577-45-15-15
-#define Y_X 640
-#define Y_Y 575-45-15-15
-#define B_X 721-8-2-3
-#define B_Y 577-45-15-15
-#define O_X 804-19-5-4
-#define O_Y 581-45-15-15
 #define DELAY 4
 #else
 // Guitar Hero
-#define G_X 495
-#define G_Y 506
-#define R_X 568
-#define R_Y 502
-#define Y_X 639
-#define Y_Y 500
-#define B_X 711
-#define B_Y 502
-#define O_X 783
-#define O_Y 506
 #define DELAY 5
 #endif
 
-// Positions of note detectors (x, y)
-point gPos = {G_X, G_Y};
-point rPos = {R_X, R_Y};
-point yPos = {Y_X, Y_Y};
-point bPos = {B_X, B_Y};
-point oPos = {O_X, O_Y};
+// Note detector
 u8 delay = DELAY;
 
 u8 playerEnable = 0;
-u8 type = TYPE_OLD;
+#if (FILTERS == 0)
+u8 type = 0;
+#else
+u8 type = 1;
+#endif
 u8 strumValue = 1;
 
 
@@ -179,26 +115,8 @@ void PushBtnHandler(void *CallBackRef) {
 
 		delay--;
 
-//		gPos.y = G_Y + offset;
-//		rPos.y = R_Y + offset;
-//		yPos.y = Y_Y + offset;
-//		bPos.y = B_Y + offset;
-//		oPos.y = O_Y + offset;
-//
-//		gPos.x = G_X - (offset/3);
-//		rPos.x = R_X - (offset/6);
-//		yPos.x = Y_X;
-//		bPos.x = B_X + (offset/6);
-//		oPos.x = O_X + (offset/3);
-
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
-
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, yPos, FRET_YELLOW);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
-		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
 	}
 
 	if ((lBtnChanges & BUTTON_DOWN) && (lBtnStateNew & BUTTON_DOWN))
@@ -208,26 +126,8 @@ void PushBtnHandler(void *CallBackRef) {
 
 		delay++;
 
-//		gPos.y = G_Y + offset;
-//		rPos.y = R_Y + offset;
-//		yPos.y = Y_Y + offset;
-//		bPos.y = B_Y + offset;
-//		oPos.y = O_Y + offset;
-//
-//		gPos.x = G_X - (offset/3);
-//		rPos.x = R_X - (offset/6);
-//		yPos.x = Y_X;
-//		bPos.x = B_X + (offset/6);
-//		oPos.x = O_X + (offset/3);
-
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
-
-//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, gPos, FRET_GREEN);
-//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, rPos, FRET_RED);
-//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, yPos, FRET_YELLOW);
-//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, bPos, FRET_BLUE);
-//		ghPlayer_SetPosition(XPAR_GH_PLAYER_0_BASEADDR, oPos, FRET_ORANGE);
 	}
 
 	if ((lBtnChanges & BUTTON_LEFT) && (lBtnStateNew & BUTTON_LEFT))

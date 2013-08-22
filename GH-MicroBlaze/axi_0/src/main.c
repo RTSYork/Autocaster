@@ -16,13 +16,6 @@
  *
  */
 
-// ---------
-// Set current game to 'Rock Band 3' (RB) or 'Guitar Hero: Warriors of Rock' (GH)
-#define RB 0
-#define GH 1
-#define GAME RB
-// ---------
-
 #include <stdio.h>
 
 #include "xparameters.h"
@@ -37,6 +30,7 @@
 #include "gh_player.h"
 #include "image_filter.h"
 
+#include "options.h"
 #include "hdmi/vdma.h"		// VDMA functions
 #include "hdmi/hdmi.h"		// HDMI functions
 #include "hdmi/edid.h"		// Sets up and sends EDID
@@ -52,6 +46,77 @@
  */
 #define FRAME_HORIZONTAL_LEN  1280   /* 1280 pixels, each pixel 4 bytes */
 #define FRAME_VERTICAL_LEN    720    /* 720 pixels */
+
+// --- 1 Player ---
+//#define G_X 476
+//#define G_Y 581
+//#define R_X 559
+//#define R_Y 577
+//#define Y_X 640
+//#define Y_Y 575
+//#define B_X 721
+//#define B_Y 577
+//#define O_X 804
+//#define O_Y 581
+// --- 2 Player ---
+//#define G_X 218
+//#define G_Y 593
+//#define R_X 288
+//#define R_Y 589
+//#define Y_X 358
+//#define Y_Y 588
+//#define B_X 429
+//#define B_Y 590
+//#define O_X 499
+//#define O_Y 594
+// --- 3 Player ---
+//#define G_X 109
+//#define G_Y 607
+//#define R_X 182
+//#define R_Y 603
+//#define Y_X 249
+//#define Y_Y 602
+//#define B_X 311
+//#define B_Y 602
+//#define O_X 371
+//#define O_Y 605
+// --- Filtered fret detector ---
+//#define G_X 480
+//#define G_Y 571
+//#define R_X 558
+//#define R_Y 566
+//#define Y_X 640
+//#define Y_Y 564
+//#define B_X 722
+//#define B_Y 566
+//#define O_X 800
+//#define O_Y 571
+// --- Delayed fret detector ---
+#if (GAME == RB)
+// Rock Band
+#define G_X 476+19+5+4
+#define G_Y 581-45-15-15
+#define R_X 559+8+2+3
+#define R_Y 577-45-15-15
+#define Y_X 640
+#define Y_Y 575-45-15-15
+#define B_X 721-8-2-3
+#define B_Y 577-45-15-15
+#define O_X 804-19-5-4
+#define O_Y 581-45-15-15
+#else
+// Guitar Hero
+#define G_X 495
+#define G_Y 506
+#define R_X 568
+#define R_Y 502
+#define Y_X 639
+#define Y_Y 500
+#define B_X 711
+#define B_Y 502
+#define O_X 783
+#define O_Y 506
+#endif
 
 static XIntc intCtrl;
 
@@ -113,24 +178,11 @@ int main(void)
 	int s0, s1, s2, s3, s4, s5, s6, s7;
 
 	// Positions of note detectors (x, y)
-	// 1 Player
-//	point gPos = {470, 601};
-//	point rPos = {556, 597};
-//	point yPos = {640, 595};
-//	point bPos = {724, 597};
-//	point oPos = {810, 601};
-	// 2 Player
-//	point gPos = {212, 611};
-//	point rPos = {285, 607};
-//	point yPos = {358, 606};
-//	point bPos = {432, 608};
-//	point oPos = {505, 612};
-	// 3 Player
-//	point gPos = {114, 623};
-//	point rPos = {184, 619};
-//	point yPos = {249, 618};
-//	point bPos = {313, 618};
-//	point oPos = {376, 621};
+	point gPos = {G_X, G_Y};
+	point rPos = {R_X, R_Y};
+	point yPos = {Y_X, Y_Y};
+	point bPos = {B_X, B_Y};
+	point oPos = {O_X, O_Y};
 
 	// Thresholds of note detectors
 #if (GAME == RB)
@@ -192,7 +244,7 @@ int main(void)
 
 
 	// Reset Image Filter core, set threshold, enable
-	u8 filtersEnable = 0;
+	u8 filtersEnable = FILTERS;
 	IMAGE_FILTER_mReset(XPAR_IMAGE_FILTER_0_BASEADDR);
 	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 128);
 	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_NONE);
@@ -236,12 +288,11 @@ int main(void)
 				playerEnable = 0;
 				setLed(LED2, LED_OFF);
 			}
-			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, TYPE_OLD, playerEnable);
-			//ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, 0, TYPE_NEW, enable);
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, FILTERS, playerEnable);
 
 			lasts2 = s2;
 		}
-
+#if (FILTERS == 0)
 		s3 = getSwitch(SWITCH3);
 		if (s3 == SWITCH_ON) {
 			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
@@ -270,7 +321,7 @@ int main(void)
 			}
 			lasts4 = s4;
 		}
-/*
+#else
 		s3 = getSwitch(SWITCH3);
 		s4 = getSwitch(SWITCH4);
 		s5 = getSwitch(SWITCH5);
@@ -339,7 +390,8 @@ int main(void)
 			lasts5 = s5;
 			lasts6 = s6;
 			lasts7 = s7;
-		}*/
+		}
+#endif
 	}
 
 	/* never reached */

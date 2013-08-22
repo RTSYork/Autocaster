@@ -15,11 +15,6 @@
 
 #define lBtnChannel	1	//GPIO channel of the push buttons
 
-extern point gPos;
-extern point rPos;
-extern point yPos;
-extern point bPos;
-extern point oPos;
 extern u8 delay;
 
 extern u8 playerEnable;
