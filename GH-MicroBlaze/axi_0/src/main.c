@@ -121,6 +121,7 @@
 static XIntc intCtrl;
 
 void drawCross(int xpos, int ypos, int size, int colour);
+void drawDiagonalCross(int xpos, int ypos, int size, int colour);
 
 int main(void)
 {
@@ -402,6 +403,31 @@ int main(void)
 }
 
 void drawCross(int xpos, int ypos, int size, int colour) {
+	int x;
+	int y;
+	int z;
+	int pFrame;
+	u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
+	int i;
+	int lineStride = 1280;
+
+	for (z = 0; z < 2; z++) {
+		pFrame = z * 1280 * 720;
+		for (x = -size/2; x <= size/2; x++) {
+			// Set pixel value
+			i = pFrame + (ypos)*(lineStride) + (xpos+x);
+			vbufptr[i] = colour;
+		}
+
+		for (y = -size/2; y <= size/2; y++) {
+			// Set pixel value
+			i = pFrame + (ypos+y)*(lineStride) + (xpos);
+			vbufptr[i] = colour;
+		}
+	}
+}
+
+void drawDiagonalCross(int xpos, int ypos, int size, int colour) {
 	int x;
 	int y;
 	int z;
