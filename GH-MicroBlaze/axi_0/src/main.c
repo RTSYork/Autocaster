@@ -409,19 +409,18 @@ void drawCross(int xpos, int ypos, int size, int colour) {
 	int pFrame;
 	u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
 	int i;
-	int lineStride = 1280;
 
 	for (z = 0; z < 2; z++) {
 		pFrame = z * 1280 * 720;
 		for (x = -size/2; x <= size/2; x++) {
 			// Set pixel value
-			i = pFrame + (ypos)*(lineStride) + (xpos+x);
+			i = pFrame + (ypos)*(FRAME_HORIZONTAL_LEN) + (xpos+x);
 			vbufptr[i] = colour;
 		}
 
 		for (y = -size/2; y <= size/2; y++) {
 			// Set pixel value
-			i = pFrame + (ypos+y)*(lineStride) + (xpos);
+			i = pFrame + (ypos+y)*(FRAME_HORIZONTAL_LEN) + (xpos);
 			vbufptr[i] = colour;
 		}
 	}
@@ -433,15 +432,14 @@ void drawDiagonalCross(int xpos, int ypos, int size, int colour) {
 	int z;
 	u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
 	int i;
-	int lineStride = 1280;
 	for (z = 0; z < 2; z++) {
 		int pFrame = z * 1280 * 720;
 		for (x = -size/2; x < size/2; x++) {
 			for (y = -size/2; y < size/2; y++) {
 				// Set pixel value
-				i = pFrame + (ypos+y)*(lineStride) + (xpos+y);
+				i = pFrame + (ypos+y)*(FRAME_HORIZONTAL_LEN) + (xpos+y);
 				vbufptr[i] = colour;
-				i = pFrame + ((ypos - size)+(size-y))*(lineStride) + (xpos+y);
+				i = pFrame + ((ypos - size)+(size-y))*(FRAME_HORIZONTAL_LEN) + (xpos+y);
 				vbufptr[i] = colour;
 			}
 		}
