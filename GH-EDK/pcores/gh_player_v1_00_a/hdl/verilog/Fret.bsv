@@ -32,7 +32,7 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	Vector#(33, Reg#(Bool)) fretValues <- replicateM(mkReg(False));
 	Reg#(Bool) fretPressed <- mkReg(False);
-	//Reg#(Bool) fretPressedDly <- mkReg(False);
+	Reg#(Bool) fretPressedDly <- mkReg(False);
 	
 	Wire#(UInt#(8)) red   <- mkWire;
 	Wire#(UInt#(8)) green <- mkWire;
@@ -79,7 +79,23 @@ module mkFret #(parameter UInt#(2) lOffset,
 		                fretValues[13] ||
 		                fretValues[14] ||
 		                fretValues[15] ||
-		                fretValues[16]);
+		                fretValues[16] ||
+		                fretValues[17] ||
+		                fretValues[18] ||
+		                fretValues[19] ||
+		                fretValues[20] ||
+		                fretValues[21] ||
+		                fretValues[22] ||
+		                fretValues[23] ||
+		                fretValues[24]);/* ||
+		                fretValues[25] ||
+		                fretValues[26] ||
+		                fretValues[27] ||
+		                fretValues[28] ||
+		                fretValues[29] ||
+		                fretValues[30] ||
+		                fretValues[31] ||
+		                fretValues[32]);*/
 	endrule
 	
 	// New line on each HSync pulse
@@ -95,13 +111,13 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	
 	// Slight low-pass filter for release (1 frame)
-	//rule fret_on(fretPressed && !fretPressedDly);
-	//	fretPressedDly <= True;
-	//endrule
+	rule fret_on(fretPressed && !fretPressedDly);
+		fretPressedDly <= True;
+	endrule
 	
-	//rule fret_off(!fretPressed && fretPressedDly && vsync_pulse);
-	//	fretPressedDly <= False;
-	//endrule
+	rule fret_off(!fretPressed && fretPressedDly && vsync_pulse);
+		fretPressedDly <= False;
+	endrule
 	
 	
 	// Triggers for start of a note
@@ -456,7 +472,7 @@ module mkFret #(parameter UInt#(2) lOffset,
 	
 	// Output fret pressed value
 	method Bool press();
-		return fretPressed;
+		return fretPressedDly;
 	endmethod
 
 endmodule
