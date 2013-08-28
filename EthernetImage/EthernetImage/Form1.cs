@@ -113,7 +113,7 @@ namespace EthernetImage
 
                 button2.Text = "Stop Listening";
                 udpClient = new UdpClient(0xF00D);
-                udpClient.Client.ReceiveBufferSize = frameWidth * frameHeight * 4;
+                udpClient.Client.ReceiveBufferSize = frameWidth * frameHeight * frameCount * 4;
                 
                 open = true;
 
