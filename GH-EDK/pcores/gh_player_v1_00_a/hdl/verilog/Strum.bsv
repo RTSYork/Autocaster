@@ -20,7 +20,6 @@ module mkStrum (Strum);
 	Wire#(Bit#(5)) frets <- mkWire;
 	Reg#(Bit#(5)) lastFrets <- mkReg(0);
 	Reg#(Bool) fretPressed <- mkReg(False);
-	Reg#(Bool) fretsDiff <- mkReg(False);
 	
 	Reg#(UInt#(4)) strumCount <- mkReg(0);
 	Reg#(Bool) strumOutput <- mkReg(False);
@@ -32,20 +31,19 @@ module mkStrum (Strum);
 	// New frame on each VSync pulse
 	rule new_frame(vsync_pulse);
 		fretPressed <= (frets != 0);
-		fretsDiff <= (frets != lastFrets);
 		lastFrets <= frets;
 	endrule
 	
 	
 	// Set strum on for max 'strumTimeVal' frames, 1 frame after fret pressed
-	rule strum_on(vsync_pulse && fretPressed && fretsDiff && strumCount < strumTimeVal);
+	rule strum_on(vsync_pulse && fretPressed && strumCount < strumTimeVal);
 		strumOutput <= True;
 		strumCount <= strumCount + 1;
 	endrule
 	
 	rule strum_off(vsync_pulse && fretPressed && strumCount == strumTimeVal);
 		strumOutput <= False;
-		strumCount <= 0; //strumTimeVal + 1;
+		strumCount <= strumTimeVal + 1;
 	endrule
 	
 	rule strum_reset(vsync_pulse && !fretPressed && strumCount != 0);
