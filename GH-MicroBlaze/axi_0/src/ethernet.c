@@ -9,14 +9,14 @@ static u8 LocalIpAddress[4] =
 	169, 254, 0, 0
 };
 
-// Remote address is WV2988 in RTS lab
+// Remote address is broadcast to 144.32.175.192/27 subnet
 static u8 RemoteMacAddress[XEL_MAC_ADDR_SIZE] =
 {
-	0x00, 0x19, 0xD1, 0x89, 0x2D, 0xFC
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 static u8 RemoteIpAddress[4] =
 {
-	144, 32, 175, 213
+	0x90, 0x20, 0xAF, 0xDF
 };
 
 /*
