@@ -46,7 +46,6 @@
             this.frameLabel = new System.Windows.Forms.Label();
             this.saveAllButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameTrackBar)).BeginInit();
             this.SuspendLayout();
@@ -161,14 +160,14 @@
             this.frameTrackBar.Location = new System.Drawing.Point(747, 11);
             this.frameTrackBar.Maximum = 0;
             this.frameTrackBar.Name = "frameTrackBar";
-            this.frameTrackBar.Size = new System.Drawing.Size(471, 45);
+            this.frameTrackBar.Size = new System.Drawing.Size(386, 45);
             this.frameTrackBar.TabIndex = 12;
             this.frameTrackBar.Scroll += new System.EventHandler(this.frameTrackBar_Scroll);
             // 
             // frameLabel
             // 
             this.frameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.frameLabel.Location = new System.Drawing.Point(1217, 13);
+            this.frameLabel.Location = new System.Drawing.Point(1132, 13);
             this.frameLabel.Name = "frameLabel";
             this.frameLabel.Size = new System.Drawing.Size(55, 17);
             this.frameLabel.TabIndex = 13;
@@ -189,16 +188,11 @@
             // 
             this.folderBrowserDialog1.SelectedPath = "h:\\Project\\Screenshots";
             // 
-            // timer2
-            // 
-            this.timer2.Interval = 5;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 775);
+            this.ClientSize = new System.Drawing.Size(1199, 637);
             this.Controls.Add(this.saveAllButton);
             this.Controls.Add(this.frameLabel);
             this.Controls.Add(this.label3);
@@ -241,7 +235,6 @@
         private System.Windows.Forms.Label frameLabel;
         private System.Windows.Forms.Button saveAllButton;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Timer timer2;
     }
 }
 

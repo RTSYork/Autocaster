@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using System.Drawing.Imaging;
 
 namespace EthernetImage
 {
@@ -20,16 +21,17 @@ namespace EthernetImage
         IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         bool open = false;
 
-        int frameWidth = 414;
-        int frameHeight = 50;
-        int frameCount = 60;
+        int frameWidth = 440;
+        int frameHeight = 360;
+        int frameCount = 120;
 
         Bitmap[] b;
         int x;
         int y;
         int z;
-        byte[] bytes;
         int i;
+        byte[] bytes;
+        uint[] imageData;
 
         int currentFrame = 0;
 
@@ -111,7 +113,7 @@ namespace EthernetImage
 
                 button2.Text = "Stop Listening";
                 udpClient = new UdpClient(0xF00D);
-                udpClient.Client.ReceiveBufferSize = 2949120;
+                udpClient.Client.ReceiveBufferSize = frameWidth * frameHeight * 4;
                 
                 open = true;
 
@@ -119,144 +121,95 @@ namespace EthernetImage
 
                 for (int a = 0; a < frameCount; a++)
                 {
-                    b[a] = new Bitmap(frameWidth, frameHeight);
+                    b[a] = new Bitmap(frameWidth, frameHeight, PixelFormat.Format32bppRgb);
                 }
+
+                imageData = new uint[frameWidth * frameHeight];
+
+                UdpState s = new UdpState();
+                s.e = RemoteIpEndPoint;
+                s.u = udpClient;
+                udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), s);
 
                 x = 0;
                 y = 0;
                 z = 0;
                 i = 0;
-                bytes = new byte[frameWidth * frameHeight * frameCount * 3];
-                //timer1.Start();
-                //timer2.Start();
-                
-                byte[] data;
-                int count = 0;
-                for (int j = 0; j < 2880; j++)
-                {
-                    data = udpClient.Receive(ref RemoteIpEndPoint);
-                    for (int px = 0; px < data.Length; px += 4)
-                    {
-                        bytes[count] = data[px+2];
-                        bytes[count+1] = data[px+1];
-                        bytes[count+2] = data[px];
-                        count += 3;
-                    }
-                }
-
-                count = 0;
-                for (y = 0; y < 720; y++)
-                {
-                    for (x = 0; x < 1280; x++)
-                    {
-                        b[0].SetPixel(x, y, Color.FromArgb(bytes[count], bytes[count+1], bytes[count+2]));
-                        count += 3;
-                    }
-                }
-
-                pictureBox1.Image = b[currentFrame];
-                
+                timer1.Start();
             }
             else
             {
-                button2.Text = "Start Listening";
-                udpClient.Close();
                 open = false;
+                button2.Text = "Start Listening";
+                udpClient.Close();  
                 timer1.Stop();
             }
         }
-        /*
-        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+
+        public void ReceiveCallback(IAsyncResult ar)
         {
+            UdpClient u = (UdpClient)((UdpState)(ar.AsyncState)).u;
+            IPEndPoint e = (IPEndPoint)((UdpState)(ar.AsyncState)).e;
             if (open)
             {
-                while (serialPort1.BytesToRead > 0)
+                bytes = u.EndReceive(ar, ref e);
+
+                for (int i = 0; i < bytes.Length; i+=4)
                 {
-                    bytes[i] = (byte)serialPort1.ReadByte();
+                    imageData[x + (y * frameWidth)] = (uint)(((uint)bytes[i + 2] << 16) | ((uint)bytes[i + 1] << 8) | bytes[i]);
+                    x++;
+                }
 
-                    if (y == frameHeight && z < frameCount - 1)
-                    {
-                        y = 0;
-                        z++;
+                if (x == frameWidth)
+                {
+                    x = 0;
+                    y++;
+                }
 
-                        currentFrame = z;
-                        //frameTrackBar.Value = z;
-                        //frameLabel.Text = (currentFrame + 1) + " / " + frameCount;
-                    }
-
-                    if (y < frameHeight)
-                    {
-                        if (i == 2)
-                        {
-                            Monitor.Enter(b[z]);
-                            b[z].SetPixel(x, y, Color.FromArgb(bytes[0], bytes[1], bytes[2]));
-                            Monitor.Exit(b[z]);
-
-                            x++;
-                            if (x == frameWidth)
-                            {
-                                x = 0;
-                                y++;
-                            }
-
-                            i = 0;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        serialPort1.ReadByte();
-                    }
+                if (y == frameHeight && z < frameCount)
+                {
+                    updateImage();
+                    currentFrame = z;
+                    z++;
+                    y = 0;
                 }
             }
+
+            if (open)
+            {
+                UdpState s = new UdpState();
+                s.e = e;
+                s.u = u;
+                u.BeginReceive(new AsyncCallback(ReceiveCallback), s);
+            }
         }
-        */
+
+        public unsafe void updateImage()
+        {
+            BitmapData bData = b[z].LockBits(new Rectangle(0, 0, frameWidth, frameHeight), ImageLockMode.ReadWrite, b[z].PixelFormat);
+
+            byte bitsPerPixel = 32;
+
+            byte* scan0 = (byte*)bData.Scan0.ToPointer();
+
+            for (int i = 0; i < bData.Height; ++i)
+            {
+                for (int j = 0; j < bData.Width; ++j)
+                {
+                    byte* data = scan0 + i * bData.Stride + j * bitsPerPixel / 8;
+                    *((uint*)data) = imageData[(j + (i * frameWidth))];
+                }
+            }
+
+            b[z].UnlockBits(bData);
+
+            pictureBox1.Image = b[z];
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Monitor.Enter(bytes);
-            pictureBox1.Image = (Image)b[currentFrame].Clone();
-            Monitor.Exit(bytes);
-
             frameTrackBar.Value = currentFrame;
             frameLabel.Text = (currentFrame + 1) + " / " + frameCount;
-        }
-
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            if (udpClient.Available > 0)
-            {
-                //bytes[i] = (byte)serialPort1.ReadByte();
-                byte[] data = udpClient.Receive(ref RemoteIpEndPoint);
-
-                for (int i = 0; i < data.Length; i += 4)
-                {
-                    if (y == frameHeight && z < frameCount - 1)
-                    {
-                        y = 0;
-                        z++;
-
-                        currentFrame = z;
-                    }
-
-                    if (y < frameHeight)
-                    {
-                        Monitor.Enter(bytes);
-                        b[z].SetPixel(x, y, Color.FromArgb(data[i + 2], data[i + 1], data[i]));
-                        Monitor.Exit(bytes);
-
-                        x++;
-                        if (x == frameWidth)
-                        {
-                            x = 0;
-                            y++;
-                        }
-                    }
-                }
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -294,5 +247,11 @@ namespace EthernetImage
             }
         }
 
+    }
+
+    class UdpState
+    {
+        public UdpClient u;
+        public IPEndPoint e;
     }
 }
