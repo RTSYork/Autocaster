@@ -80,9 +80,9 @@ module mkFret #(parameter UInt#(2) lOffset,
 		                fretValues[14] ||
 		                fretValues[15] ||
 		                fretValues[16] ||
-		                fretValues[17] ||
-		                fretValues[18] ||
-		                fretValues[19] ||
+		               // fretValues[17] ||
+		               // fretValues[18] ||
+		               // fretValues[19] ||
 		                fretValues[20] ||
 		                fretValues[21] ||
 		                fretValues[22] ||
