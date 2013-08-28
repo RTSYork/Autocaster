@@ -24,7 +24,7 @@ XIntc btnIntCtrl;
 // --- Delayed fret detector ---
 #if (GAME == RB)
 // Rock Band
-#define DELAY 4
+#define DELAY 5
 #else
 // Guitar Hero
 #define DELAY 5
