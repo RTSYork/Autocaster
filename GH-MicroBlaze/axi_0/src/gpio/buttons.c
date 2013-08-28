@@ -113,7 +113,7 @@ void PushBtnHandler(void *CallBackRef) {
 		// Up button pressed
 		//xil_printf("U");
 
-		delay--;
+		delay++;
 
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
@@ -124,7 +124,7 @@ void PushBtnHandler(void *CallBackRef) {
 		// Down button pressed
 		//xil_printf("D");
 
-		delay++;
+		delay--;
 
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
