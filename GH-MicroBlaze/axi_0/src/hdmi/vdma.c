@@ -902,14 +902,15 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 			u8 r, g, b;
 			register u32 *vbufptr = (u32 *)(VBUFFER_BASE_ADDR);
 			// Skip the first frame, as it may be from earlier in time (due to buffer)
-			for (i = VBUFFER_WIDTH * VBUFFER_HEIGHT; i < VBUFFER_WIDTH * VBUFFER_HEIGHT * (VBUFFER_FRAMES+1); i++) {
-				u32 pixel = vbufptr[i];
-				b = (u8)pixel;
-				g = (u8)(pixel >> 8);
-				r = (u8)(pixel >> 16);
-				XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, r);
-				XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, g);
-				XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
+			for (i = VBUFFER_WIDTH * VBUFFER_HEIGHT; i < VBUFFER_WIDTH * VBUFFER_HEIGHT * (VBUFFER_FRAMES+1); i+= VBUFFER_WIDTH / 2) {
+				//u32 pixel = vbufptr[i];
+				//b = (u8)pixel;
+				//g = (u8)(pixel >> 8);
+				//r = (u8)(pixel >> 16);
+				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, r);
+				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, g);
+				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
+				ethernetSendPayload(VBUFFER_WIDTH * 2, (u8*)(vbufptr + i));
 			}
 		}
 	}
