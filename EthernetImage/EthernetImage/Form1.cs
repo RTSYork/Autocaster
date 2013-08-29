@@ -32,6 +32,7 @@ namespace EthernetImage
         int i;
         byte[] bytes;
         uint[] imageData;
+        string[] statuses;
 
         int currentFrame = 0;
 
@@ -126,6 +127,8 @@ namespace EthernetImage
 
                 imageData = new uint[frameWidth * frameHeight];
 
+                statuses = new string[frameCount];
+
                 UdpState s = new UdpState();
                 s.e = RemoteIpEndPoint;
                 s.u = udpClient;
@@ -154,25 +157,41 @@ namespace EthernetImage
             {
                 bytes = u.EndReceive(ar, ref e);
 
-                for (int i = 0; i < bytes.Length; i+=4)
+                if (bytes.Length != 4)
                 {
-                    imageData[x + (y * frameWidth)] = (uint)(((uint)bytes[i + 2] << 16) | ((uint)bytes[i + 1] << 8) | bytes[i]);
-                    x++;
+
+                    for (int i = 0; i < bytes.Length; i += 4)
+                    {
+                        imageData[x + (y * frameWidth)] = (uint)(((uint)bytes[i + 2] << 16) | ((uint)bytes[i + 1] << 8) | bytes[i]);
+                        x++;
+                    }
+
+                    if (x == frameWidth)
+                    {
+                        x = 0;
+                        y++;
+                    }
+
+                    if (y == frameHeight && z < frameCount)
+                    {
+                        updateImage();
+                        currentFrame = z;
+                        z++;
+                        y = 0;
+                    }
+
+                }
+                else
+                {
+                    int g = (bytes[0] >> 0) & 0x01;
+                    int r = (bytes[0] >> 1) & 0x01;
+                    int y = (bytes[0] >> 2) & 0x01;
+                    int b = (bytes[0] >> 3) & 0x01;
+                    int o = (bytes[0] >> 4) & 0x01;
+                    int s = (bytes[0] >> 5) & 0x01;
+                    statuses[z] = String.Format("{0} {1} {2} {3} {4}   {5}", g, r, y, b, o, s);
                 }
 
-                if (x == frameWidth)
-                {
-                    x = 0;
-                    y++;
-                }
-
-                if (y == frameHeight && z < frameCount)
-                {
-                    updateImage();
-                    currentFrame = z;
-                    z++;
-                    y = 0;
-                }
             }
 
             if (open)
@@ -210,6 +229,7 @@ namespace EthernetImage
         {
             frameTrackBar.Value = currentFrame;
             frameLabel.Text = (currentFrame + 1) + " / " + frameCount;
+            statusLabel.Text = statuses[currentFrame];
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -230,9 +250,8 @@ namespace EthernetImage
             currentFrame = frameTrackBar.Value;
             frameLabel.Text = (currentFrame + 1) + " / " + frameCount;
 
-            Monitor.Enter(b[currentFrame]);
-            pictureBox1.Image = (Image)b[currentFrame].Clone();
-            Monitor.Exit(b[currentFrame]);
+            pictureBox1.Image = b[currentFrame];
+            statusLabel.Text = statuses[currentFrame];
         }
 
         private void saveAllButton_Click(object sender, EventArgs e)
