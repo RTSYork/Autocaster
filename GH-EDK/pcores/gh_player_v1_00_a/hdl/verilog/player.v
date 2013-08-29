@@ -165,10 +165,7 @@ output [14:0] Status;
 	
 	
 	// Green Fret Controller
-	mkFret # (
-		.lOffset       (2),
-		.rOffset       (0)
-	) GreenFret (
+	mkFret GreenFret (
 		.CLK           (PClk),
 		.RST_N         (RST),
 		.vsync         (vClk),
@@ -184,10 +181,7 @@ output [14:0] Status;
 	);
 	
 	// Red Fret Controller
-	mkFret # (
-		.lOffset       (1),
-		.rOffset       (0)
-	) RedFret (
+	mkFret RedFret (
 		.CLK           (PClk),
 		.RST_N         (RST),
 		.vsync         (vClk),
@@ -203,10 +197,7 @@ output [14:0] Status;
 	);
 	
 	// Yellow Fret Controller
-	mkFret # (
-		.lOffset       (1),
-		.rOffset       (1)
-	) YellowFret (
+	mkFret YellowFret (
 		.CLK           (PClk),
 		.RST_N         (RST),
 		.vsync         (vClk),
@@ -222,10 +213,7 @@ output [14:0] Status;
 	);
 	
 	// Blue Fret Controller
-	mkFret # (
-		.lOffset       (0),
-		.rOffset       (1)
-	) BlueFret (
+	mkFret BlueFret (
 		.CLK           (PClk),
 		.RST_N         (RST),
 		.vsync         (vClk),
@@ -241,10 +229,7 @@ output [14:0] Status;
 	);
 	
 	// Orange Fret Controller
-	mkFret # (
-		.lOffset      (0),
-		.rOffset      (2)
-	) OrangeFret (
+	mkFret OrangeFret (
 		.CLK           (PClk),
 		.RST_N         (RST),
 		.vsync         (vClk),
