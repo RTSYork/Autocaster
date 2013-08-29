@@ -24,14 +24,18 @@ module mkStrum (Strum);
 	Reg#(UInt#(4)) strumCount <- mkReg(0);
 	Reg#(Bool) strumOutput <- mkReg(False);
 	Wire#(UInt#(4)) strumTimeVal <- mkWire;
+	Reg#(Bool) fretsDiff <- mkReg(False);
 	
 	PulseWire vsync_pulse <- mkPulseWire();
+	Reg#(Bool) vsync_pulse2 <- mkReg(False);
 
 
 	// New frame on each VSync pulse
 	rule new_frame(vsync_pulse);
 		fretPressed <= (frets != 0);
+		fretsDiff <= ((~lastFrets & frets) != 0);
 		lastFrets <= frets;
+		vsync_pulse2 <= True;
 	endrule
 	
 	
@@ -46,9 +50,10 @@ module mkStrum (Strum);
 		strumCount <= strumTimeVal + 1;
 	endrule
 	
-	rule strum_reset(vsync_pulse && !fretPressed && strumCount != 0);
+	rule strum_reset(!vsync_pulse && vsync_pulse2 && (!fretPressed || fretsDiff) && strumCount != 0);
 		strumOutput <= False;
 		strumCount <= 0;
+		vsync_pulse2 <= False;
 	endrule
 	
 	
