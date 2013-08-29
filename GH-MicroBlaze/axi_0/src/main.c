@@ -94,28 +94,38 @@
 // --- Delayed fret detector ---
 #if (GAME == RB)
 // Rock Band
-#define G_X 476+19+5+4
-#define G_Y 581-45-15-15-1
-#define R_X 559+8+2+3
-#define R_Y 577-45-15-15
+//#define G_X 476+19+5+4
+//#define G_Y 581-45-15-15-1
+//#define R_X 559+8+2+3
+//#define R_Y 577-45-15-15
+//#define Y_X 640
+//#define Y_Y 575-45-15-15
+//#define B_X 721-8-2-3
+//#define B_Y 577-45-15-15
+//#define O_X 804-19-5-4
+//#define O_Y 581-45-15-15-1
+#define G_X 476+19+5+4+7+2
+#define G_Y 581-45-15-15-1-15-5
+#define R_X 559+8+2+3+2+1
+#define R_Y 577-45-15-15-15-5
 #define Y_X 640
-#define Y_Y 575-45-15-15
-#define B_X 721-8-2-3
-#define B_Y 577-45-15-15
-#define O_X 804-19-5-4
-#define O_Y 581-45-15-15-1
+#define Y_Y 575-45-15-15-15-5-1
+#define B_X 721-8-2-3-2-1
+#define B_Y 577-45-15-15-15-5
+#define O_X 804-19-5-4-7-2
+#define O_Y 581-45-15-15-1-15-5
 #else
 // Guitar Hero
-#define G_X 495
-#define G_Y 506
-#define R_X 568
-#define R_Y 502
+#define G_X 487
+#define G_Y 500
+#define R_X 564
+#define R_Y 500
 #define Y_X 639
 #define Y_Y 500
-#define B_X 711
-#define B_Y 502
-#define O_X 783
-#define O_Y 506
+#define B_X 715
+#define B_Y 500
+#define O_X 791
+#define O_Y 500
 #endif
 
 static XIntc intCtrl;
@@ -200,10 +210,10 @@ int main(void)
 //	pixel oOff = {0x7A, 0x3F, 0x19};
 	pixel gOn  = {0x07, 0x87, 0x07};
 	pixel gOff = {0x52, 0x6F, 0x24};
-	pixel rOn  = {0x80, 0x26, 0x28};
-	pixel rOff = {0x74, 0x38, 0x38};
-	pixel yOn  = {0x6D, 0x6B, 0x05};
-	pixel yOff = {0x7C, 0x6F, 0x4E};
+	pixel rOn  = {0x80, 0x26, 0x38};
+	pixel rOff = {0x74, 0x38, 0x58};
+	pixel yOn  = {0x7D, 0x7B, 0x45};
+	pixel yOff = {0x7C, 0x6F, 0x6E};
 	pixel bOn  = {0x1B, 0x32, 0x9A};
 	pixel bOff = {0x32, 0x40, 0x74};
 	pixel oOn  = {0x92, 0x42, 0x07};
@@ -220,16 +230,26 @@ int main(void)
 //	pixel oOff = {0x5F, 0x4F, 0x4F};
 #else
 	// Guitar Hero thresholds
-	pixel gOn  = {0x00, 0x70, 0x00};
-	pixel gOff = {0x40, 0x40, 0x40};
-	pixel rOn  = {0x9A, 0x00, 0x00};
-	pixel rOff = {0x4A, 0x4A, 0x4A};
-	pixel yOn  = {0xBB, 0x60, 0x00};
-	pixel yOff = {0x50, 0x50, 0x50};
-	pixel bOn  = {0x00, 0x00, 0x9A};
-	pixel bOff = {0x4A, 0x4A, 0x4A};
-	pixel oOn  = {0xA0, 0x50, 0x00};
-	pixel oOff = {0x40, 0x40, 0x40};
+//	pixel gOn  = {0x00, 0x70, 0x00};
+//	pixel gOff = {0x40, 0x40, 0x40};
+//	pixel rOn  = {0x9A, 0x00, 0x00};
+//	pixel rOff = {0x4A, 0x4A, 0x4A};
+//	pixel yOn  = {0xBB, 0x60, 0x00};
+//	pixel yOff = {0x50, 0x50, 0x50};
+//	pixel bOn  = {0x00, 0x00, 0x10};
+//	pixel bOff = {0x4A, 0x4A, 0x4A};
+//	pixel oOn  = {0xA0, 0x50, 0x00};
+//	pixel oOff = {0x40, 0x40, 0x40};
+	pixel gOn  = {0xB0, 0xB0, 0xB0};
+	pixel gOff = {0x5F, 0x5F, 0x5F};
+	pixel rOn  = {0xB0, 0xB0, 0xB0};
+	pixel rOff = {0x5F, 0x5F, 0x5F};
+	pixel yOn  = {0xC0, 0xC0, 0xC0};
+	pixel yOff = {0x5F, 0x5F, 0x5F};
+	pixel bOn  = {0xB0, 0xB0, 0xB0};
+	pixel bOff = {0x5F, 0x5F, 0x5F};
+	pixel oOn  = {0xB0, 0xB0, 0xB0};
+	pixel oOff = {0x5F, 0x5F, 0x5F};
 #endif
 
 	// Control values
