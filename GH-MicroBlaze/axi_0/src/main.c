@@ -130,8 +130,8 @@
 
 static XIntc intCtrl;
 
+void drawMarker(int xpos, int ypos, int colour);
 void drawCross(int xpos, int ypos, int size, int colour);
-void drawDiagonalCross(int xpos, int ypos, int size, int colour);
 
 int main(void)
 {
@@ -312,11 +312,11 @@ int main(void)
 		s1 = getSwitch(SWITCH1);
 		if (s1 == SWITCH_ON) {
 			// Draw a cross at each pixel test position
-			drawCross(gPos.x, gPos.y, 16, 0x00FF00); // Green
-			drawCross(rPos.x, rPos.y, 16, 0xFF0000); // Red
-			drawCross(yPos.x, yPos.y, 16, 0xFFFF00); // Yellow
-			drawCross(bPos.x, bPos.y, 16, 0x0000FF); // Blue
-			drawCross(oPos.x, oPos.y, 16, 0xFF7F00); // Orange
+			drawMarker(gPos.x, gPos.y, 0x00FF00); // Green
+			drawMarker(rPos.x, rPos.y, 0xFF0000); // Red
+			drawMarker(yPos.x, yPos.y, 0xFFFF00); // Yellow
+			drawMarker(bPos.x, bPos.y, 0x0000FF); // Blue
+			drawMarker(oPos.x, oPos.y, 0xFF7F00); // Orange
 		}
 
 		s2 = getSwitch(SWITCH2);
@@ -442,7 +442,7 @@ int main(void)
 	return 0;
 }
 
-void drawCross(int xpos, int ypos, int size, int colour) {
+void drawMarker(int xpos, int ypos, int colour) {
 	int x;
 	int y;
 	int z;
@@ -452,13 +452,13 @@ void drawCross(int xpos, int ypos, int size, int colour) {
 
 	for (z = 0; z < 2; z++) {
 		pFrame = z * 1280 * 720;
-		for (x = -size/2; x <= size/2; x++) {
+		for (x = -8; x <= 8; x++) {
 			// Set pixel value
 			i = pFrame + (ypos)*(FRAME_HORIZONTAL_LEN) + (xpos+x);
 			vbufptr[i] = colour;
 		}
 
-		for (y = -size/2; y <= size/2; y++) {
+		for (y = -5; y <= 0; y++) {
 			// Set pixel value
 			i = pFrame + (ypos+y)*(FRAME_HORIZONTAL_LEN) + (xpos);
 			vbufptr[i] = colour;
@@ -466,7 +466,7 @@ void drawCross(int xpos, int ypos, int size, int colour) {
 	}
 }
 
-void drawDiagonalCross(int xpos, int ypos, int size, int colour) {
+void drawCross(int xpos, int ypos, int size, int colour) {
 	int x;
 	int y;
 	int z;
