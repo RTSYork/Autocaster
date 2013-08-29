@@ -89,6 +89,7 @@
 #include "xuartlite_l.h"
 
 #include "../ethernet.h"
+#include "gh_player.h"
 
 /******************** Constant Definitions **********************************/
 
@@ -198,6 +199,7 @@ static int vBufferX;
 static int vBufferY;
 static u32 *frmptr;
 static u32 *vbufptr;
+static u32 statuses[VBUFFER_FRAMES+1];
 
 static u8 interruptMask;
 
@@ -881,6 +883,7 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 		// Add 1 frame on to counteract buffer at start
 		if (vBufferCounter < (VBUFFER_FRAMES+1)) {
 			vbufptr = (u32 *)(VBUFFER_BASE_ADDR + (vBufferCounter * VBUFFER_HEIGHT * VBUFFER_WIDTH * sizeof(u32)));
+			statuses[vBufferCounter] = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
 			for (vBufferY = 0; vBufferY < VBUFFER_HEIGHT; vBufferY++) {
 				for (vBufferX = 0; vBufferX < VBUFFER_WIDTH; vBufferX++) {
 					vbufptr[vBufferX + (vBufferY * VBUFFER_WIDTH)] = frmptr[vBufferX + (vBufferY * FRAME_HORIZONTAL_LEN)];
@@ -899,18 +902,18 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 
 			// Output over UART
 			register int i;
-			u8 r, g, b;
 			register u32 *vbufptr = (u32 *)(VBUFFER_BASE_ADDR);
+			int frame = 0;
 			// Skip the first frame, as it may be from earlier in time (due to buffer)
-			for (i = VBUFFER_WIDTH * VBUFFER_HEIGHT; i < VBUFFER_WIDTH * VBUFFER_HEIGHT * (VBUFFER_FRAMES+1); i+= VBUFFER_WIDTH / 2) {
-				//u32 pixel = vbufptr[i];
-				//b = (u8)pixel;
-				//g = (u8)(pixel >> 8);
-				//r = (u8)(pixel >> 16);
-				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, r);
-				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, g);
-				//XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
-				ethernetSendPayload(VBUFFER_WIDTH * 2, (u8*)(vbufptr + i));
+			for (i = VBUFFER_WIDTH * VBUFFER_HEIGHT; i < VBUFFER_WIDTH * VBUFFER_HEIGHT * (VBUFFER_FRAMES+1); i+= VBUFFER_WIDTH / 4) {
+
+				if ((i % (VBUFFER_WIDTH * VBUFFER_HEIGHT)) == 0)
+				{
+					ethernetSendPayload(4, (u8*)(statuses + frame));
+					frame++;
+				}
+
+				ethernetSendPayload(VBUFFER_WIDTH, (u8*)(vbufptr + i));
 			}
 		}
 	}
