@@ -21,25 +21,13 @@ volatile u32 lBtnStateOld;
 
 XIntc btnIntCtrl;
 
-// --- Delayed fret detector ---
-#if (GAME == RB)
-// Rock Band
-#define DELAY 10
-#else
-// Guitar Hero
-#define DELAY 5
-#endif
-
 // Note detector
 u8 delay = DELAY;
 
 u8 playerEnable = 0;
-#if (FILTERS == 0)
-u8 type = 0;
-#else
-u8 type = 1;
-#endif
-u8 strumValue = 1;
+u8 type = FILTERS;
+
+u8 strumValue = STRUM;
 
 
 void initButtonInterrupt(XIntc controller) {
@@ -169,10 +157,16 @@ void PushBtnHandler(void *CallBackRef) {
 	if ((lBtnChanges & BUTTON_CENTRE) && (lBtnStateNew & BUTTON_CENTRE))
 	{
 		// Centre button pressed
-		xil_printf("C");
+		//xil_printf("C");
 
 		// Set up VDMA
-		vdma_setup(btnIntCtrl);
+		//vdma_setup(btnIntCtrl);
+
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0x01, TILT, strumValue, delay, type, playerEnable);
+	}
+	else if ((lBtnChanges & BUTTON_CENTRE) && !(lBtnStateNew & BUTTON_CENTRE))
+	{
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0x00, TILT, strumValue, delay, type, playerEnable);
 	}
 
 	XGpio_InterruptClear(pPushBtn, lBtnChannel); // Clear interrupt
