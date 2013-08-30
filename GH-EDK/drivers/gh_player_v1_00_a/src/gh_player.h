@@ -232,7 +232,7 @@ typedef struct {
 
 void ghPlayer_SetPosition(u32 baseAddress, point position, u8 fret);
 void ghPlayer_SetThreshold(u32 baseAddress, pixel value, u8 fret, u8 onOff);
-void ghPlayer_SetControl(u32 baseAddress, u8 strumValue, u8 delay, u8 type, u8 enable);
+void ghPlayer_SetControl(u32 baseAddress, u8 fretOverride, u8 tiltEnable, u8 strumValue, u8 delay, u8 type, u8 enable);
 
 u32 ghPlayer_GetStatus(u32 baseAddress);
 
