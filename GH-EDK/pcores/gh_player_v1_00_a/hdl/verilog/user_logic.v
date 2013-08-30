@@ -143,6 +143,8 @@ output                                    IP2Bus_Error;
 	wire       [23 : 0]                       orangePos;
 	wire       [ 3 : 0]                       delayValue;
 	wire       [ 3 : 0]                       strumTime;
+	wire                                      tiltEnable;
+	wire       [ 4 : 0]                       fretOverride;
 	
 	wire                                      player1Enable;
 	wire                                      player2Enable;
@@ -194,6 +196,9 @@ output                                    IP2Bus_Error;
 		playerType   = slv_reg0[1],
 		delayValue   = slv_reg0[6:2],
 		strumTime    = slv_reg0[10:7],
+		tiltEnable   = slv_reg0[11],
+		fretOverride = slv_reg0[16:12],
+
 		greenOn      = slv_reg2[24:0],
 		greenOff     = slv_reg3[24:0],
 		greenPos     = slv_reg4[24:0],
@@ -217,7 +222,7 @@ output                                    IP2Bus_Error;
 	
 	// Player output assignments
 	assign
-		Frets  = playerType ? frets2  : frets1,
+		Frets  = (playerType ? frets2  : frets1) | fretOverride,
 		Strum  = playerType ? strum2  : strum1,
 		Whammy = playerType ? whammy2 : whammy1,
 		Tilt   = playerType ? tilt2   : tilt1,
@@ -256,7 +261,7 @@ output                                    IP2Bus_Error;
 
 			if ( Bus2IP_Resetn == 1'b0 )
 				begin
-					slv_reg0  <= 32'b000000000000000000000_0100_00101_0_0; // Strum time 4, Delay value 5, Old type, Output off
+					slv_reg0  <= 32'b000000000000000_00000_1_0100_00101_0_0; // Frets off, Tilt on, Strum time 4, Delay value 5, Old type, Output off
 					slv_reg1  <= 32'b0;
 					slv_reg2  <= 32'h00_055907;  // Green
 					slv_reg3  <= 32'h00_28590A;
@@ -414,6 +419,7 @@ output                                    IP2Bus_Error;
 		.CLK         (Bus2IP_Clk),
 		.RST         (Bus2IP_Resetn),
 		.Enable      (player1Enable),
+		.TiltEnable  (tiltEnable),
 		.HSync       (HSync),
 		.VSync       (VSync),
 		.PClk        (PClk),
@@ -449,6 +455,7 @@ output                                    IP2Bus_Error;
 		.CLK         (Bus2IP_Clk),
 		.RST         (Bus2IP_Resetn),
 		.Enable      (player2Enable),
+		.TiltEnable  (tiltEnable),
 		.HSync       (HSync),
 		.VSync       (VSync),
 		.PClk        (PClk),
@@ -471,3 +478,4 @@ output                                    IP2Bus_Error;
 	);
   
 endmodule
+

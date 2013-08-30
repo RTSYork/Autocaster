@@ -3,6 +3,7 @@ module player
 	CLK,
 	RST,
 	Enable,
+	TiltEnable,
 	HSync,
 	VSync,
 	PClk,
@@ -37,6 +38,7 @@ module player
 input         CLK;
 input         RST;
 input         Enable;
+input         TiltEnable;
 input         HSync;
 input         VSync;
 input         PClk;
@@ -142,7 +144,7 @@ output [14:0] Status;
 	mkTilt Tilter (
 		.CLK          (CLK),
 		.RST_N        (RST),
-		.move_enabled (1'b1),
+		.move_enabled (TiltEnable),
 		
 		.out          (tiltVal)
 	);

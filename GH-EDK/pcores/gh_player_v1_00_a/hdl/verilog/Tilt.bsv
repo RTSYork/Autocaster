@@ -43,7 +43,7 @@ module mkTilt (Tilt);
 	endmethod
 	
 	method Bool out();
-		return high;
+		return high && moving;
 	endmethod
 
 endmodule
