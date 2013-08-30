@@ -264,7 +264,7 @@ int main(void)
 	GH_PLAYER_mReset(XPAR_GH_PLAYER_0_BASEADDR);
 
 	// Set initial register values
-	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
+	ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, type, playerEnable);
 
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOn,  FRET_GREEN,  THRESHOLD_ON);
 	ghPlayer_SetThreshold(XPAR_GH_PLAYER_0_BASEADDR, gOff, FRET_GREEN,  THRESHOLD_OFF);
@@ -329,7 +329,7 @@ int main(void)
 				playerEnable = 0;
 				setLed(LED2, LED_OFF);
 			}
-			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, FILTERS, playerEnable);
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, FILTERS, playerEnable);
 
 			lasts2 = s2;
 		}

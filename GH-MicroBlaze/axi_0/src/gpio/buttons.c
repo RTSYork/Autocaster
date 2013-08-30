@@ -116,7 +116,7 @@ void PushBtnHandler(void *CallBackRef) {
 		delay++;
 
 		xil_printf("Delay: %2d\r\n", delay);
-		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, type, playerEnable);
 	}
 
 	if ((lBtnChanges & BUTTON_DOWN) && (lBtnStateNew & BUTTON_DOWN))
@@ -127,7 +127,7 @@ void PushBtnHandler(void *CallBackRef) {
 		delay--;
 
 		xil_printf("Delay: %2d\r\n", delay);
-		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, strumValue, delay, type, playerEnable);
+		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, type, playerEnable);
 	}
 
 	if ((lBtnChanges & BUTTON_LEFT) && (lBtnStateNew & BUTTON_LEFT))

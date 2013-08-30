@@ -5,3 +5,6 @@
 
 // Enable (1) or disable (0) image filters
 #define FILTERS 0
+
+// Enable (1) or disable (0) tilt control
+#define TILT 0
