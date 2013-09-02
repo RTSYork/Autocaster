@@ -531,3 +531,17 @@ BEGIN axi_ethernetlite
  PORT IP2INTC_Irpt = axi_ethernetlite_0_IP2INTC_Irpt
 END
 
+BEGIN screen_detector
+ PARAMETER INSTANCE = screen_detector_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x72400000
+ PARAMETER C_HIGHADDR = 0x7240ffff
+ BUS_INTERFACE S_AXI = axi4lite_0
+ PORT S_AXI_ACLK = clk_100_0000MHzPLL0
+ PORT HSYNC = axi_hdmi_0_HDMI_IN_HSYNC
+ PORT VSYNC = axi_hdmi_0_HDMI_IN_VSYNC
+ PORT PCLK = axi_hdmi_0_HDMI_IN_PCLK
+ PORT VDE = axi_hdmi_0_HDMI_IN_VDE
+ PORT RGB = axi_hdmi_0_HDMI_IN_RGB
+END
+

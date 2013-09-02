@@ -1,0 +1,10 @@
+-batch 
+-create screen_detector 
+-ver 1.00.a 
+-dir "C:\Autocaster\GH-EDK" 
+-lang verilog 
+-bus axi4lite s 
+-rst 
+-reg 2 
+-xps 
+-driver 

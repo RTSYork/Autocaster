@@ -1,0 +1,12 @@
+##############################################################################
+## Filename:          C:/Autocaster/GH-EDK/pcores/screen_detector_v1_00_a/data/screen_detector_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Mon Sep 02 10:38:36 2013 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v3_00_a  all 
+lib axi_lite_ipif_v1_01_a  all 
+lib screen_detector_v1_00_a user_logic verilog
+lib screen_detector_v1_00_a screen_detector vhdl
+lib screen_detector_v1_00_a detector verilog
+lib screen_detector_v1_00_a mkScreen verilog
