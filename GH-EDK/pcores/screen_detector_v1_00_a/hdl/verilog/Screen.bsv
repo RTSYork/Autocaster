@@ -56,9 +56,16 @@ module mkScreen # (
 		
 		// Update fret value
 		lastDetected <= currentDetected;
-		currentDetected <= ((pointDetected[0]) &&
-		                    (pointDetected[1]) &&
-		                    (pointDetected[2]));
+
+		if (numPos == 0)
+			currentDetected <= False;
+		else if (numPos == 1)
+			currentDetected <= pointDetected[0];
+		else if (numPos == 2)
+			currentDetected <= pointDetected[0] && pointDetected[1];
+		else if (numPos == 3)
+			currentDetected <= pointDetected[0] && pointDetected[1] && pointDetected[2];
+
 	endrule
 	
 	// New line on each HSync pulse
@@ -79,9 +86,9 @@ module mkScreen # (
 		UInt#(8) g = unpack(pixel1[15:8]);
 		UInt#(8) b = unpack(pixel1[7:0]);
 
-		Bool rMatch = (r > red) ? ((r - red) < 8) : ((red - r) < 8);
-		Bool gMatch = (g > green) ? ((g - green) < 8) : ((green - g) < 8);
-		Bool bMatch = (b > blue) ? ((b - blue) < 8) : ((blue - b) < 8);
+		Bool rMatch = ((r > red) ? ((r - red) < 8) : ((red - r) < 8));
+		Bool gMatch = ((g > green) ? ((g - green) < 8) : ((green - g) < 8));
+		Bool bMatch = ((b > blue) ? ((b - blue) < 8) : ((blue - b) < 8));
 
 		pointDetected[0] <= rMatch && gMatch && bMatch;
 	endrule
@@ -91,9 +98,9 @@ module mkScreen # (
 		UInt#(8) g = unpack(pixel2[15:8]);
 		UInt#(8) b = unpack(pixel2[7:0]);
 
-		Bool rMatch = (r > red) ? ((r - red) < 8) : ((red - r) < 8);
-		Bool gMatch = (g > green) ? ((g - green) < 8) : ((green - g) < 8);
-		Bool bMatch = (b > blue) ? ((b - blue) < 8) : ((blue - b) < 8);
+		Bool rMatch = ((r > red) ? ((r - red) < 8) : ((red - r) < 8));
+		Bool gMatch = ((g > green) ? ((g - green) < 8) : ((green - g) < 8));
+		Bool bMatch = ((b > blue) ? ((b - blue) < 8) : ((blue - b) < 8));
 
 		pointDetected[1] <= rMatch && gMatch && bMatch;
 	endrule
@@ -103,24 +110,11 @@ module mkScreen # (
 		UInt#(8) g = unpack(pixel3[15:8]);
 		UInt#(8) b = unpack(pixel3[7:0]);
 
-		Bool rMatch = (r > red) ? ((r - red) < 8) : ((red - r) < 8);
-		Bool gMatch = (g > green) ? ((g - green) < 8) : ((green - g) < 8);
-		Bool bMatch = (b > blue) ? ((b - blue) < 8) : ((blue - b) < 8);
+		Bool rMatch = ((r > red) ? ((r - red) < 8) : ((red - r) < 8));
+		Bool gMatch = ((g > green) ? ((g - green) < 8) : ((green - g) < 8));
+		Bool bMatch = ((b > blue) ? ((b - blue) < 8) : ((blue - b) < 8));
 
 		pointDetected[2] <= rMatch && gMatch && bMatch;
-	endrule
-
-
-	rule noPoint1(numPos < 1);
-		pointDetected[0] <= True;
-	endrule
-
-	rule noPoint2(numPos < 2);
-		pointDetected[1] <= True;
-	endrule
-
-	rule noPoint3(numPos < 3);
-		pointDetected[2] <= True;
 	endrule
 	
 	
