@@ -162,8 +162,8 @@
 #define VBUFFER_FRAMES			120
 
 #define NO_INTERRUPT_MASK 0x00
-#define ETH_INTERRUPT_MASK 0x01
-#define UART_INTERRUPT_MASK 0x02
+#define STREAM_INTERRUPT_MASK 0x01
+#define FRAME_INTERRUPT_MASK 0x02
 
 #define STREAM_DELAY 0
 
@@ -696,7 +696,7 @@ int StartParking(int writeFrame, int readFrame, int output)
 	return Status;
 }
 
-void EnableVDMAEthIntr(void) {
+void EnableVDMAStreamIntr(void) {
 	streamDelay = 0;
 	interlaced = 0;
 
@@ -705,18 +705,18 @@ void EnableVDMAEthIntr(void) {
 	              	 (VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
 	              	 (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
 
-	interruptMask |= ETH_INTERRUPT_MASK;
+	interruptMask |= STREAM_INTERRUPT_MASK;
 	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 }
 
-void DisableVDMAEthIntr(void) {
-	interruptMask &= ~ETH_INTERRUPT_MASK;
+void DisableVDMAStreamIntr(void) {
+	interruptMask &= ~STREAM_INTERRUPT_MASK;
 
 	if (interruptMask == NO_INTERRUPT_MASK)
 		XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 }
 
-void EnableVDMAUARTIntr(void) {
+void EnableVDMAFrameIntr(void) {
 	StartParking(0, 0, 0);
 
 	vBufferCounter = 0;
@@ -726,7 +726,7 @@ void EnableVDMAUARTIntr(void) {
 	                 (VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)));
 
 
-	interruptMask |= UART_INTERRUPT_MASK;
+	interruptMask |= FRAME_INTERRUPT_MASK;
 	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 }
 
@@ -879,7 +879,7 @@ static void ReadErrorCallBack(void *CallbackRef, u32 Mask)
 ******************************************************************************/
 static void WriteCallBack(void *CallbackRef, u32 Mask)
 {
-	if (interruptMask & UART_INTERRUPT_MASK) {
+	if (interruptMask & FRAME_INTERRUPT_MASK) {
 		// Add 1 frame on to counteract buffer at start
 		if (vBufferCounter < (VBUFFER_FRAMES+1)) {
 			vbufptr = (u32 *)(VBUFFER_BASE_ADDR + (vBufferCounter * VBUFFER_HEIGHT * VBUFFER_WIDTH * sizeof(u32)));
@@ -893,7 +893,7 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 			vBufferCounter++;
 		}
 		else {
-			interruptMask &= ~UART_INTERRUPT_MASK;
+			interruptMask &= ~FRAME_INTERRUPT_MASK;
 
 			if (interruptMask == NO_INTERRUPT_MASK)
 				XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
@@ -918,7 +918,7 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 		}
 	}
 
-	if (interruptMask & ETH_INTERRUPT_MASK) {
+	if (interruptMask & STREAM_INTERRUPT_MASK) {
 		if (streamDelay == 0) {
 			streamDelay = STREAM_DELAY;
 			u8 *PayloadPtr;

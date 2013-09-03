@@ -329,11 +329,11 @@ int main(void)
 		s4 = getSwitch(SWITCH4);
 		if (s4 != lasts4) {
 			if (s4 == SWITCH_ON) {
-				EnableVDMAEthIntr();
+				EnableVDMAStreamIntr();
 				setLed(LED4, LED_ON);
 			}
 			else {
-				DisableVDMAEthIntr();
+				DisableVDMAStreamIntr();
 				setLed(LED4, LED_OFF);
 			}
 			lasts4 = s4;
