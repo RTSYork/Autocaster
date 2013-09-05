@@ -90,6 +90,8 @@
 
 #include "../ethernet.h"
 #include "gh_player.h"
+#include "screen_detector.h"
+#include "../gpio/bitops.h"
 
 /******************** Constant Definitions **********************************/
 
@@ -155,17 +157,23 @@
 /* For video buffer for UART output */
 #define VBUFFER_BASE_ADDR		MEM_BASE_ADDR + (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * 4 * NUMBER_OF_READ_FRAMES)
 #define LASTFRAME_START_ADDR	MEM_BASE_ADDR + (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * 4 * (NUMBER_OF_READ_FRAMES-1))
-#define VBUFFER_X				420//433
-#define VBUFFER_Y				320//560
-#define VBUFFER_WIDTH			440//414
-#define VBUFFER_HEIGHT			360//50
+#define VBUFFER_X				420
+#define VBUFFER_Y				320
+#define VBUFFER_WIDTH			440
+#define VBUFFER_HEIGHT			360
 #define VBUFFER_FRAMES			120
+
+#define SCORE_Y					210
+#define SCORE1_X				0
+#define SCORE2_X				320
+#define SCORE3_X				590
+#define SCORE4_X				839
 
 #define NO_INTERRUPT_MASK 0x00
 #define STREAM_INTERRUPT_MASK 0x01
 #define FRAME_INTERRUPT_MASK 0x02
 
-#define STREAM_DELAY 0
+#define STREAM_DELAY 60
 
 /*
  * Device instance definitions
@@ -205,10 +213,14 @@ static u8 interruptMask;
 
 static u16 streamDelay;
 static u8 interlaced;
+static u32 screenStatus;
+static u32 newScreenStatus;
+static u32 playerStatus;
+static char playerStatusString[] = "\xFF\xFF GRYBO   S\n 00000   0";
+static char playerWaitingString[] = "\xFF\xFF Waiting for next song...";
 
 
 /******************* Function Prototypes ************************************/
-
 
 
 static int ReadSetup(XAxiVdma *InstancePtr);
@@ -697,13 +709,43 @@ int StartParking(int writeFrame, int readFrame, int output)
 }
 
 void EnableVDMAStreamIntr(void) {
-	streamDelay = 0;
+	streamDelay = STREAM_DELAY;
 	interlaced = 0;
 
-	frmptr = (u32 *)(MEM_BASE_ADDR  +
-	              	 (VBUFFER_X * sizeof(u32)) +
-	              	 (VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
-	              	 (FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+	screenStatus = screenDetector_GetScreen(XPAR_SCREEN_DETECTOR_0_BASEADDR);
+
+	if (BIT_CHECK(screenStatus, 0)) {
+		if (BIT_CHECK(screenStatus, 1)) {
+			frmptr = (u32 *)(MEM_BASE_ADDR  +
+					(SCORE1_X * sizeof(u32)) +
+					(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+					(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+		}
+		else if (BIT_CHECK(screenStatus, 2)) {
+			frmptr = (u32 *)(MEM_BASE_ADDR  +
+					(SCORE2_X * sizeof(u32)) +
+					(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+					(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+		}
+		else if (BIT_CHECK(screenStatus, 3)) {
+			frmptr = (u32 *)(MEM_BASE_ADDR  +
+					(SCORE3_X * sizeof(u32)) +
+					(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+					(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+		}
+		else {
+			frmptr = (u32 *)(MEM_BASE_ADDR  +
+					(SCORE4_X * sizeof(u32)) +
+					(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+					(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+		}
+	}
+	else {
+		frmptr = (u32 *)(MEM_BASE_ADDR  +
+				(VBUFFER_X * sizeof(u32)) +
+				(VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+				(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+	}
 
 	interruptMask |= STREAM_INTERRUPT_MASK;
 	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
@@ -919,28 +961,82 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 	}
 
 	if (interruptMask & STREAM_INTERRUPT_MASK) {
+		if (screenStatus == 0) {
+			playerStatus = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
+			playerStatusString[14] = BIT_CHECK(playerStatus, 0) ? 0xDB : '-';
+			playerStatusString[15] = BIT_CHECK(playerStatus, 1) ? 0xDB : '-';
+			playerStatusString[16] = BIT_CHECK(playerStatus, 2) ? 0xDB : '-';
+			playerStatusString[17] = BIT_CHECK(playerStatus, 3) ? 0xDB : '-';
+			playerStatusString[18] = BIT_CHECK(playerStatus, 4) ? 0xDB : '-';
+			playerStatusString[22] = BIT_CHECK(playerStatus, 5) ? 0xDB : '-';
+			// Add header and send packet
+			ethernetSendPayload(27, (u8*)(playerStatusString));
+		}
+		else {
+			ethernetSendPayload(27, (u8*)(playerWaitingString));
+		}
+
+		u8 *PayloadPtr;
+		static u16 x;
+		static u16 y;
+		static u32 pixel;
+
+		// Copy subframe into Ethernet packet
+		for (y = interlaced; y < VBUFFER_HEIGHT; y+=2) {
+			PayloadPtr = (u8 *)TxFrame + XEL_HEADER_SIZE + 28;
+			*((u16 *)PayloadPtr) = y;
+			PayloadPtr += 2;
+			for (x = 0; x < VBUFFER_WIDTH; x++) {
+				pixel = frmptr[x + (y * FRAME_HORIZONTAL_LEN)];
+				*((u16 *)PayloadPtr) = (u16)(((pixel & 0x00F80000) >> 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x000000F8) >> 3));
+				PayloadPtr += 2;
+			}
+			// Add header and send packet
+			ethernetSend(VBUFFER_WIDTH * 2 + 2);
+		}
+
+		interlaced ^= 0x01;
+
 		if (streamDelay == 0) {
 			streamDelay = STREAM_DELAY;
-			u8 *PayloadPtr;
-			static u16 x;
-			static u16 y;
-			static u32 pixel;
 
-			// Copy subframe into Ethernet packet
-			for (y = interlaced; y < VBUFFER_HEIGHT; y+=2) {
-				PayloadPtr = (u8 *)TxFrame + XEL_HEADER_SIZE + 28;
-				*((u16 *)PayloadPtr) = y;
-				PayloadPtr += 2;
-				for (x = 0; x < VBUFFER_WIDTH; x++) {
-					pixel = frmptr[x + (y * FRAME_HORIZONTAL_LEN)];
-					*((u16 *)PayloadPtr) = (u16)(((pixel & 0x00F80000) >> 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x000000F8) >> 3));
-					PayloadPtr += 2;
+			newScreenStatus = screenDetector_GetScreen(XPAR_SCREEN_DETECTOR_0_BASEADDR);
+			if (newScreenStatus != screenStatus) {
+				screenStatus = newScreenStatus;
+
+				if (BIT_CHECK(screenStatus, 0)) {
+					if (BIT_CHECK(screenStatus, 1)) {
+						frmptr = (u32 *)(MEM_BASE_ADDR  +
+								(SCORE1_X * sizeof(u32)) +
+								(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+								(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+					}
+					else if (BIT_CHECK(screenStatus, 2)) {
+						frmptr = (u32 *)(MEM_BASE_ADDR  +
+								(SCORE2_X * sizeof(u32)) +
+								(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+								(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+					}
+					else if (BIT_CHECK(screenStatus, 3)) {
+						frmptr = (u32 *)(MEM_BASE_ADDR  +
+								(SCORE3_X * sizeof(u32)) +
+								(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+								(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+					}
+					else {
+						frmptr = (u32 *)(MEM_BASE_ADDR  +
+								(SCORE4_X * sizeof(u32)) +
+								(SCORE_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+								(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+					}
 				}
-				// Add header and send packet
-				ethernetSend(VBUFFER_WIDTH * 2 + 2);
+				else {
+					frmptr = (u32 *)(MEM_BASE_ADDR  +
+							(VBUFFER_X * sizeof(u32)) +
+							(VBUFFER_Y * FRAME_HORIZONTAL_LEN * sizeof(u32)) +
+							(FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN * sizeof(u32)));
+				}
 			}
-
-			interlaced ^= 0x01;
 		}
 		else {
 			streamDelay--;

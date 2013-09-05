@@ -29,6 +29,7 @@
 
 #include "gh_player.h"
 #include "image_filter.h"
+#include "screen_detector.h"
 
 #include "options.h"
 #include "hdmi/vdma.h"		// VDMA functions
@@ -103,6 +104,14 @@
 //#define B_Y 577-45-15-15
 //#define O_X 804-19-5-4
 //#define O_Y 581-45-15-15-1
+
+#define SONG_DELAY1 9000000
+#define SONG_DELAY2 700000
+#define SONG_DELAY3 1400000
+#define SONG_DELAY4 200000
+static u32 songDelay;
+static u32 screenStatus;
+static u32 lastScreenStatus;
 
 static XIntc intCtrl;
 
@@ -269,6 +278,26 @@ int main(void)
 
 	while (1) {
 		// Loop forever
+		screenStatus = screenDetector_GetScreen(XPAR_SCREEN_DETECTOR_0_BASEADDR);
+		if (screenStatus != lastScreenStatus) {
+			if (BIT_CHECK(screenStatus, 0)) {
+				ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, FILTERS, 0);
+				songDelay = 1;
+			}
+			else {
+				playerEnable = s2 && !screenStatus;
+				ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, FILTERS, playerEnable);
+				songDelay = 0;
+			}
+
+			lastScreenStatus = screenStatus;
+		}
+		else if (songDelay == SONG_DELAY1 || (s1 && songDelay == SONG_DELAY2) || (s4 && songDelay == SONG_DELAY3) || (s1 && s4 && songDelay == SONG_DELAY4)) {
+			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0x01, TILT, strumValue, delay, FILTERS, 0);
+		}
+		else if (songDelay > 0) {
+			songDelay++;
+		}
 
 		// Use SW0 to freeze the image
 		s0 = getSwitch(SWITCH0);
@@ -298,7 +327,7 @@ int main(void)
 		s2 = getSwitch(SWITCH2);
 		if (s2 != lasts2) {
 			if (s2 == SWITCH_ON) {
-				playerEnable = 1;
+				playerEnable = !screenStatus;
 				setLed(LED2, LED_ON);
 			}
 			else {
@@ -338,6 +367,22 @@ int main(void)
 			}
 			lasts4 = s4;
 		}
+
+		s5 = getSwitch(SWITCH5);
+		if (s5 != lasts5) {
+			if (s5 == SWITCH_ON) {
+				screenDetector_SetEnabled(XPAR_SCREEN_DETECTOR_0_BASEADDR, 1);
+				setLed(LED5, LED_ON);
+				xil_printf("\r\nScreen detection (auto mode) enabled");
+			}
+			else {
+				screenDetector_SetEnabled(XPAR_SCREEN_DETECTOR_0_BASEADDR, 0);
+				setLed(LED5, LED_OFF);
+				xil_printf("\r\nScreen detection (auto mode) disabled");
+			}
+			lasts5 = s5;
+		}
+
 #else
 		s3 = getSwitch(SWITCH3);
 		s4 = getSwitch(SWITCH4);
