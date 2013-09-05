@@ -83,20 +83,30 @@ namespace EthernetStream
             {
                 bytes = u.EndReceive(ar, ref e);
 
-                int y = ((bytes[1] << 8) | bytes[0]) / 2;
-                interlace = (byte)(bytes[0] & 0x1);
-
-                for (int x = 0; x < bytes.Length - 2; x++)
+                if (bytes[0] == 0xFF && bytes[1] == 0xFF)
                 {
-                    if (y < frameHeight && x < frameWidth)
+                    output.Invoke((MethodInvoker)delegate
                     {
-                        imageData[x + (y * frameWidth)] = (ushort)(((ushort)bytes[x*2+3] << 8) | bytes[x*2+2]);
-                    }
+                        output.Text = Encoding.GetEncoding(437).GetString(bytes, 2, bytes.Length - 2);
+                    });
                 }
-
-                if (y == frameHeight / 2 - 1)
+                else
                 {
-                    updateImage();
+                    int y = ((bytes[1] << 8) | bytes[0]) / 2;
+                    interlace = (byte)(bytes[0] & 0x1);
+
+                    for (int x = 0; x < bytes.Length - 2; x++)
+                    {
+                        if (y < frameHeight && x < frameWidth)
+                        {
+                            imageData[x + (y * frameWidth)] = (ushort)(((ushort)bytes[x * 2 + 3] << 8) | bytes[x * 2 + 2]);
+                        }
+                    }
+
+                    if (y == frameHeight / 2 - 1)
+                    {
+                        updateImage();
+                    }
                 }
             }
 

@@ -34,6 +34,7 @@
             this.heightTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.output = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,11 +90,22 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "x";
             // 
+            // output
+            // 
+            this.output.AutoSize = true;
+            this.output.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.output.Location = new System.Drawing.Point(12, 424);
+            this.output.Name = "output";
+            this.output.Size = new System.Drawing.Size(63, 19);
+            this.output.TabIndex = 11;
+            this.output.Text = "Output";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 542);
+            this.Controls.Add(this.output);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.heightTextBox);
@@ -117,6 +129,7 @@
         private System.Windows.Forms.TextBox heightTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label output;
     }
 }
 
