@@ -34,6 +34,8 @@ int ethernetInit(void) {
 	XEmacLite_Config *ConfigPtr;
 	XEmacLite *InstancePtr = &EmacLite;
 
+	xil_printf("\r\nInitialising Ethernet...");
+
 	/*
 	 * Initialize the EmacLite device.
 	 */
@@ -60,6 +62,8 @@ int ethernetInit(void) {
 
 	u32 PhyAddress = EmacLitePhyDetect();
 	Status = EmacLiteSetupPhy(PhyAddress);
+
+	xil_printf("done");
 
 	return XST_SUCCESS;
 }

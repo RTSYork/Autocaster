@@ -48,21 +48,21 @@ void initEdid(XIntc controller) {
 	Xil_Out32(IIC_BASEADDR + bIicCR, 0x00000002);   //Clear TX FIFO
 	Xil_Out32(IIC_BASEADDR + bIicCR, 0x00000001);   //Enable IIC core
 
-	xil_printf("done\n\r");
+	xil_printf("done");
 }
 
 
 void enableEdidInterrupt(void) {
 	xil_printf("\r\nEnabling EDID interrupts...");
 	Xil_Out32(IIC_BASEADDR + bIicIER, 0x00000026);  //Enable AAS, TxFifo empty and Tx done interrupts
-	xil_printf("done\n\r");
+	xil_printf("done");
 }
 
 
 void disableEdidInterrupt(void) {
 	xil_printf("\r\nDisabling EDID interrupts...");
 	Xil_Out32(IIC_BASEADDR + bIicIER, 0x00000000);
-	xil_printf("done\n\r");
+	xil_printf("done");
 }
 
 

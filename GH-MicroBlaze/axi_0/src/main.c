@@ -118,18 +118,98 @@ static XIntc intCtrl;
 void drawMarker(int xpos, int ypos, int colour);
 void drawCross(int xpos, int ypos, int size, int colour);
 
+// Positions of note detectors (x, y)
+point gPos = {G_X, G_Y};
+point rPos = {R_X, R_Y};
+point yPos = {Y_X, Y_Y};
+point bPos = {B_X, B_Y};
+point oPos = {O_X, O_Y};
+
+// Thresholds of note detectors
+#if (GAME == RB)
+// Rock Band thresholds
+//	pixel gOn  = {0x02, 0x80, 0x02}; // pixel gOn  = {0x02, 0x68, 0x02};
+//	pixel gOff = {0x4E, 0x6B, 0x20}; // pixel gOff = {0x4C, 0x66, 0x19};
+//	pixel rOn  = {0x79, 0x21, 0x23}; // pixel rOn  = {0x66, 0x21, 0x23};
+//	pixel rOff = {0x67, 0x30, 0x30}; // pixel rOff = {0x5B, 0x26, 0x26};
+//	pixel yOn  = {0x6D, 0x6B, 0x05};
+//	pixel yOff = {0x7A, 0x6D, 0x4C};
+//	pixel bOn  = {0x1C, 0x33, 0x9B};
+//	pixel bOff = {0x30, 0x38, 0x72};
+//	pixel oOn  = {0x87, 0x3D, 0x02};
+//	pixel oOff = {0x7A, 0x3F, 0x19};
+pixel gOn  = {0x07, 0x87, 0x07};
+pixel gOff = {0x52, 0x6F, 0x24};
+pixel rOn  = {0x80, 0x26, 0x38};
+pixel rOff = {0x80, 0x80, 0x80};
+pixel yOn  = {0x7A, 0x77, 0x1A};
+pixel yOff = {0x7C, 0x6F, 0x6E};
+pixel bOn  = {0x1B, 0x32, 0x9A};
+pixel bOff = {0x36, 0x44, 0x90};
+pixel oOn  = {0x92, 0x42, 0x07};
+pixel oOff = {0x7E, 0x43, 0x23};
+//	pixel gOn  = {0x7F, 0x7F, 0x7F};
+//	pixel gOff = {0x5F, 0x4F, 0x4F};
+//	pixel rOn  = {0x7F, 0x7F, 0x7F};
+//	pixel rOff = {0x5F, 0x5F, 0x5F};
+//	pixel yOn  = {0x7F, 0x7F, 0x7F};
+//	pixel yOff = {0x4F, 0x4F, 0x4F};
+//	pixel bOn  = {0x7F, 0x7F, 0x7F};
+//	pixel bOff = {0x5F, 0x5F, 0x5F};
+//	pixel oOn  = {0x7F, 0x7F, 0x7F};
+//	pixel oOff = {0x5F, 0x4F, 0x4F};
+#else
+// Guitar Hero thresholds
+//	pixel gOn  = {0x00, 0x70, 0x00};
+//	pixel gOff = {0x40, 0x40, 0x40};
+//	pixel rOn  = {0x9A, 0x00, 0x00};
+//	pixel rOff = {0x4A, 0x4A, 0x4A};
+//	pixel yOn  = {0xBB, 0x60, 0x00};
+//	pixel yOff = {0x50, 0x50, 0x50};
+//	pixel bOn  = {0x00, 0x00, 0x10};
+//	pixel bOff = {0x4A, 0x4A, 0x4A};
+//	pixel oOn  = {0xA0, 0x50, 0x00};
+//	pixel oOff = {0x40, 0x40, 0x40};
+pixel gOn  = {0xB0, 0xB0, 0xB0};
+pixel gOff = {0x5F, 0x5F, 0x5F};
+pixel rOn  = {0xB0, 0xB0, 0xB0};
+pixel rOff = {0x5F, 0x5F, 0x5F};
+pixel yOn  = {0xC0, 0xC0, 0xC0};
+pixel yOff = {0x5F, 0x5F, 0x5F};
+pixel bOn  = {0xB0, 0xB0, 0xB0};
+pixel bOff = {0x5F, 0x5F, 0x5F};
+pixel oOn  = {0xB0, 0xB0, 0xB0};
+pixel oOff = {0x5F, 0x5F, 0x5F};
+#endif
+
+int lasts0 = SWITCH_OFF;
+int lasts1 = SWITCH_OFF;
+int lasts2 = SWITCH_OFF;
+int lasts3 = SWITCH_OFF;
+int lasts4 = SWITCH_OFF;
+int lasts5 = SWITCH_OFF;
+int lasts6 = SWITCH_OFF;
+int lasts7 = SWITCH_OFF;
+int s0, s1, s2, s3, s4, s5, s6, s7;
+
 int main(void)
 {
-	xil_printf("\r\n\n****************************************\r\n");
+	xil_printf("\x1b[H\x1b[2J\x1b[36m");
+	xil_printf("******************************************\r\n");
+	xil_printf("**        --- The Autocaster ---        **\r\n");
+	xil_printf("**  Autonomous Music Video Game Player  **\r\n");
+	xil_printf("******************************************\r\n");
+	xil_printf("** 2013 Russell Joyce --- Department of **\r\n");
+	xil_printf("** Computer Science, University of York **\r\n");
+	xil_printf("******************************************");
+	xil_printf("\x1b[0m");
 
 	setLed(LED0, LED_ON);
 
 	init_platform();
 
 	// Set up HDMI output
-	xil_printf("\r\nHDMI control register was %x\r\n", getHdmiOutputResolution());
 	setHdmiOutputResolution(FRAME_HORIZONTAL_LEN, FRAME_VERTICAL_LEN);
-	xil_printf("HDMI control register now %x\r\n", getHdmiOutputResolution());
 
 	setLed(LED1, LED_ON);
 
@@ -162,85 +242,6 @@ int main(void)
 	ethernetInit();
 
 	setLeds(0);
-
-
-	int lasts0 = SWITCH_OFF;
-	int lasts2 = SWITCH_OFF;
-	int lasts3 = SWITCH_OFF;
-	int lasts4 = SWITCH_OFF;
-	int lasts5 = SWITCH_OFF;
-	int lasts6 = SWITCH_OFF;
-	int lasts7 = SWITCH_OFF;
-	int s0, s1, s2, s3, s4, s5, s6, s7;
-
-	// Positions of note detectors (x, y)
-	point gPos = {G_X, G_Y};
-	point rPos = {R_X, R_Y};
-	point yPos = {Y_X, Y_Y};
-	point bPos = {B_X, B_Y};
-	point oPos = {O_X, O_Y};
-
-	// Thresholds of note detectors
-#if (GAME == RB)
-	// Rock Band thresholds
-//	pixel gOn  = {0x02, 0x80, 0x02}; // pixel gOn  = {0x02, 0x68, 0x02};
-//	pixel gOff = {0x4E, 0x6B, 0x20}; // pixel gOff = {0x4C, 0x66, 0x19};
-//	pixel rOn  = {0x79, 0x21, 0x23}; // pixel rOn  = {0x66, 0x21, 0x23};
-//	pixel rOff = {0x67, 0x30, 0x30}; // pixel rOff = {0x5B, 0x26, 0x26};
-//	pixel yOn  = {0x6D, 0x6B, 0x05};
-//	pixel yOff = {0x7A, 0x6D, 0x4C};
-//	pixel bOn  = {0x1C, 0x33, 0x9B};
-//	pixel bOff = {0x30, 0x38, 0x72};
-//	pixel oOn  = {0x87, 0x3D, 0x02};
-//	pixel oOff = {0x7A, 0x3F, 0x19};
-	pixel gOn  = {0x07, 0x87, 0x07};
-	pixel gOff = {0x52, 0x6F, 0x24};
-	pixel rOn  = {0x80, 0x26, 0x38};
-	pixel rOff = {0x80, 0x80, 0x80};
-	pixel yOn  = {0x7A, 0x77, 0x1A};
-	pixel yOff = {0x7C, 0x6F, 0x6E};
-	pixel bOn  = {0x1B, 0x32, 0x9A};
-	pixel bOff = {0x36, 0x44, 0x90};
-	pixel oOn  = {0x92, 0x42, 0x07};
-	pixel oOff = {0x7E, 0x43, 0x23};
-//	pixel gOn  = {0x7F, 0x7F, 0x7F};
-//	pixel gOff = {0x5F, 0x4F, 0x4F};
-//	pixel rOn  = {0x7F, 0x7F, 0x7F};
-//	pixel rOff = {0x5F, 0x5F, 0x5F};
-//	pixel yOn  = {0x7F, 0x7F, 0x7F};
-//	pixel yOff = {0x4F, 0x4F, 0x4F};
-//	pixel bOn  = {0x7F, 0x7F, 0x7F};
-//	pixel bOff = {0x5F, 0x5F, 0x5F};
-//	pixel oOn  = {0x7F, 0x7F, 0x7F};
-//	pixel oOff = {0x5F, 0x4F, 0x4F};
-#else
-	// Guitar Hero thresholds
-//	pixel gOn  = {0x00, 0x70, 0x00};
-//	pixel gOff = {0x40, 0x40, 0x40};
-//	pixel rOn  = {0x9A, 0x00, 0x00};
-//	pixel rOff = {0x4A, 0x4A, 0x4A};
-//	pixel yOn  = {0xBB, 0x60, 0x00};
-//	pixel yOff = {0x50, 0x50, 0x50};
-//	pixel bOn  = {0x00, 0x00, 0x10};
-//	pixel bOff = {0x4A, 0x4A, 0x4A};
-//	pixel oOn  = {0xA0, 0x50, 0x00};
-//	pixel oOff = {0x40, 0x40, 0x40};
-	pixel gOn  = {0xB0, 0xB0, 0xB0};
-	pixel gOff = {0x5F, 0x5F, 0x5F};
-	pixel rOn  = {0xB0, 0xB0, 0xB0};
-	pixel rOff = {0x5F, 0x5F, 0x5F};
-	pixel yOn  = {0xC0, 0xC0, 0xC0};
-	pixel yOff = {0x5F, 0x5F, 0x5F};
-	pixel bOn  = {0xB0, 0xB0, 0xB0};
-	pixel bOff = {0x5F, 0x5F, 0x5F};
-	pixel oOn  = {0xB0, 0xB0, 0xB0};
-	pixel oOff = {0x5F, 0x5F, 0x5F};
-#endif
-
-	// Control values
-	//u8 delay = 2; //4;
-	//u8 strumValue = 2;
-	//u8 playerEnable = 0;
 
 	// Status value
 	u32 status = 0;
@@ -275,6 +276,7 @@ int main(void)
 	imageFilter_SetThreshold(XPAR_IMAGE_FILTER_0_BASEADDR, 128);
 	imageFilter_SetControl(XPAR_IMAGE_FILTER_0_BASEADDR, filtersEnable, FILTER_NONE);
 
+	xil_printf("\r\n******************************************");
 
 	while (1) {
 		// Loop forever
@@ -303,18 +305,32 @@ int main(void)
 		s0 = getSwitch(SWITCH0);
 		if (s0 != lasts0) {
 			if (s0 == SWITCH_ON) {
-				StartParking(1, 0, 1);
+				StartParking(1, 0);
 				setLed(LED0, LED_ON);
+				xil_printf("\r\nVideo output frozen");
 			}
 			else {
-				StopParking(1);
+				StopParking();
 				setLed(LED0, LED_OFF);
+				xil_printf("\r\nVideo output resumed");
 			}
 
 			lasts0 = s0;
 		}
 
 		s1 = getSwitch(SWITCH1);
+		if (s1 != lasts1) {
+			if (s1 == SWITCH_ON) {
+				setLed(LED1, LED_ON);
+				xil_printf("\r\nPlayer markers on");
+			}
+			else {
+				setLed(LED1, LED_OFF);
+				xil_printf("\r\nPlayer markers off");
+			}
+
+			lasts1 = s1;
+		}
 		if (s1 == SWITCH_ON) {
 			// Draw a cross at each pixel test position
 			drawMarker(gPos.x, gPos.y, 0x00FF00); // Green
@@ -329,10 +345,12 @@ int main(void)
 			if (s2 == SWITCH_ON) {
 				playerEnable = !screenStatus;
 				setLed(LED2, LED_ON);
+				xil_printf("\r\nPlayer enabled");
 			}
 			else {
 				playerEnable = 0;
 				setLed(LED2, LED_OFF);
+				xil_printf("\r\nPlayer disabled");
 			}
 			ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, FILTERS, playerEnable);
 
@@ -340,10 +358,19 @@ int main(void)
 		}
 #if (FILTERS == 0)
 		s3 = getSwitch(SWITCH3);
+		if (s3 != lasts3) {
+			if (s3 == SWITCH_ON) {
+				setLed(LED3, LED_ON);
+			}
+			else {
+				setLed(LED3, LED_OFF);
+			}
+			lasts3 = s3;
+		}
 		if (s3 == SWITCH_ON) {
 			status = ghPlayer_GetStatus(XPAR_GH_PLAYER_0_BASEADDR);
-			print("\x1b[H\n");
-			print(" GRYBO  S | W | T %d %d %d\n");
+			xil_printf("\x1b[H\n");
+			xil_printf(" GRYBO  S | W | T\n");
 			xil_printf(" %d%d%d%d%d  %d | %d | %d\n\n",
 					BIT_CHECK(status, 0),
 					BIT_CHECK(status, 1)  >> 1,
@@ -360,10 +387,12 @@ int main(void)
 			if (s4 == SWITCH_ON) {
 				EnableVDMAStreamIntr();
 				setLed(LED4, LED_ON);
+				xil_printf("\r\nEthernet video stream enabled");
 			}
 			else {
 				DisableVDMAStreamIntr();
 				setLed(LED4, LED_OFF);
+				xil_printf("\r\nEthernet video stream disabled");
 			}
 			lasts4 = s4;
 		}

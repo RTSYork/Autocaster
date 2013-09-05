@@ -41,21 +41,21 @@ void initButtonInterrupt(XIntc controller) {
 	microblaze_register_handler(XIntc_DeviceInterruptHandler, INTC_DEVICE_ID);
 	microblaze_enable_interrupts();
 	XIntc_Start(&controller, XIN_REAL_MODE);
-	xil_printf("done\r\n");
+	xil_printf("done");
 }
 
 void enableButtonInterrupt(void) {
 	xil_printf("\r\nEnabling button interrupts...");
 	XGpio_InterruptEnable(&pshBtns, lBtnChannel);
 	XGpio_InterruptGlobalEnable(&pshBtns);
-	xil_printf("done\r\n");
+	xil_printf("done");
 }
 
 void disableButtonInterrupt(void) {
 	xil_printf("\r\nDisabling button interrupts...");
 	XGpio_InterruptDisable(&pshBtns, lBtnChannel);
 	XGpio_InterruptGlobalDisable(&pshBtns);
-	xil_printf("done\r\n");
+	xil_printf("done");
 }
 
 
@@ -99,10 +99,7 @@ void PushBtnHandler(void *CallBackRef) {
 	if ((lBtnChanges & BUTTON_UP) && (lBtnStateNew & BUTTON_UP))
 	{
 		// Up button pressed
-		//xil_printf("U");
-
 		delay++;
-
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, type, playerEnable);
 	}
@@ -110,10 +107,7 @@ void PushBtnHandler(void *CallBackRef) {
 	if ((lBtnChanges & BUTTON_DOWN) && (lBtnStateNew & BUTTON_DOWN))
 	{
 		// Down button pressed
-		//xil_printf("D");
-
 		delay--;
-
 		xil_printf("Delay: %2d\r\n", delay);
 		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0, TILT, strumValue, delay, type, playerEnable);
 	}
@@ -121,43 +115,30 @@ void PushBtnHandler(void *CallBackRef) {
 	if ((lBtnChanges & BUTTON_LEFT) && (lBtnStateNew & BUTTON_LEFT))
 	{
 		// Left button pressed
-		//xil_printf("L");
-
-		/* Output series of frames over UART */
+		xil_printf("\r\nOutputting frames over Ethernet...");
+		// Output series of frames over Ethernet
 		EnableVDMAFrameIntr();
 	}
 
 	if ((lBtnChanges & BUTTON_RIGHT) && (lBtnStateNew & BUTTON_RIGHT))
 	{
 		// Right button pressed
-		//xil_printf("R");
+		xil_printf("\r\nOutputting frame over Ethernet...");
 
-		/* Output frame over UART *//*
-		register int i;
-		u8 r, g, b;
-		register u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
-		for (i = 0; i < 1280 * 720 ; i++) {
-			u32 pixel = vbufptr[i];
-			b = (u8)pixel;
-			g = (u8)(pixel >> 8);
-			r = (u8)(pixel >> 16);
-			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, r);
-			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, g);
-			XUartLite_SendByte(XPAR_UARTLITE_1_BASEADDR, b);
-		}
-		*/
 		/* Output frame over Ethernet */
 		register int i;
 		register u32 *vbufptr = (u32 *)(XPAR_S6DDR_0_S0_AXI_BASEADDR + 0x01000000);
 		for (i = 0; i < 1280 * 720 ; i += 320) {
 			ethernetSendPayload(1280, (u8*)(vbufptr + i));
 		}
+
+		xil_printf("done");
 	}
 
 	if ((lBtnChanges & BUTTON_CENTRE) && (lBtnStateNew & BUTTON_CENTRE))
 	{
 		// Centre button pressed
-		//xil_printf("C");
+		xil_printf("\r\nResetting VDMA setup...");
 
 		// Set up VDMA
 		vdma_setup(btnIntCtrl);

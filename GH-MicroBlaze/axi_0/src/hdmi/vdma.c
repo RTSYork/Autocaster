@@ -274,8 +274,6 @@ int vdma_setup(XIntc controller)
 	ReadFrameAddr = READ_ADDRESS_BASE;
 	WriteFrameAddr = WRITE_ADDRESS_BASE;
 
-	xil_printf("\r\n--- Entering vdma_setup() --- \r\n");
-
 	/* The information of the XAxiVdma_Config comes from hardware build.
 	 * The user IP should pass this information to the AXI DMA core.
 	 */
@@ -389,20 +387,11 @@ int vdma_setup(XIntc controller)
 
 	/* Register callback functions
 	 */
-//	XAxiVdma_SetCallBack(&AxiVdma, XAXIVDMA_HANDLER_GENERAL, ReadCallBack,
-//	    (void *)&AxiVdma, XAXIVDMA_READ);
-//
-//	XAxiVdma_SetCallBack(&AxiVdma, XAXIVDMA_HANDLER_ERROR,
-//	    ReadErrorCallBack, (void *)&AxiVdma, XAXIVDMA_READ);
-
 	XAxiVdma_SetCallBack(&AxiVdma, XAXIVDMA_HANDLER_GENERAL,
 	    WriteCallBack, (void *)&AxiVdma, XAXIVDMA_WRITE);
 
 	XAxiVdma_SetCallBack(&AxiVdma, XAXIVDMA_HANDLER_ERROR,
 	    WriteErrorCallBack, (void *)&AxiVdma, XAXIVDMA_WRITE);
-
-	/* Enable your video IP interrupts if needed
-	 */
 
 	/* Start the DMA engine to transfer
 	 */
@@ -413,37 +402,6 @@ int vdma_setup(XIntc controller)
 		return XST_FAILURE;
 	}
 
-
-	/* Enable DMA read and write channel interrupts
-	 *
-	 * If interrupts overwhelms the system, please do not enable interrupt
-	 */
-//	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
-//	XAxiVdma_IntrEnable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_READ);
-
-
-
-	/* Every set of frame buffer finish causes a completion interrupt
-	 */
-//	while ((WriteDone < NUM_TEST_FRAME_SETS) && !ReadError &&
-//	      (ReadDone < NUM_TEST_FRAME_SETS) && !WriteError) {
-// 		/* NOP */
-//	}
-
-
-//	if (ReadError || WriteError) {
-//		xil_printf("Test has transfer error %d/%d\r\n",
-//		    ReadError, WriteError);
-//
-//		Status = XST_FAILURE;
-//	}
-//	else {
-//		xil_printf("Test passed\r\n");
-//	}
-
-	xil_printf("\r\n--- Exiting vdma_setup() --- \r\n");
-
-//	DisableIntrSystem(READ_INTR_ID, WRITE_INTR_ID);
 
 	if (Status != XST_SUCCESS) {
 		if(Status == XST_VDMA_MISMATCH_ERROR)
@@ -469,7 +427,7 @@ int vdma_setup(XIntc controller)
 ******************************************************************************/
 static int ReadSetup(XAxiVdma *InstancePtr)
 {
-	xil_printf("\r\nRead setup...");
+	xil_printf("\r\nVDMA Read setup...");
 	int Index;
 	u32 Addr;
 	int Status;
@@ -537,7 +495,7 @@ static int ReadSetup(XAxiVdma *InstancePtr)
 ******************************************************************************/
 static int WriteSetup(XAxiVdma * InstancePtr)
 {
-	xil_printf("\r\nWrite setup...");
+	xil_printf("\r\nVDMA Write setup...");
 	int Index;
 	u32 Addr;
 	int Status;
@@ -602,20 +560,6 @@ static int WriteSetup(XAxiVdma * InstancePtr)
 		vbufptr[i] = 0x0000FF;
 	}
 
-	/* Initialise data buffer with nice pattern */
-//	register int i;
-//	register u32 x;
-//	register u32 y;
-//	int frame_size = FRAME_HORIZONTAL_LEN * FRAME_VERTICAL_LEN;
-//	register u32 *vbufptr = (u32 *)READ_ADDRESS_BASE;
-//	for (i = 0; i < NUMBER_OF_READ_FRAMES ; i++) {
-//		for (x = 0; x < FRAME_HORIZONTAL_LEN; x++) {
-//			for (y = 0; y < FRAME_VERTICAL_LEN; y++) {
-//				vbufptr[(i * frame_size) + y * FRAME_HORIZONTAL_LEN + x] = (x/5 * 0x000001) + (y/3 * 0x00FF00);
-//			}
-//		}
-//	}
-
 	xil_printf("done");
 	return XST_SUCCESS;
 }
@@ -636,7 +580,7 @@ static int WriteSetup(XAxiVdma * InstancePtr)
 ******************************************************************************/
 static int StartTransfer(XAxiVdma *InstancePtr)
 {
-	xil_printf("\r\nStarting transfer...");
+	xil_printf("\r\nStarting VDMA transfer...");
 
 	int Status = XST_SUCCESS;
 
@@ -660,14 +604,9 @@ static int StartTransfer(XAxiVdma *InstancePtr)
 	return XST_SUCCESS;
 }
 
-int StopParking(int output)
+int StopParking(void)
 {
-	if (output)
-		xil_printf("\r\nStopping parking...");
-
 	int Status = XST_SUCCESS;
-
-	//Status = XAxiVdma_DmaStart(&AxiVdma, XAXIVDMA_WRITE);
 
 	XAxiVdma_StopParking(&AxiVdma, XAXIVDMA_WRITE);
 	XAxiVdma_StopParking(&AxiVdma, XAXIVDMA_READ);
@@ -679,19 +618,12 @@ int StopParking(int output)
 		return XST_FAILURE;
 	}
 
-	if (output)
-		xil_printf("done");
 	return XST_SUCCESS;
 }
 
-int StartParking(int writeFrame, int readFrame, int output)
+int StartParking(int writeFrame, int readFrame)
 {
-	if (output)
-		xil_printf("\r\nStarting parking...");
-
 	int Status = XST_SUCCESS;
-
-	//XAxiVdma_DmaStop(&AxiVdma, XAXIVDMA_WRITE);
 
 	Status = XAxiVdma_StartParking(&AxiVdma, writeFrame, XAXIVDMA_WRITE); // Park write on frame 2 (to stop writing to frame 0)
 	Status &= XAxiVdma_StartParking(&AxiVdma, readFrame, XAXIVDMA_READ); // Park read on frame 0 (output should be frozen)
@@ -703,8 +635,6 @@ int StartParking(int writeFrame, int readFrame, int output)
 		return XST_FAILURE;
 	}
 
-	if (output)
-		xil_printf("done");
 	return Status;
 }
 
@@ -759,7 +689,7 @@ void DisableVDMAStreamIntr(void) {
 }
 
 void EnableVDMAFrameIntr(void) {
-	StartParking(0, 0, 0);
+	StartParking(0, 0);
 
 	vBufferCounter = 0;
 
@@ -790,28 +720,10 @@ void EnableVDMAFrameIntr(void) {
 static int SetupIntrSystem(XAxiVdma *AxiVdmaPtr, u16 ReadIntrId,
 				u16 WriteIntrId)
 {
-	xil_printf("\r\nEnabling interrupts...");
+	xil_printf("\r\nEnabling VDMA interrupts...");
 	int Status;
 
 	XIntc *IntcInstancePtr = &Intc;
-
-
-	/* Initialize the interrupt controller and connect the ISRs */
-//	Status = XIntc_Initialize(IntcInstancePtr, INTC_DEVICE_ID);
-//	if (Status != XST_SUCCESS) {
-//
-//		xil_printf( "Failed init intc\r\n");
-//		return XST_FAILURE;
-//	}
-
-//	Status = XIntc_Connect(IntcInstancePtr, ReadIntrId,
-//	         (XInterruptHandler)XAxiVdma_ReadIntrHandler, AxiVdmaPtr);
-//	if (Status != XST_SUCCESS) {
-//
-//		xil_printf(
-//		    "Failed read channel connect intc %d\r\n", Status);
-//		return XST_FAILURE;
-//	}
 
 	Status = XIntc_Connect(IntcInstancePtr, WriteIntrId,
 	         (XInterruptHandler)XAxiVdma_WriteIntrHandler, AxiVdmaPtr);
@@ -831,7 +743,6 @@ static int SetupIntrSystem(XAxiVdma *AxiVdmaPtr, u16 ReadIntrId,
 	}
 
 	/* Enable interrupts from the hardware */
-//	XIntc_Enable(IntcInstancePtr, ReadIntrId);
 	XIntc_Enable(IntcInstancePtr, WriteIntrId);
 
 	Xil_ExceptionInit();
@@ -860,7 +771,7 @@ static int SetupIntrSystem(XAxiVdma *AxiVdmaPtr, u16 ReadIntrId,
 ******************************************************************************/
 static void DisableIntrSystem(u16 ReadIntrId, u16 WriteIntrId)
 {
-	xil_printf("\r\nDisabling interrupts...");
+	xil_printf("\r\nDisabling VDMA interrupts...");
 	XIntc *IntcInstancePtr = &Intc;
 
 	/* Disconnect the interrupts for the DMA TX and RX channels */
@@ -904,7 +815,6 @@ static void ReadErrorCallBack(void *CallbackRef, u32 Mask)
 	if (Mask & XAXIVDMA_IXR_ERROR_MASK) {
 		ReadError += 1;
 	}
-//	xil_printf("r!");
 }
 
 /*****************************************************************************/
@@ -940,7 +850,7 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 			if (interruptMask == NO_INTERRUPT_MASK)
 				XAxiVdma_IntrDisable(&AxiVdma, XAXIVDMA_IXR_FRMCNT_MASK, XAXIVDMA_WRITE);
 
-			StopParking(0);
+			StopParking();
 
 			// Output over UART
 			register int i;
@@ -1043,7 +953,6 @@ static void WriteCallBack(void *CallbackRef, u32 Mask)
 		}
 
 	}
-//	xil_printf("w.");
 }
 
 /*****************************************************************************/
@@ -1061,7 +970,6 @@ static void WriteErrorCallBack(void *CallbackRef, u32 Mask)
 	if (Mask & XAXIVDMA_IXR_ERROR_MASK) {
 		WriteError += 1;
 	}
-//	xil_printf("w!");
 }
 
 

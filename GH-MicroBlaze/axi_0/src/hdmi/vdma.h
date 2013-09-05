@@ -3,8 +3,8 @@
 
 int vdma_setup(XIntc controller);
 
-int StartParking(int writeFrame, int readFrame, int output);
-int StopParking(int output);
+int StartParking(int writeFrame, int readFrame);
+int StopParking(void);
 
 void EnableVDMAStreamIntr(void);
 void DisableVDMAStreamIntr(void);
