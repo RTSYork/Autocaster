@@ -160,13 +160,7 @@ void PushBtnHandler(void *CallBackRef) {
 		//xil_printf("C");
 
 		// Set up VDMA
-		//vdma_setup(btnIntCtrl);
-
-		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0x01, TILT, strumValue, delay, type, playerEnable);
-	}
-	else if ((lBtnChanges & BUTTON_CENTRE) && !(lBtnStateNew & BUTTON_CENTRE))
-	{
-		ghPlayer_SetControl(XPAR_GH_PLAYER_0_BASEADDR, 0x00, TILT, strumValue, delay, type, playerEnable);
+		vdma_setup(btnIntCtrl);
 	}
 
 	XGpio_InterruptClear(pPushBtn, lBtnChannel); // Clear interrupt
