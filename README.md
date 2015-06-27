@@ -46,6 +46,6 @@ UART Image Capture
 - Open 'UARTImage/UARTImage.sln' in Microsoft Visual Studio
 
 
-UART Image Capture
+Image Filter Test
 -------------------
 - Open 'Image Filter/Image Filter.sln' in Microsoft Visual Studio
