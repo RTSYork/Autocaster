@@ -2,7 +2,7 @@ The Autocaster
 ==============
 ### An FPGA-Based Embedded System to Autonomously Play Music Video Games
 #### Russell Joyce, Department of Computer Science, University of York, UK
-For more information, see http://rtslab.wikispaces.com/Guitar+Hero+on+FPGA
+For more information, see https://wiki.york.ac.uk/display/RTS/The+Autocaster
 
 ---
 
